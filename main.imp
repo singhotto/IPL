@@ -1,0 +1,5 @@
+var a = load('img.jpg');
+
+grayscale(a);
+
+saveImage(a, 'output.jpg');
