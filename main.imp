@@ -1,5 +1,14 @@
 var a = load('img.jpg');
+var threshold = 50;
 
-grayscale(a);
+func cc(a){
+    grayscale(a);
 
-saveImage(a, 'output.jpg');
+    rotate(a, 90);
+
+    changeBrightness(a, threshold);
+
+    saveImage(a);
+}
+
+cc(a);
