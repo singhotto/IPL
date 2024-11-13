@@ -1,5 +1,9 @@
 var a = load('img.jpg');
-var threshold = 50;
+var threshold = 50 * 4;
+
+threshold = threshold + 53;
+
+print(threshold);
 
 func cc(a){
     grayscale(a);
