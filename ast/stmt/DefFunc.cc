@@ -1,0 +1,83 @@
+#include "DefFunc.hh"
+#include "../Log.hh"  // Include the macros header
+
+DefFunc::~DefFunc()
+{
+    LOG_OPERATION_START("DefFunc::~DefFunc");
+    LOG_OPERATION_END("DefFunc::~DefFunc");
+}
+
+DefFunc::DefFunc(IdPtr id, std::vector<Id *> args, std::vector<Statement *> statements)
+{
+    LOG_OPERATION_START("DefFunc::DefFunc(IdPtr, std::vector<Id *>, std::vector<Statement*>&&)");
+    
+    this->args.reserve(args.size());
+    for(auto i : args){
+        this->args.push_back(IdPtr(i));
+    }
+
+    this->statements.reserve(statements.size());
+    for(auto i : statements){
+        this->statements.push_back(StmtPtr(i));
+    }
+    
+    LOG_OPERATION_END("DefFunc::DefFunc(IdPtr, std::vector<Id *>, std::vector<Statement*>&&)");
+}
+
+DefFunc::DefFunc(IdPtr id, std::vector<Statement *> statements) : funcName(std::move(id))
+{
+    LOG_OPERATION_START("DefFunc::DefFunc(IdPtr, std::vector<Statement*>&&)");
+
+    this->statements.reserve(statements.size());
+    for(auto i : statements){
+        this->statements.push_back(StmtPtr(i));
+    }
+    
+    LOG_OPERATION_END("DefFunc::DefFunc(IdPtr, std::vector<Statement*>&&)");
+}
+
+std::string DefFunc::getName()
+{
+    LOG_OPERATION_START("DefFunc::getName");
+    std::string name = funcName->getName();
+    LOG_OPERATION_END("DefFunc::getName");
+    return name;
+}
+
+std::vector<Id *> DefFunc::funcArgs()
+{
+    LOG_OPERATION_START("DefFunc::funcArgs");
+    std::vector<Id *> temp;
+    temp.reserve(args.size());
+    for(IdPtr& id : args){
+        temp.push_back(id.get());
+    }
+    LOG_OPERATION_END("DefFunc::funcArgs");
+    return temp;
+}
+
+std::vector<Statement *> DefFunc::funcStatements()
+{
+    LOG_OPERATION_START("DefFunc::funcStatements");
+    std::vector<Statement *> temp;
+    temp.reserve(statements.size());
+    for(StmtPtr& stmt : statements){
+        temp.push_back(stmt.get());
+    }
+    LOG_OPERATION_END("DefFunc::funcStatements");
+    return temp;
+}
+
+float DefFunc::getValue() const
+{
+    LOG_OPERATION_START("DefFunc::getValue");
+    LOG_OPERATION_END("DefFunc::getValue");
+    return 0.0f;  // Assuming it returns 0.0f as a placeholder
+}
+
+void DefFunc::accept(Visitor *visitor)
+{
+    LOG_OPERATION_START("DefFunc::accept");
+    visitor->visit(this);
+    LOG_OPERATION_END("DefFunc::accept");
+}
