@@ -17,6 +17,8 @@ private:
     Interpreter(const Interpreter&) = delete;
     Interpreter& operator=(const Interpreter&) = delete;
 
+    void binaryNumber(BinaryExpr* expr, float& left, float& right);
+
 public:
     
     // Private constructor to prevent direct instantiation
@@ -26,9 +28,11 @@ public:
     static Interpreter& getInstance();
 
     void visit(Id* id) override;
+    void visit(String* str) override;
     void visit(Int* integer) override;
     void visit(Float* expr) override;
     void visit(Expr* expr) override;
+    void visit(BinaryExpr* expr) override;
     void visit(AddExpr* expr) override;
     void visit(ModExpr* expr) override;
     void visit(SubtExpr* expr) override;
@@ -40,8 +44,6 @@ public:
     void visit(CallFunc* func) override;
     void visit(PrintExpr* expr) override;
     void visit(ReturnStmt* expr) override;
-    
-    float getResult() const;
 };
 
 #endif // INTERPRETER__GUARD

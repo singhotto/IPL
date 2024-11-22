@@ -1,19 +1,18 @@
 #ifndef INT__GUARD
 #define INT__GUARD
 
-#include <iostream>
-#include "../Value.hh"
-#include "Expr.hh"
-#include "../Visitor.hh" // Only necessary to define `accept`
+#include "Number.hh"
+#include "../../Visitor.hh" 
 
 class Visitor;
 
-class Int : virtual public Value, virtual public Expr {
+class Int : virtual public Number {
 private:
     int value;
 public:
     explicit Int(int value);
     ~Int();
+    
     float getValue() const override;
     void accept(Visitor* visitor) override;
 };

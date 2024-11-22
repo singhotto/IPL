@@ -1,10 +1,10 @@
 #include "Interpreter.hh"
 #include "IPLFactory.hh"
 #include "Value.hh"
-#include "expr/Int.hh"
-#include "expr/AddExpr.hh"
+#include "expr/value/Int.hh"
+#include "expr/arithmatic/AddExpr.hh"
 #include "expr/Expr.hh"
-#include "expr/Id.hh"
+#include "expr/value/Id.hh"
 #include "stmt/Statement.hh"
 #include "stmt/DefVar.hh"
 #include "stmt/DefFunc.hh"
@@ -14,6 +14,19 @@
 #include "Log.hh"
 
 bool g_logOperations = false;
+
+void Interpreter::binaryNumber(BinaryExpr *expr, float &left, float &right)
+{
+    expr->getLeft()->accept(this);
+    Number* l = dynamic_cast<Number*>(current);
+    assert(l != nullptr);
+    left = l->getValue();
+
+    expr->getRight()->accept(this);
+    Number* r = dynamic_cast<Number*>(current);
+    assert(r != nullptr);
+    right = r->getValue();
+}
 
 Interpreter::~Interpreter()
 {
@@ -37,6 +50,14 @@ void Interpreter::visit(Id *id)
     LOG_OPERATION_END("Interpreter::visit(Id *id)");
 }
 
+void Interpreter::visit(String *str)
+{
+    LOG_OPERATION_START("Interpreter::visit(Id *id)");
+    assert(str != nullptr);
+    current = str;
+    LOG_OPERATION_END("Interpreter::visit(Id *id)");
+}
+
 void Interpreter::visit(Int *integer)
 {
     LOG_OPERATION_START("Interpreter::visit(Int *integer)");
@@ -54,55 +75,73 @@ void Interpreter::visit(Float *fvalue)
 void Interpreter::visit(AddExpr *expr)
 {
     LOG_OPERATION_START("Interpreter::visit(AddExpr *expr)");
-    expr->getLeft()->accept(this);
-    float leftValue = current->getValue();
-    expr->getRight()->accept(this);
-    float rightValue = current->getValue();
+
+    float leftValue = 0.0f;
+    float rightValue = 0.0f;
+
+    binaryNumber(expr, leftValue, rightValue);
+
     current = IPLFactory::createFloat(leftValue + rightValue);
+
     LOG_OPERATION_END("Interpreter::visit(AddExpr *expr)");
 }
 
 void Interpreter::visit(ModExpr *expr)
 {
     LOG_OPERATION_START("Interpreter::visit(ModExpr *expr)");
-    expr->getLeft()->accept(this);
-    int leftValue = static_cast<int>(current->getValue());
-    expr->getRight()->accept(this);
-    int rightValue = static_cast<int>(current->getValue());
+
+    float leftfValue = 0.0f;
+    float rightfValue = 0.0f;
+
+    binaryNumber(expr, leftfValue, rightfValue);
+
+    int leftValue = static_cast<int>(leftfValue);
+    int rightValue = static_cast<int>(rightfValue);
+    
     current = IPLFactory::createFloat((float)(leftValue % rightValue));
+
     LOG_OPERATION_END("Interpreter::visit(ModExpr *expr)");
 }
 
 void Interpreter::visit(SubtExpr *expr)
 {
     LOG_OPERATION_START("Interpreter::visit(SubtExpr *expr)");
-    expr->getLeft()->accept(this);
-    float leftValue = current->getValue();
-    expr->getRight()->accept(this);
-    float rightValue = current->getValue();
+
+    float leftValue = 0.0f;
+    float rightValue = 0.0f;
+
+    binaryNumber(expr, leftValue, rightValue);
+
     current = IPLFactory::createFloat(leftValue - rightValue);
+
     LOG_OPERATION_END("Interpreter::visit(SubtExpr *expr)");
 }
 
 void Interpreter::visit(DivExpr *expr)
 {
     LOG_OPERATION_START("Interpreter::visit(DivExpr *expr)");
-    expr->getLeft()->accept(this);
-    float leftValue = current->getValue();
-    expr->getRight()->accept(this);
-    float rightValue = current->getValue();
+
+    float leftValue = 0.0f;
+    float rightValue = 0.0f;
+
+    binaryNumber(expr, leftValue, rightValue);
+
     current = IPLFactory::createFloat(leftValue / rightValue);
+    
     LOG_OPERATION_END("Interpreter::visit(DivExpr *expr)");
 }
 
 void Interpreter::visit(MulExpr *expr)
 {
     LOG_OPERATION_START("Interpreter::visit(MulExpr *expr)");
-    expr->getLeft()->accept(this);
-    float leftValue = current->getValue();
-    expr->getRight()->accept(this);
-    float rightValue = current->getValue();
+
+    float leftValue = 0.0f;
+    float rightValue = 0.0f;
+
+    binaryNumber(expr, leftValue, rightValue);
+
     current = IPLFactory::createFloat(leftValue * rightValue);
+    
     LOG_OPERATION_END("Interpreter::visit(MulExpr *expr)");
 }
 
@@ -165,8 +204,16 @@ void Interpreter::visit(PrintExpr *expr)
     assert(e != nullptr);
     e->accept(this);
     assert(current != nullptr);
-    assert(dynamic_cast<Value*>(current));
-    std::cout << current->getValue() << std::endl;
+    Number* num = dynamic_cast<Number*>(current);
+    String* str = dynamic_cast<String*>(current);
+    if(num){
+        std::cout << num->getValue() << std::endl;
+    }else if(str){
+        std::cout << str->getStr() << std::endl;
+    }else{
+        assert(0 && "it's not Printable");
+    }
+
     LOG_OPERATION_END("Interpreter::visit(PrintExpr *expr)");
 }
 
@@ -184,10 +231,9 @@ void Interpreter::visit(Expr *expr)
     LOG_OPERATION_END("Interpreter::visit(Expr *expr)");
 }
 
-float Interpreter::getResult() const
+void Interpreter::visit(BinaryExpr *expr)
 {
-    LOG_OPERATION_START("Interpreter::getResult()");
-    float result = current->getValue();
-    LOG_OPERATION_END("Interpreter::getResult()");
-    return result;
+    LOG_OPERATION_START("Interpreter::visit(BinaryExpr *expr)");
+    expr->accept(this);
+    LOG_OPERATION_END("Interpreter::visit(BinaryExpr *expr)");
 }

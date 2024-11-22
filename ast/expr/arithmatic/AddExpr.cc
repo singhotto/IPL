@@ -1,4 +1,4 @@
-#include "../Log.hh"  // Include the macros header
+#include "../../Log.hh"
 #include "AddExpr.hh"
 
 AddExpr::AddExpr(ExprPtr left, ExprPtr right) : left(std::move(left)), right(std::move(right))

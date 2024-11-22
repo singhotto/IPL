@@ -1,4 +1,4 @@
-#include "../Log.hh"  // Include the macros header
+#include "../../Log.hh"
 #include "Float.hh"
 
 Float::Float(float value) : value(value)

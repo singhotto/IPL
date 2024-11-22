@@ -3,8 +3,10 @@
 
 class Id;
 class Int;       // Forward declaration
+class String;       // Forward declaration
 class Float;   // Forward declaration
 class Expr;   // Forward declaration
+class BinaryExpr;   // Forward declaration
 class AddExpr;   // Forward declaration
 class ModExpr;   // Forward declaration
 class SubtExpr;   // Forward declaration
@@ -22,9 +24,11 @@ public:
     virtual ~Visitor() = default;
 
     virtual void visit(Id* id) = 0;
+    virtual void visit(String* id) = 0;
     virtual void visit(Int* integer) = 0;
     virtual void visit(Float* expr) = 0;
     virtual void visit(Expr* expr) = 0;
+    virtual void visit(BinaryExpr* expr) = 0;
     virtual void visit(AddExpr* expr) = 0;
     virtual void visit(ModExpr* expr) = 0;
     virtual void visit(SubtExpr* expr) = 0;

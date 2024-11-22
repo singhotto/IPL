@@ -1,4 +1,4 @@
-#include "../Log.hh"  // Include the macros header
+#include "../../Log.hh"
 #include "Int.hh"
 
 Int::Int(int value) : value(value)

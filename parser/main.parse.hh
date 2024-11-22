@@ -57,38 +57,39 @@ extern int yydebug;
     INTEGER = 258,                 /* INTEGER  */
     FLOAT = 259,                   /* FLOAT  */
     ID = 260,                      /* ID  */
-    VAR = 261,                     /* VAR  */
-    PRINT = 262,                   /* PRINT  */
-    FUNC = 263,                    /* FUNC  */
-    FOR = 264,                     /* FOR  */
-    WHILE = 265,                   /* WHILE  */
-    IF = 266,                      /* IF  */
-    ELSE = 267,                    /* ELSE  */
-    RETURN = 268,                  /* RETURN  */
-    ADD = 269,                     /* ADD  */
-    SUB = 270,                     /* SUB  */
-    MUL = 271,                     /* MUL  */
-    DIV = 272,                     /* DIV  */
-    MOD = 273,                     /* MOD  */
-    ASSIGN = 274,                  /* ASSIGN  */
-    INCREASE = 275,                /* INCREASE  */
-    DECREASE = 276,                /* DECREASE  */
-    ADDASSIGN = 277,               /* ADDASSIGN  */
-    SUBASSIGN = 278,               /* SUBASSIGN  */
-    EQUAL = 279,                   /* EQUAL  */
-    NOTEQUAL = 280,                /* NOTEQUAL  */
-    LESS = 281,                    /* LESS  */
-    GREATER = 282,                 /* GREATER  */
-    LESSEQUAL = 283,               /* LESSEQUAL  */
-    GREATEREQUAL = 284,            /* GREATEREQUAL  */
-    AND = 285,                     /* AND  */
-    OR = 286,                      /* OR  */
-    LPAREN = 287,                  /* LPAREN  */
-    RPAREN = 288,                  /* RPAREN  */
-    LBRACE = 289,                  /* LBRACE  */
-    RBRACE = 290,                  /* RBRACE  */
-    SEMICOLON = 291,               /* SEMICOLON  */
-    EOL = 292                      /* EOL  */
+    STRING = 261,                  /* STRING  */
+    VAR = 262,                     /* VAR  */
+    PRINT = 263,                   /* PRINT  */
+    FUNC = 264,                    /* FUNC  */
+    FOR = 265,                     /* FOR  */
+    WHILE = 266,                   /* WHILE  */
+    IF = 267,                      /* IF  */
+    ELSE = 268,                    /* ELSE  */
+    RETURN = 269,                  /* RETURN  */
+    ADD = 270,                     /* ADD  */
+    SUB = 271,                     /* SUB  */
+    MUL = 272,                     /* MUL  */
+    DIV = 273,                     /* DIV  */
+    MOD = 274,                     /* MOD  */
+    ASSIGN = 275,                  /* ASSIGN  */
+    INCREASE = 276,                /* INCREASE  */
+    DECREASE = 277,                /* DECREASE  */
+    ADDASSIGN = 278,               /* ADDASSIGN  */
+    SUBASSIGN = 279,               /* SUBASSIGN  */
+    EQUAL = 280,                   /* EQUAL  */
+    NOTEQUAL = 281,                /* NOTEQUAL  */
+    LESS = 282,                    /* LESS  */
+    GREATER = 283,                 /* GREATER  */
+    LESSEQUAL = 284,               /* LESSEQUAL  */
+    GREATEREQUAL = 285,            /* GREATEREQUAL  */
+    AND = 286,                     /* AND  */
+    OR = 287,                      /* OR  */
+    LPAREN = 288,                  /* LPAREN  */
+    RPAREN = 289,                  /* RPAREN  */
+    LBRACE = 290,                  /* LBRACE  */
+    RBRACE = 291,                  /* RBRACE  */
+    SEMICOLON = 292,               /* SEMICOLON  */
+    EOL = 293                      /* EOL  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -110,7 +111,7 @@ union YYSTYPE
     std::vector<Statement*>* body;
     Id* IDENTIFIER;
 
-#line 114 "parser/main.parse.hh"
+#line 115 "parser/main.parse.hh"
 
 };
 typedef union YYSTYPE YYSTYPE;

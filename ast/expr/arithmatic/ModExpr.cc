@@ -1,5 +1,5 @@
 #include "ModExpr.hh"
-#include "../Log.hh"
+#include "../../Log.hh"
 
 ModExpr::ModExpr(ExprPtr left, ExprPtr right) : left(std::move(left)), right(std::move(right))
 {

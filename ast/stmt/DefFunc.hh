@@ -3,7 +3,7 @@
 
 #include "../Value.hh"
 #include "Statement.hh"
-#include "../expr/Id.hh"
+#include "../expr/value/Id.hh"
 #include <vector>
 #include "../Visitor.hh"
 
@@ -25,7 +25,6 @@ public:
     std::string getName();
     std::vector<Id*> funcArgs();
     std::vector<Statement*> funcStatements();
-    float getValue() const override;
     void accept(Visitor* visitor) override;
 };
 

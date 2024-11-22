@@ -1,5 +1,13 @@
 var a = 50;
-var b = 5;
+var b = 5 + 4 * 1 ;
 
-print(b);
+print(b * a);
 
+var c = "desi jatt";
+
+var d = 4343;
+var f = 243.2;
+var x = d/f;
+
+print(x);
+print(c);

@@ -68,12 +68,6 @@ std::vector<Statement *> DefFunc::funcStatements()
     return temp;
 }
 
-float DefFunc::getValue() const
-{
-    LOG_OPERATION_START("DefFunc::getValue");
-    LOG_OPERATION_END("DefFunc::getValue");
-    return 0.0f;  // Assuming it returns 0.0f as a placeholder
-}
 
 void DefFunc::accept(Visitor *visitor)
 {

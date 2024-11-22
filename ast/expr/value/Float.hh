@@ -1,13 +1,12 @@
 #ifndef FLOAT__GUARD
 #define FLOAT__GUARD
 
-#include "../Value.hh"
-#include "Expr.hh"
-#include "../Visitor.hh" // Only necessary to define `accept`
+#include "Number.hh"
+#include "../../Visitor.hh" 
 
 class Visitor;
 
-class Float : virtual public Value, virtual public Expr {
+class Float : virtual public Number {
 private:
     float value;
 public:
@@ -17,4 +16,4 @@ public:
     void accept(Visitor* visitor) override;
 };
 
-#endif // INT__GUARD
+#endif

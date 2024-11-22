@@ -57,6 +57,7 @@ STRING \"(\\.|[^\"])*\"
 {ID}          { yylval.str = new std::string(yytext); return ID; }
 {INT}         { yylval.inum = atoi(yytext); return INTEGER; }
 {FLOAT}       { yylval.fnum = atof(yytext); return FLOAT; }
+{STRING}       { yylval.str = new std::string(yytext); return STRING; }
 
 "\n"          { return EOL; }
 

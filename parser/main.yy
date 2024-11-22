@@ -32,6 +32,7 @@ Interpreter& eval = Interpreter::getInstance();
 %token <inum> INTEGER
 %token <fnum> FLOAT
 %token <str> ID
+%token <str> STRING
 
 
 %token VAR PRINT FUNC FOR WHILE IF ELSE RETURN
@@ -47,14 +48,19 @@ Interpreter& eval = Interpreter::getInstance();
 %type <expr>  expr
 %type <IDENTIFIER>  IDENTIFIER
 
+%left ADD SUB
+%left MUL DIV MOD
+
 %%
 program:
-    program stmt_list EOL
+    
+    | program EOL
+    | program stmt_list EOL
     | stmt EOL { eval.visit($1); }
     ;
 
 stmt_list:
-    stmt_list stmt 
+    stmt_list stmt { eval.visit($2); }
     | stmt { eval.visit($1); }
 ;
 
@@ -66,10 +72,6 @@ stmt:
     | PRINT LPAREN expr RPAREN SEMICOLON {
         // Create a print statement node 
         $$ = IPLFactory::createPrintExpr(U(Expr, $3));
-    }
-    | PRINT LPAREN IDENTIFIER RPAREN SEMICOLON {
-        // Create a print statement node 
-        $$ = IPLFactory::createPrintExpr(U(Id, $3));
     }
     | RETURN expr SEMICOLON {
         // Create a return statement node
@@ -113,6 +115,10 @@ expr:
     | FLOAT {
         // Create a float literal node
         $$ = IPLFactory::createFloat($1);
+    }
+    | STRING {
+        // Create a string literal node
+        $$ = IPLFactory::createString(*$1);
     }
     |  IDENTIFIER { 
         $<IDENTIFIER>$ = $1; 

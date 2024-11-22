@@ -3,15 +3,16 @@
 #include <string>
 #include <type_traits>
 
-#include "expr/Int.hh"
-#include "expr/Float.hh"
+#include "expr/value/Int.hh"
+#include "expr/value/String.hh"
+#include "expr/value/Float.hh"
+#include "expr/value/Id.hh"
 #include "expr/Expr.hh"
-#include "expr/AddExpr.hh"
-#include "expr/DivExpr.hh"
-#include "expr/MulExpr.hh"
-#include "expr/ModExpr.hh"
-#include "expr/SubtExpr.hh"
-#include "expr/Id.hh"
+#include "expr/arithmatic/AddExpr.hh"
+#include "expr/arithmatic/DivExpr.hh"
+#include "expr/arithmatic/MulExpr.hh"
+#include "expr/arithmatic/ModExpr.hh"
+#include "expr/arithmatic/SubtExpr.hh"
 #include "stmt/Statement.hh"
 #include "stmt/DefVar.hh"
 #include "stmt/DefFunc.hh"
@@ -28,6 +29,12 @@ public:
     static Id *createId(std::string name)
     {
         return new Id(name);
+    }
+
+    static String *createString(std::string str)
+    {
+        std::string new_str = str.substr(1, str.size() - 2);
+        return new String(new_str);
     }
 
     template <typename T>
