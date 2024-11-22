@@ -3,7 +3,7 @@
 
 #include <vector>
 #include "Statement.hh"
-#include "../expr/value/Bool.hh"
+#include "../expr/Expr.hh"
 #include "../Visitor.hh"
 
 class Visitor;
@@ -11,15 +11,15 @@ class Visitor;
 class Ifcond : virtual public Statement {
 private:
     using StmtPtr = std::unique_ptr<Statement>;
-    using BoolPtr = std::unique_ptr<Bool>;
-    BoolPtr cond;
+    using ExprPtr = std::unique_ptr<Expr>;
+    ExprPtr cond;
     std::vector<StmtPtr> statements;
 
 public:
-    explicit Ifcond(BoolPtr cond, std::vector<Statement*> statements);
+    explicit Ifcond(ExprPtr cond, std::vector<Statement*> statements);
     ~Ifcond();
     
-    Bool* getCond();
+    Expr* getCond();
     std::vector<Statement*> getBody();
     void accept(Visitor* visitor) override;
 };

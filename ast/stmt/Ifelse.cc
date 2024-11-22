@@ -1,10 +1,10 @@
 #include "Ifelse.hh"
 #include "../Log.hh"
 
-Ifelse::Ifelse(BoolPtr cond, std::vector<Statement *> thenBody, std::vector<Statement *> elseBody)
+Ifelse::Ifelse(ExprPtr cond, std::vector<Statement *> thenBody, std::vector<Statement *> elseBody)
     : cond(std::move(cond))
 {
-    LOG_OPERATION_START("Ifelse::Ifelse(BoolPtr, std::vector<Statement *>)");
+    LOG_OPERATION_START("Ifelse::Ifelse(ExprPtr, std::vector<Statement *>)");
 
     this->thenBody.reserve(thenBody.size());
     for(auto i : thenBody){
@@ -16,7 +16,7 @@ Ifelse::Ifelse(BoolPtr cond, std::vector<Statement *> thenBody, std::vector<Stat
         this->elseBody.push_back(StmtPtr(i));
     }
     
-    LOG_OPERATION_END("Ifelse::Ifelse(BoolPtr, std::vector<Statement *>)");
+    LOG_OPERATION_END("Ifelse::Ifelse(ExprPtr, std::vector<Statement *>)");
 }
 
 Ifelse::~Ifelse()
@@ -25,10 +25,10 @@ Ifelse::~Ifelse()
     LOG_OPERATION_END("Ifelse::~Ifelse()");
 }
 
-Bool *Ifelse::getCond()
+Expr *Ifelse::getCond()
 {
-    LOG_OPERATION_START("Bool *Ifelse::getCond()");
-    LOG_OPERATION_END("Bool *Ifelse::getCond()");
+    LOG_OPERATION_START("Expr *Ifelse::getCond()");
+    LOG_OPERATION_END("Expr *Ifelse::getCond()");
     return cond.get();
 }
 

@@ -40,9 +40,10 @@ BISON_HEADER = $(PROGRAM_PATH).parse.hh
 main: $(BISON_OUTPUT) $(OBJ)
 	$(CXX) $(CXXFLAGS) -o $@ $(OBJ)
 
+# $(BISON) --report=all --defines=$(BISON_HEADER) -o $(BISON_OUTPUT) $< -Wcounterexamples
 # Rule for generating the parser (runs first)
 $(BISON_OUTPUT) $(BISON_HEADER): $(BISON_FILE)
-	$(BISON) --report=all --defines=$(BISON_HEADER) -o $(BISON_OUTPUT) $< -Wcounterexamples
+	$(BISON) --report=all --defines=$(BISON_HEADER) -o $(BISON_OUTPUT) $<
 
 # Rule for generating the lexer
 $(LEX_OUTPUT): $(LEX_FILE) $(BISON_OUTPUT)

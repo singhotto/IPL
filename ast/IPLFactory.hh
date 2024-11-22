@@ -8,18 +8,23 @@
 #include "expr/value/Float.hh"
 #include "expr/value/Id.hh"
 #include "expr/value/Bool.hh"
+
 #include "expr/Expr.hh"
 #include "expr/arithmatic/AddExpr.hh"
 #include "expr/arithmatic/DivExpr.hh"
 #include "expr/arithmatic/MulExpr.hh"
 #include "expr/arithmatic/ModExpr.hh"
 #include "expr/arithmatic/SubtExpr.hh"
+
 #include "stmt/Statement.hh"
 #include "stmt/DefVar.hh"
 #include "stmt/DefFunc.hh"
 #include "expr/CallFunc.hh"
 #include "stmt/PrintExpr.hh"
 #include "stmt/ReturnStmt.hh"
+#include "stmt/Ifcond.hh"
+#include "stmt/Ifelse.hh"
+
 #include "expr/boolean/And.hh"
 #include "expr/boolean/Or.hh"
 #include "expr/boolean/Equal.hh"
@@ -33,6 +38,8 @@ class IPLFactory
 {
 private:
     using ExprPtr = std::unique_ptr<Expr>;
+    using BoolPtr = std::unique_ptr<Bool>;
+    using IdPtr = std::unique_ptr<Id>;
 
 public:
     static Id *createId(std::string name)
@@ -159,33 +166,33 @@ public:
 
 
     static DefVar *createDefVar(
-        std::unique_ptr<Id> id,
+        IdPtr id,
         ExprPtr val)
     {
         return new DefVar(std::move(id), std::move(val));
     }
 
     static DefFunc *createDefFunc(
-        std::unique_ptr<Id>  id, std::vector<Id*> args, std::vector<Statement*> stmts)
+        IdPtr  id, std::vector<Id*> args, std::vector<Statement*> stmts)
     {
         return new DefFunc(std::move(id), args, stmts);
     }
 
     static DefFunc *createDefFunc(
-        std::unique_ptr<Id> id, std::vector<Statement*> stmts)
+        IdPtr id, std::vector<Statement*> stmts)
     {
         return new DefFunc(std::move(id), stmts);
     }
 
     static CallFunc *createCallFunc(
-        std::unique_ptr<Id> funcName, std::vector<Id *> args)
+        IdPtr funcName, std::vector<Id *> args)
     {
         return new CallFunc(std::move(funcName), std::move(args));
     }
 
 
     static CallFunc *createCallFunc(
-        std::unique_ptr<Id> funcName)
+        IdPtr funcName)
     {
         return new CallFunc(std::move(funcName));
     }
@@ -200,5 +207,17 @@ public:
         ExprPtr expr)
     {
         return new ReturnStmt(std::move(expr));
+    }
+
+    static Ifcond *createIfcond(
+        ExprPtr cond, std::vector<Statement*> statements)
+    {
+        return new Ifcond(std::move(cond), std::move(statements));
+    }
+
+    static Ifelse *createIfelse(
+        ExprPtr cond, std::vector<Statement*> thanBody, std::vector<Statement*> elseBody)
+    {
+        return new Ifelse(std::move(cond), std::move(thanBody), std::move(elseBody));
     }
 };

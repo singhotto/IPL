@@ -22,7 +22,7 @@ Interpreter& eval = Interpreter::getInstance();
     Expr* expr;     // For expressions
     Value* val;     // For values
     std::vector<Id*>* args;
-    std::vector<Statement*>* body;
+    StmtsVec* sBody;
     Id* IDENTIFIER;
 }
 
@@ -40,9 +40,10 @@ Interpreter& eval = Interpreter::getInstance();
 
 // Non-terminal declarations
 %type <node> program stmt_list
-%type <stmt> stmt
+%type <stmt> stmt var_decl
 %type <expr> expr
 %type <IDENTIFIER> IDENTIFIER
+%type <sBody> body
 
 %left ADD SUB
 %left MUL DIV MOD
@@ -51,24 +52,46 @@ Interpreter& eval = Interpreter::getInstance();
 program:
       program EOL
     | program stmt_list EOL
-    | stmt EOL { eval.visit($1); }
+    | stmt  { eval.visit($1); }
     ;
 
 stmt_list:
-    stmt_list stmt { eval.visit($2); }
+    stmt_list stmt   { eval.visit($2); }
     | stmt { eval.visit($1); }
     ;
 
 stmt:
-    VAR IDENTIFIER ASSIGN expr SEMICOLON {
-        $$ = IPLFactory::createDefVar(U(Id, $2), U(Expr, $4));
-    }
+    var_decl
     | PRINT LPAREN expr RPAREN SEMICOLON {
         $$ = IPLFactory::createPrintExpr(U(Expr, $3));
+    }
+    | IF LPAREN expr RPAREN EOL_LIST LBRACE EOL_LIST body EOL_LIST RBRACE {
+        $$ = IPLFactory::createIfcond(U(Expr, $3), *$8);
+        delete $8;
     }
     | RETURN expr SEMICOLON {
         $$ = IPLFactory::createReturnStmt(U(Expr, $2));
     }
+    ;
+
+EOL_LIST:
+    EOL               
+  | EOL EOL_LIST 
+
+
+var_decl: 
+    IDENTIFIER ASSIGN expr SEMICOLON {
+        $$ = IPLFactory::createDefVar(U(Id, $1), U(Expr, $3));
+    }
+    | VAR IDENTIFIER ASSIGN expr SEMICOLON {
+        $$ = IPLFactory::createDefVar(U(Id, $2), U(Expr, $4));
+    }
+    ;
+
+body:
+    /*blank*/  { $$ = new StmtsVec(); }
+    | stmt { $$ = new StmtsVec(); $$->push_back($1); }
+    | body stmt { $1->push_back($2); }
     ;
 
 IDENTIFIER:
