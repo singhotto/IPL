@@ -3,7 +3,7 @@ var b = 5 + 4 * 1 ;
 
 print(b * a);
 
-var c = "desi jatt";
+var c = "desi jatt" + " gandu";
 
 var d = 4343;
 var f = 243.2;

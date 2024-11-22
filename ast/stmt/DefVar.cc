@@ -1,5 +1,5 @@
 #include "DefVar.hh"
-#include "../Log.hh"  // Include the macros header
+#include "../Log.hh"
 
 DefVar::DefVar(IdPtr idExp, ExprPtr value) 
     : idExp(std::move(idExp)), value(std::move(value))

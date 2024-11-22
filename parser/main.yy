@@ -1,5 +1,4 @@
 %{
-
 #include "main.hh"
 #include "main.parse.hh"
 #include <iostream>
@@ -12,7 +11,6 @@ extern int yyparse();
 extern void yyerror(const char* s);
 
 Interpreter& eval = Interpreter::getInstance();
-
 %}
 
 %union {
@@ -20,9 +18,9 @@ Interpreter& eval = Interpreter::getInstance();
     float fnum;     // For float literals
     std::string* str; // For identifiers and strings
     Node* node;     // For AST nodes
-    Statement* stmt;     // For AST nodes
+    Statement* stmt; // For AST statements
     Expr* expr;     // For expressions
-    Value* val;
+    Value* val;     // For values
     std::vector<Id*>* args;
     std::vector<Statement*>* body;
     Id* IDENTIFIER;
@@ -34,27 +32,24 @@ Interpreter& eval = Interpreter::getInstance();
 %token <str> ID
 %token <str> STRING
 
-
-%token VAR PRINT FUNC FOR WHILE IF ELSE RETURN
-%token ADD SUB MUL DIV MOD ASSIGN
+%token VAR PRINT FUNC FOR WHILE IF ELSE RETURN True False
+%token ADD SUB MUL DIV MOD ASSIGN 
 %token INCREASE DECREASE ADDASSIGN SUBASSIGN
 %token EQUAL NOTEQUAL LESS GREATER LESSEQUAL GREATEREQUAL
-%token AND OR LPAREN RPAREN LBRACE RBRACE SEMICOLON
-%token EOL
+%token AND OR LPAREN RPAREN LBRACE RBRACE SEMICOLON COMMA EOL
 
 // Non-terminal declarations
-%type <node> program stmt_list 
-%type <stmt> stmt 
-%type <expr>  expr
-%type <IDENTIFIER>  IDENTIFIER
+%type <node> program stmt_list
+%type <stmt> stmt
+%type <expr> expr
+%type <IDENTIFIER> IDENTIFIER
 
 %left ADD SUB
 %left MUL DIV MOD
 
 %%
 program:
-    
-    | program EOL
+      program EOL
     | program stmt_list EOL
     | stmt EOL { eval.visit($1); }
     ;
@@ -62,72 +57,48 @@ program:
 stmt_list:
     stmt_list stmt { eval.visit($2); }
     | stmt { eval.visit($1); }
-;
+    ;
 
 stmt:
     VAR IDENTIFIER ASSIGN expr SEMICOLON {
-        // Create a variable definition node
         $$ = IPLFactory::createDefVar(U(Id, $2), U(Expr, $4));
     }
     | PRINT LPAREN expr RPAREN SEMICOLON {
-        // Create a print statement node 
         $$ = IPLFactory::createPrintExpr(U(Expr, $3));
     }
     | RETURN expr SEMICOLON {
-        // Create a return statement node
         $$ = IPLFactory::createReturnStmt(U(Expr, $2));
     }
-;
+    ;
 
-IDENTIFIER: 
+IDENTIFIER:
     ID { $$ = IPLFactory::createId(*$1); delete $1; }
     ;
 
 expr:
-    expr ADD expr {
-        // Create an addition expression node
-        $$ = IPLFactory::createAddExpr(U(Expr, $1), U(Expr, $3));
-    }
-    | expr SUB expr {
-        // Create a subtraction expression node
-        $$ = IPLFactory::createSubtExpr(U(Expr, $1), U(Expr, $3));
-    }
-    | expr MUL expr {
-        // Create a multiplication expression node
-        $$ = IPLFactory::createMulExpr(U(Expr, $1), U(Expr, $3));
-    }
-    | expr DIV expr {
-        // Create a division expression node
-        $$ = IPLFactory::createDivExpr(U(Expr, $1), U(Expr, $3));
-    }
-    | expr MOD expr {
-        // Create a modulus expression node
-        $$ = IPLFactory::createModExpr(U(Expr, $1), U(Expr, $3));
-    }
-    | LPAREN expr RPAREN {
-        // Parenthesized expression
-        $$ = $2;
-    }
-    | INTEGER {
-        // Create an integer literal node
-        $$ = IPLFactory::createInt($1);
-    }
-    | FLOAT {
-        // Create a float literal node
-        $$ = IPLFactory::createFloat($1);
-    }
-    | STRING {
-        // Create a string literal node
-        $$ = IPLFactory::createString(*$1);
-    }
-    |  IDENTIFIER { 
-        $<IDENTIFIER>$ = $1; 
-    }
-;
+    expr ADD expr { $$ = IPLFactory::createAddExpr(U(Expr, $1), U(Expr, $3)); }
+    | expr SUB expr { $$ = IPLFactory::createSubtExpr(U(Expr, $1), U(Expr, $3)); }
+    | expr MUL expr { $$ = IPLFactory::createMulExpr(U(Expr, $1), U(Expr, $3)); }
+    | expr DIV expr { $$ = IPLFactory::createDivExpr(U(Expr, $1), U(Expr, $3)); }
+    | expr MOD expr { $$ = IPLFactory::createModExpr(U(Expr, $1), U(Expr, $3)); }
+    | LPAREN expr RPAREN { $$ = $2; }
+    | expr EQUAL expr { $$ = IPLFactory::createEqual(U(Expr, $1), U(Expr, $3)); }
+    | expr NOTEQUAL expr { $$ = IPLFactory::createNotEqual(U(Expr, $1), U(Expr, $3)); }
+    | expr LESS expr { $$ = IPLFactory::createLess(U(Expr, $1), U(Expr, $3)); }
+    | expr GREATER expr { $$ = IPLFactory::createGreater(U(Expr, $1), U(Expr, $3)); }
+    | expr LESSEQUAL expr { $$ = IPLFactory::createLessEqual(U(Expr, $1), U(Expr, $3)); }
+    | expr GREATEREQUAL expr { $$ = IPLFactory::createGreaterEqual(U(Expr, $1), U(Expr, $3)); }
+    | expr AND expr { $$ = IPLFactory::createAnd(U(Expr, $1), U(Expr, $3)); }
+    | expr OR expr { $$ = IPLFactory::createOr(U(Expr, $1), U(Expr, $3)); }
+    | INTEGER { $$ = IPLFactory::createInt($1); }
+    | FLOAT { $$ = IPLFactory::createFloat($1); }
+    | STRING { $$ = IPLFactory::createString(*$1); }
+    | IDENTIFIER { $$ = $1; }
+    ;
 
 %%
 
-// Main function
-int main() {
+
+int main(){
     return yyparse();
 }

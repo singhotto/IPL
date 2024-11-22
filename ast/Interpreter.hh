@@ -6,6 +6,7 @@
 #include "Visitor.hh"
 #include "Value.hh"
 #include "ExecContext.hh"
+#include "expr/boolean/BoolExpr.hh"
 
 class Interpreter : virtual public Visitor
 {
@@ -17,7 +18,8 @@ private:
     Interpreter(const Interpreter&) = delete;
     Interpreter& operator=(const Interpreter&) = delete;
 
-    void binaryNumber(BinaryExpr* expr, float& left, float& right);
+    float binaryNumber(BinaryExpr* expr, char op);
+    bool boolean(BoolExpr* expr, int op);
 
 public:
     
@@ -32,18 +34,31 @@ public:
     void visit(Int* integer) override;
     void visit(Float* expr) override;
     void visit(Expr* expr) override;
+
     void visit(BinaryExpr* expr) override;
     void visit(AddExpr* expr) override;
     void visit(ModExpr* expr) override;
     void visit(SubtExpr* expr) override;
     void visit(DivExpr* expr) override;
     void visit(MulExpr* expr) override;
+
     void visit(Statement* stmt) override;
     void visit(DefVar* stmt) override;
     void visit(DefFunc* func) override;
     void visit(CallFunc* func) override;
     void visit(PrintExpr* expr) override;
     void visit(ReturnStmt* expr) override;
+    void visit(Ifcond* expr) override;
+    void visit(Ifelse* expr) override;
+
+    void visit(And* expr) override;
+    void visit(Equal* expr) override;
+    void visit(Greater* expr) override;
+    void visit(GreaterEqual* expr) override;
+    void visit(Less* expr) override;
+    void visit(LessEqual* expr) override;
+    void visit(NotEqual* expr) override;
+    void visit(Or* expr) override;
 };
 
 #endif // INTERPRETER__GUARD

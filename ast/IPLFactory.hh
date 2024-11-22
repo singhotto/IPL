@@ -7,6 +7,7 @@
 #include "expr/value/String.hh"
 #include "expr/value/Float.hh"
 #include "expr/value/Id.hh"
+#include "expr/value/Bool.hh"
 #include "expr/Expr.hh"
 #include "expr/arithmatic/AddExpr.hh"
 #include "expr/arithmatic/DivExpr.hh"
@@ -19,6 +20,14 @@
 #include "expr/CallFunc.hh"
 #include "stmt/PrintExpr.hh"
 #include "stmt/ReturnStmt.hh"
+#include "expr/boolean/And.hh"
+#include "expr/boolean/Or.hh"
+#include "expr/boolean/Equal.hh"
+#include "expr/boolean/Greater.hh"
+#include "expr/boolean/GreaterEqual.hh"
+#include "expr/boolean/Less.hh"
+#include "expr/boolean/LessEqual.hh"
+#include "expr/boolean/NotEqual.hh"
 
 class IPLFactory
 {
@@ -37,15 +46,9 @@ public:
         return new String(new_str);
     }
 
-    template <typename T>
-    static Expr* createValue(T value) {
-        if constexpr (std::is_same_v<T, int>) {
-            return new Int(value);
-        } else if constexpr (std::is_same_v<T, float>) {
-            return new Float(value);
-        } else {
-            static_assert(false, "Unsupported type!");
-        }
+    static String *createEString(std::string str)
+    {
+        return new String(str);
     }
 
     static Int *createInt(int value)
@@ -56,6 +59,67 @@ public:
     static Float *createFloat(float value)
     {
         return new Float(value);
+    }
+
+    static Bool *createBool(bool val)
+    {
+        return new Bool(val);
+    }
+
+    static Equal *createEqual(
+        ExprPtr left,
+        ExprPtr right)
+    {
+        return new Equal(std::move(left), std::move(right));
+    }
+
+    static NotEqual *createNotEqual(
+        ExprPtr left,
+        ExprPtr right)
+    {
+        return new NotEqual(std::move(left), std::move(right));
+    }
+
+    static And *createAnd(
+        ExprPtr left,
+        ExprPtr right)
+    {
+        return new And(std::move(left), std::move(right));
+    }
+
+    static Or *createOr(
+        ExprPtr left,
+        ExprPtr right)
+    {
+        return new Or(std::move(left), std::move(right));
+    }
+
+    static Greater *createGreater(
+        ExprPtr left,
+        ExprPtr right)
+    {
+        return new Greater(std::move(left), std::move(right));
+    }
+
+    static GreaterEqual *createGreaterEqual(
+        ExprPtr left,
+        ExprPtr right)
+    {
+        return new GreaterEqual(std::move(left), std::move(right));
+    }
+
+    static Less *createLess(
+        ExprPtr left,
+        ExprPtr right)
+    {
+        return new Less(std::move(left), std::move(right));
+    }
+
+    static LessEqual *createLessEqual(
+        ExprPtr left,
+        ExprPtr right)
+    {
+        return new LessEqual(std::move(left), std::move(right));
     }
 
     static AddExpr *createAddExpr(

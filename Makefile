@@ -15,17 +15,16 @@ AST_DIR = ast
 EXPR_DIR = $(AST_DIR)/expr
 ARITH_DIR = $(EXPR_DIR)/arithmatic
 VALUE_DIR = $(EXPR_DIR)/value
+BOOL_DIR = $(EXPR_DIR)/boolean
 STMT_DIR = $(AST_DIR)/stmt
 OBJ_DIR = obj
 EXPR_OBJ_DIR = $(OBJ_DIR)/expr
 
 # Source files
-SRC = $(VALUE_DIR)/Id.cc $(VALUE_DIR)/String.cc $(VALUE_DIR)/Int.cc $(VALUE_DIR)/Float.cc $(ARITH_DIR)/AddExpr.cc \
-      $(ARITH_DIR)/SubtExpr.cc $(ARITH_DIR)/DivExpr.cc $(ARITH_DIR)/ModExpr.cc $(ARITH_DIR)/MulExpr.cc \
-      $(STMT_DIR)/DefVar.cc $(STMT_DIR)/DefFunc.cc $(EXPR_DIR)/CallFunc.cc \
-      $(STMT_DIR)/PrintExpr.cc $(STMT_DIR)/ReturnStmt.cc \
-      $(AST_DIR)/ExecContext.cc $(AST_DIR)/Interpreter.cc \
-      $(PROGRAM_PATH).lex.cc $(PROGRAM_PATH).parse.cc
+SRC = $(wildcard $(VALUE_DIR)/*.cc) $(wildcard $(ARITH_DIR)/*.cc) \
+      $(wildcard $(STMT_DIR)/*.cc) $(wildcard $(EXPR_DIR)/*.cc) \
+      $(wildcard $(BOOL_DIR)/*.cc) $(wildcard $(AST_DIR)/*.cc) \
+	  $(PROGRAM_PATH).lex.cc $(PROGRAM_PATH).parse.cc
 
 # Object files
 OBJ = $(SRC:%.cc=$(OBJ_DIR)/%.o)
@@ -43,7 +42,7 @@ main: $(BISON_OUTPUT) $(OBJ)
 
 # Rule for generating the parser (runs first)
 $(BISON_OUTPUT) $(BISON_HEADER): $(BISON_FILE)
-	$(BISON) --report=all --defines=$(BISON_HEADER) -o $(BISON_OUTPUT) $<
+	$(BISON) --report=all --defines=$(BISON_HEADER) -o $(BISON_OUTPUT) $< -Wcounterexamples
 
 # Rule for generating the lexer
 $(LEX_OUTPUT): $(LEX_FILE) $(BISON_OUTPUT)
@@ -63,4 +62,4 @@ $(OBJ_DIR)/$(PROGRAM).parse.o: $(BISON_OUTPUT)
 
 # Clean object files, binary, and generated files
 clean:
-	rm -rf $(OBJ_DIR) $(PROGRAM) $(LEX_OUTPUT) $(BISON_OUTPUT) $(BISON_HEADER) *.output
+	rm -rf $(OBJ_DIR) $(PROGRAM) $(LEX_OUTPUT) $(BISON_OUTPUT) $(BISON_HEADER) parser/*.output

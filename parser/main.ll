@@ -27,37 +27,40 @@ STRING \"(\\.|[^\"])*\"
 "*"          { return MUL; }
 "/"          { return DIV; }
 "%"          { return MOD; }
-"="            { return ASSIGN; }
-";"            { return SEMICOLON; }
+"="          { return ASSIGN; }
+","          { return COMMA; }
+";"          { return SEMICOLON; }
 
-"++"        { return INCREASE; }
-"--"        { return DECREASE; }
-"+="        { return ADDASSIGN; }
-"-="        { return SUBASSIGN; }
+"++"          { return INCREASE; }
+"--"          { return DECREASE; }
+"+="          { return ADDASSIGN; }
+"-="          { return SUBASSIGN; }
 
-"=="        { return EQUAL; }
-"!="        { return NOTEQUAL; }
-"<"         { return LESS; }
-">"         { return GREATER; }
-"<="         { return LESSEQUAL; }
-">="         { return GREATEREQUAL; }
+"=="          { return EQUAL; }
+"!="          { return NOTEQUAL; }
+"<"           { return LESS; }
+">"           { return GREATER; }
+"<="          { return LESSEQUAL; }
+">="          { return GREATEREQUAL; }
 
-"&&"         { return AND; }
-"||"         { return OR; }
+"&&"          { return AND; }
+"||"          { return OR; }
 
-"var"          { return VAR; }
-"print"        { return PRINT; }
+"var"         { return VAR; }
+"print"       { return PRINT; }
 "func"        { return FUNC; }
 "for"         { return FOR;}
-"while"         { return WHILE;}
+"while"       { return WHILE;}
 "if"          { return IF; }
 "else"        { return ELSE; }
 "return"      { return RETURN; }
+"true"        { return True; }
+"false"       { return False; }
 
 {ID}          { yylval.str = new std::string(yytext); return ID; }
 {INT}         { yylval.inum = atoi(yytext); return INTEGER; }
 {FLOAT}       { yylval.fnum = atof(yytext); return FLOAT; }
-{STRING}       { yylval.str = new std::string(yytext); return STRING; }
+{STRING}      { yylval.str = new std::string(yytext); return STRING; }
 
 "\n"          { return EOL; }
 
