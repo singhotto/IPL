@@ -24,6 +24,7 @@
 #include "stmt/PrintExpr.hh"
 #include "stmt/ReturnStmt.hh"
 #include "stmt/ForLoop.hh"
+#include "stmt/While.hh"
 #include "Log.hh"
 
 bool g_logOperations = false;
@@ -467,6 +468,8 @@ void Interpreter::visit(ForLoop *for_stmt)
 {
     LOG_OPERATION_START("Interpreter::visit(ForLoop *expr)");
 
+    context.newScope();
+
     DefVar* var_def = dynamic_cast<DefVar*>(for_stmt->getInitial());
 
     assert(var_def != nullptr);
@@ -481,6 +484,46 @@ void Interpreter::visit(ForLoop *for_stmt)
 
     auto stmt_list = for_stmt->getBody();
 
+    // temp
+    std::string s = var_def->getId()->getName();
+    std::cout<<"j Start Value: ";
+    context.getVariable(s)->print();
+    std::cout<<"\n";
+    std::cout<<"While Condition: "<<v->getValue()<<"\n";
+
+
+    //end temp
+
+    while (v->getValue())
+    {
+        for(auto& stmt : stmt_list){
+            stmt->accept(this);
+        }
+
+        for_stmt->getUpdate()->accept(this);
+
+        for_stmt->getCond()->accept(this);
+
+        v = dynamic_cast<Bool*>(current);
+    }
+    std::cout<<"Exit Scope\n";
+    context.exitScope();
+
+    LOG_OPERATION_END("Interpreter::visit(ForLoop *expr)");
+}
+
+void Interpreter::visit(While *while_stmt)
+{
+    LOG_OPERATION_START("Interpreter::visit(While *while_stmt)");
+
+    while_stmt->getCond()->accept(this);
+
+    Bool* v = dynamic_cast<Bool*>(current);
+
+    assert(v != nullptr);
+
+    auto stmt_list = while_stmt->getBody();
+
 
     while (v->getValue())
     {
@@ -491,14 +534,12 @@ void Interpreter::visit(ForLoop *for_stmt)
 
         context.exitScope();
 
-        for_stmt->getUpdate()->accept(this);
-
-        for_stmt->getCond()->accept(this);
+        while_stmt->getCond()->accept(this);
 
         v = dynamic_cast<Bool*>(current);
     }
 
-    LOG_OPERATION_END("Interpreter::visit(ForLoop *expr)");
+    LOG_OPERATION_END("Interpreter::visit(While *while_stmt)");
 }
 
 void Interpreter::visit(And *expr)

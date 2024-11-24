@@ -62,6 +62,7 @@ public:
     void visit(Ifcond* expr) override;
     void visit(Ifelse* expr) override;
     void visit(ForLoop* expr) override;
+    void visit(While* expr) override;
 
     void visit(And* expr) override;
     void visit(Equal* expr) override;

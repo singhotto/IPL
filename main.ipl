@@ -1,20 +1,6 @@
-var a = 8;
-
-function pariDispari(x){ 
-    if(x % 2 == 0){
-        print(a);
-        return "   Pari";
-    }else {
-        return "Dispari";
+for(var i = 0; i<10; i++){
+    for(var j = 0; j<10; j++){
+        print(i, " ", j);
     }
-}
-
-function add(x, y){
-    return x + y;
-}
-
-for(var i = 0; i<=10; i++){
-    var ans = add(i, i);
-
-    print(ans);
+    print(i);
 }

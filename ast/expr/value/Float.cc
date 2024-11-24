@@ -28,6 +28,11 @@ void Float::print() const
     std::cout<<value;
 }
 
+std::unique_ptr<Value> Float::clone() const
+{
+    return std::make_unique<Float>(*this);
+}
+
 void Float::accept(Visitor *visitor)
 {
     LOG_OPERATION_START("Float::accept");

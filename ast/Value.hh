@@ -10,6 +10,7 @@ public:
         LOG_OPERATION_START("Value::~Value()");
         LOG_OPERATION_END("Value::~Value()");
     };
+    virtual std::unique_ptr<Value> clone() const = 0;
     virtual void print() const = 0;
 };
 

@@ -90,6 +90,10 @@ stmt_no_semicolon:
         $$ = IPLFactory::createForLoop(U(Statement, $3), U(Expr, $4), U(Statement, $6), *$9);
         delete $9;
     }
+    | WHILE LPAREN expr RPAREN LBRACE body RBRACE {
+        $$ = IPLFactory::createWhile(U(Expr, $3), *$6);
+        delete $6;
+    }
     ;
 
 stmt_semicolon:

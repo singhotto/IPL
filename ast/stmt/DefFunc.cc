@@ -61,6 +61,11 @@ void DefFunc::print() const
     std::cout<<funcName->getName();
 }
 
+std::unique_ptr<Value> DefFunc::clone() const
+{
+    return std::make_unique<DefFunc>(*this);
+}
+
 void DefFunc::accept(Visitor *visitor)
 {
     LOG_OPERATION_START("DefFunc::accept");

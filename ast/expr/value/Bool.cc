@@ -27,6 +27,11 @@ void Bool::print() const
     }
 }
 
+std::unique_ptr<Value> Bool::clone() const
+{
+    return std::make_unique<Bool>(*this);
+}
+
 void Bool::accept(Visitor *visitor)
 {
     LOG_OPERATION_START("Bool::accept");

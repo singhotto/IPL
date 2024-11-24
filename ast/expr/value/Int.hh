@@ -16,6 +16,7 @@ public:
     float getValue() const override;
     void setValue(float x) override;
     void print() const override;
+    std::unique_ptr<Value> clone() const override;
     void accept(Visitor* visitor) override;
 };
 

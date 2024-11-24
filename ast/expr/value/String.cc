@@ -23,6 +23,11 @@ void String::print() const
     std::cout<<str;
 }
 
+std::unique_ptr<Value> String::clone() const
+{
+    return std::make_unique<String>(*this);
+}
+
 void String::accept(Visitor *visitor)
 {
     LOG_OPERATION_START("void String::accept");

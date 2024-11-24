@@ -34,6 +34,7 @@
 #include "stmt/Ifcond.hh"
 #include "stmt/Ifelse.hh"
 #include "stmt/ForLoop.hh"
+#include "stmt/While.hh"
 
 #include "expr/boolean/And.hh"
 #include "expr/boolean/Or.hh"
@@ -248,6 +249,13 @@ public:
         std::vector<Statement*> stmts)
     {
         return new ForLoop(std::move(stmt), std::move(cond), std::move(update), std::move(stmts));
+    }
+
+    static While *createWhile(
+        ExprPtr cond, 
+        std::vector<Statement*> stmts)
+    {
+        return new While(std::move(cond), std::move(stmts));
     }
 
     static DefFunc *createDefFunc(

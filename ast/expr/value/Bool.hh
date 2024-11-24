@@ -15,6 +15,7 @@ public:
     ~Bool();
     bool getValue() const;
     void print() const override;
+    std::unique_ptr<Value> clone() const override;
     void accept(Visitor* visitor) override;
 };
 

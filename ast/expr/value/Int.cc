@@ -28,6 +28,11 @@ void Int::print() const
     std::cout<<value;
 }
 
+std::unique_ptr<Value> Int::clone() const
+{
+    return std::make_unique<Int>(*this);
+}
+
 void Int::accept(Visitor* visitor)
 {
     LOG_OPERATION_START("Int::accept");

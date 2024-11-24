@@ -34,6 +34,7 @@ class ReturnStmt;
 class Ifcond;
 class Ifelse;
 class ForLoop;
+class While;
 
 //Boolean Logic
 class And;  
@@ -80,6 +81,7 @@ public:
     virtual void visit(Ifcond* expr) = 0;
     virtual void visit(Ifelse* expr) = 0;
     virtual void visit(ForLoop* expr) = 0;
+    virtual void visit(While* expr) = 0;
 
     virtual void visit(And* expr) = 0;
     virtual void visit(Equal* expr) = 0;

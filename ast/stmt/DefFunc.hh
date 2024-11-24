@@ -25,6 +25,7 @@ public:
     std::vector<Id*> funcArgs();
     std::vector<Statement*> funcStatements();
     void print() const override;
+    std::unique_ptr<Value> clone() const override;
     void accept(Visitor* visitor) override;
 };
 
