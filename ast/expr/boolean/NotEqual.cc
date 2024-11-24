@@ -18,6 +18,14 @@ Expr *NotEqual::getLeft() const
     return left.get();
 }
 
+std::unique_ptr<Expr> NotEqual::cloneExpr() const
+{
+    auto leftClone = left->cloneExpr();   
+    auto rightClone = right->cloneExpr();
+
+    return std::make_unique<NotEqual>(std::move(leftClone), std::move(rightClone));
+}
+
 Expr* NotEqual::getRight() const
 {
     return right.get();

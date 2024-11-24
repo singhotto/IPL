@@ -14,6 +14,16 @@ std::string Id::getName() const
     return name;
 }
 
+std::unique_ptr<Expr> Id::cloneExpr() const
+{
+    return std::make_unique<Id>(name);
+}
+
+std::unique_ptr<Id> Id::cloneId() const
+{
+    return std::make_unique<Id>(name);
+}
+
 void Id::accept(Visitor *visitor)
 {
     LOG_OPERATION_START("Id::accept");

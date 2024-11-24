@@ -18,6 +18,14 @@ Expr *Less::getLeft() const
     return left.get();
 }
 
+std::unique_ptr<Expr> Less::cloneExpr() const
+{
+    auto leftClone = left->cloneExpr();   
+    auto rightClone = right->cloneExpr();
+
+    return std::make_unique<Less>(std::move(leftClone), std::move(rightClone));
+}
+
 Expr* Less::getRight() const
 {
     return right.get();

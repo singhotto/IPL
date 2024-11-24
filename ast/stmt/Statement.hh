@@ -14,6 +14,7 @@ public:
         LOG_OPERATION_START("Statement::~Statement()");
         LOG_OPERATION_END("Statement::~Statement()");
     };
+    virtual std::unique_ptr<Statement> clone() const = 0;
 };
 
 #endif

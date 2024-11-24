@@ -18,6 +18,14 @@ Expr *GreaterEqual::getLeft() const
     return left.get();
 }
 
+std::unique_ptr<Expr> GreaterEqual::cloneExpr() const
+{
+    auto leftClone = left->cloneExpr();   
+    auto rightClone = right->cloneExpr();
+
+    return std::make_unique<GreaterEqual>(std::move(leftClone), std::move(rightClone));
+}
+
 Expr* GreaterEqual::getRight() const
 {
     return right.get();

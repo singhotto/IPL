@@ -23,6 +23,8 @@ public:
     Expr* getCond();
     std::vector<Statement*> getBody();
     std::vector<Statement*> getElseBody();
+    std::unique_ptr<Statement> clone() const;
+    
     void accept(Visitor* visitor) override;
 };
 

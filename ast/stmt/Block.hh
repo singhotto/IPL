@@ -17,6 +17,7 @@ public:
     ~Block();
     
     std::vector<Statement*> getStatemets();
+    std::unique_ptr<Statement> clone() const override;
     void accept(Visitor* visitor) override;
 };
 

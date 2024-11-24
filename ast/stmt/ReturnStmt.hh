@@ -15,7 +15,7 @@ public:
     ~ReturnStmt();
     
     Expr* getValue() const;
-
+    std::unique_ptr<Statement> clone() const;
 
     void accept(Visitor* visitor) override;
 };

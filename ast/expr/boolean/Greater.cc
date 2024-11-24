@@ -23,6 +23,14 @@ Expr* Greater::getRight() const
     return right.get();
 }
 
+std::unique_ptr<Expr> Greater::cloneExpr() const
+{
+    auto leftClone = left->cloneExpr();   
+    auto rightClone = right->cloneExpr();
+
+    return std::make_unique<Greater>(std::move(leftClone), std::move(rightClone));
+}
+
 void Greater::accept(Visitor *visitor)
 {
     LOG_OPERATION_START("Greater::accept");

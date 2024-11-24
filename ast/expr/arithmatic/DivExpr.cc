@@ -23,6 +23,14 @@ Expr *DivExpr::getRight() const
     return right.get();
 }
 
+std::unique_ptr<Expr> DivExpr::cloneExpr() const
+{
+    auto leftClone = left->cloneExpr();   
+    auto rightClone = right->cloneExpr();
+
+    return std::make_unique<DivExpr>(std::move(leftClone), std::move(rightClone));
+}
+
 void DivExpr::accept(Visitor *visitor)
 {
     LOG_OPERATION_START("DivExpr::accept");

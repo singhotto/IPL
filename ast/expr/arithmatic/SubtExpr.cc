@@ -23,6 +23,14 @@ Expr* SubtExpr::getRight() const
     return right.get();
 }
 
+std::unique_ptr<Expr> SubtExpr::cloneExpr() const
+{
+    auto leftClone = left->cloneExpr();   
+    auto rightClone = right->cloneExpr();
+
+    return std::make_unique<SubtExpr>(std::move(leftClone), std::move(rightClone));
+}
+
 void SubtExpr::accept(Visitor *visitor)
 {
     LOG_OPERATION_START("SubtExpr::~SubtExpr");

@@ -23,7 +23,12 @@ void String::print() const
     std::cout<<str;
 }
 
-std::unique_ptr<Value> String::clone() const
+std::unique_ptr<Value> String::cloneValue() const
+{
+    return std::make_unique<String>(*this);
+}
+
+std::unique_ptr<Expr> String::cloneExpr() const
 {
     return std::make_unique<String>(*this);
 }

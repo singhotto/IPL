@@ -21,6 +21,13 @@ Id *Increase::getId() const
     return idExp.get();
 }
 
+std::unique_ptr<Statement> Increase::clone() const
+{
+    auto idExpClone = idExp->cloneId(); // Clone the Id object
+
+    // Return a new Increase object with the cloned members
+    return std::make_unique<Increase>(std::move(idExpClone));
+}
 
 void Increase::accept(Visitor *visitor)
 {

@@ -15,6 +15,7 @@ public:
         LOG_OPERATION_START("Expr::~Expr()");
         LOG_OPERATION_END("Expr::~Expr()");
     };
+    virtual std::unique_ptr<Expr> cloneExpr() const = 0;
 };
 
 #endif // EXPR__GUARD

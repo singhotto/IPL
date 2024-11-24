@@ -16,7 +16,8 @@ public:
     ~String();
     std::string getStr() const;
     void print() const override;
-    std::unique_ptr<Value> clone() const override;
+    std::unique_ptr<Value> cloneValue() const override;
+    std::unique_ptr<Expr> cloneExpr() const override;
     void accept(Visitor* visitor) override;
 };
 

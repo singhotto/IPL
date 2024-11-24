@@ -27,7 +27,12 @@ void Bool::print() const
     }
 }
 
-std::unique_ptr<Value> Bool::clone() const
+std::unique_ptr<Value> Bool::cloneValue() const
+{
+    return std::make_unique<Bool>(*this);
+}
+
+std::unique_ptr<Expr> Bool::cloneExpr() const
 {
     return std::make_unique<Bool>(*this);
 }

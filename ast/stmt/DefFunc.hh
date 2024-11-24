@@ -20,12 +20,20 @@ private:
 public:
     explicit DefFunc(IdPtr id, std::vector<Id*> args, std::vector<Statement*> statements);
     ~DefFunc();
+
+    DefFunc(DefFunc&& other) noexcept;
+    DefFunc& operator=(DefFunc&& other) noexcept;
+
+    DefFunc(const DefFunc&) = delete;
+    DefFunc& operator=(const DefFunc&) = delete;
     
     std::string getName();
     std::vector<Id*> funcArgs();
     std::vector<Statement*> funcStatements();
     void print() const override;
-    std::unique_ptr<Value> clone() const override;
+    std::unique_ptr<Value> cloneValue() const override;
+    std::unique_ptr<Statement> clone() const override;
+
     void accept(Visitor* visitor) override;
 };
 

@@ -34,6 +34,21 @@ Expr *DefVar::getValue() const
     return value.get();
 }
 
+std::unique_ptr<Statement> DefVar::clone() const
+{
+    // Clone the Id (idExp)
+    auto idExpClone = idExp->cloneId(); 
+
+    // Check if `value` exists and clone it if it does
+    if (value)
+    {
+        auto valueClone = value->cloneExpr(); // Clone the concrete Expr (value)
+        return std::make_unique<DefVar>(std::move(idExpClone), std::move(valueClone)); // Clone both members
+    }
+    // If no value exists, create DefVar with only idExpClone
+    return std::make_unique<DefVar>(std::move(idExpClone));
+}
+
 void DefVar::accept(Visitor *visitor)
 {
     LOG_OPERATION_START("DefVar::accept");

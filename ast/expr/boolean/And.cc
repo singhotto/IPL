@@ -18,9 +18,17 @@ Expr *And::getLeft() const
     return left.get();
 }
 
-Expr* And::getRight() const
+Expr *And::getRight() const
 {
     return right.get();
+}
+
+std::unique_ptr<Expr> And::cloneExpr() const
+{
+    auto leftClone = left->cloneExpr();   
+    auto rightClone = right->cloneExpr();
+
+    return std::make_unique<And>(std::move(leftClone), std::move(rightClone));
 }
 
 void And::accept(Visitor *visitor)

@@ -18,6 +18,14 @@ Expr *LessEqual::getLeft() const
     return left.get();
 }
 
+std::unique_ptr<Expr> LessEqual::cloneExpr() const
+{
+    auto leftClone = left->cloneExpr();   
+    auto rightClone = right->cloneExpr();
+
+    return std::make_unique<LessEqual>(std::move(leftClone), std::move(rightClone));
+}
+
 Expr* LessEqual::getRight() const
 {
     return right.get();

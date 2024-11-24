@@ -14,6 +14,7 @@ public:
 
     Expr* getLeft() const override;
     Expr* getRight() const override;
+    std::unique_ptr<Expr> cloneExpr() const override;
 
     void accept(Visitor* visitor) override;
 };

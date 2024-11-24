@@ -23,6 +23,14 @@ Expr* Equal::getRight() const
     return right.get();
 }
 
+std::unique_ptr<Expr> Equal::cloneExpr() const
+{
+    auto leftClone = left->cloneExpr();   
+    auto rightClone = right->cloneExpr();
+
+    return std::make_unique<Equal>(std::move(leftClone), std::move(rightClone));
+}
+
 void Equal::accept(Visitor *visitor)
 {
     LOG_OPERATION_START("Equal::accept");

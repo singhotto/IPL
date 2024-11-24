@@ -20,6 +20,11 @@ Expr *ReturnStmt::getValue() const
     return val.get();
 }
 
+std::unique_ptr<Statement> ReturnStmt::clone() const
+{
+    return std::make_unique<ReturnStmt>(val->cloneExpr());
+}
+
 void ReturnStmt::accept(Visitor *visitor)
 {
     LOG_OPERATION_START("ReturnStmt::accept");

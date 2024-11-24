@@ -28,6 +28,15 @@ Expr *DivAssign::getValue() const
     return value.get();
 }
 
+std::unique_ptr<Statement> DivAssign::clone() const
+{
+    auto idExpClone = idExp->cloneId(); // Clone the Id object
+    auto valueClone = value->cloneExpr(); // Clone the Expr object
+
+    // Return a new DivAssign object with the cloned members
+    return std::make_unique<DivAssign>(std::move(idExpClone), std::move(valueClone));
+}
+
 void DivAssign::accept(Visitor *visitor)
 {
     LOG_OPERATION_START("DivAssign::accept");

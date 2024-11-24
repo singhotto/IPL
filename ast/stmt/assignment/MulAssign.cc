@@ -28,6 +28,15 @@ Expr *MulAssign::getValue() const
     return value.get();
 }
 
+std::unique_ptr<Statement> MulAssign::clone() const
+{
+    auto idExpClone = idExp->cloneId(); // Clone the Id object
+    auto valueClone = value->cloneExpr(); // Clone the Expr object
+
+    // Return a new MulAssign object with the cloned members
+    return std::make_unique<MulAssign>(std::move(idExpClone), std::move(valueClone));
+}
+
 void MulAssign::accept(Visitor *visitor)
 {
     LOG_OPERATION_START("MulAssign::accept");

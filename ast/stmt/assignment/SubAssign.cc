@@ -28,6 +28,15 @@ Expr *SubAssign::getValue() const
     return value.get();
 }
 
+std::unique_ptr<Statement> SubAssign::clone() const
+{
+    auto idExpClone = idExp->cloneId(); // Clone the Id object
+    auto valueClone = value->cloneExpr(); // Clone the Expr object
+
+    // Return a new SubAssign object with the cloned members
+    return std::make_unique<SubAssign>(std::move(idExpClone), std::move(valueClone));
+}
+
 void SubAssign::accept(Visitor *visitor)
 {
     LOG_OPERATION_START("SubAssign::accept");

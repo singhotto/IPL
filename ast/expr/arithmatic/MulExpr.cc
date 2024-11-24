@@ -23,6 +23,14 @@ Expr* MulExpr::getRight() const
     return right.get();
 }
 
+std::unique_ptr<Expr> MulExpr::cloneExpr() const
+{
+    auto leftClone = left->cloneExpr();   
+    auto rightClone = right->cloneExpr();
+
+    return std::make_unique<MulExpr>(std::move(leftClone), std::move(rightClone));
+}
+
 void MulExpr::accept(Visitor *visitor)
 {
     LOG_OPERATION_START("MulExpr::accept");

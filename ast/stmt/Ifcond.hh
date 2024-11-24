@@ -21,6 +21,8 @@ public:
     
     Expr* getCond();
     std::vector<Statement*> getBody();
+    std::unique_ptr<Statement> clone() const;
+    
     void accept(Visitor* visitor) override;
 };
 

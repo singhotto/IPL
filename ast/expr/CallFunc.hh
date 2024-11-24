@@ -20,6 +20,9 @@ public:
    ~CallFunc();
    std::string funcName();
    std::vector<Expr*> funcArgs();
+   std::unique_ptr<Expr> cloneExpr() const override;
+   std::unique_ptr<Statement> clone() const override;
+
    void accept(Visitor* visitor) override;
 };
 

@@ -28,7 +28,12 @@ void Float::print() const
     std::cout<<value;
 }
 
-std::unique_ptr<Value> Float::clone() const
+std::unique_ptr<Value> Float::cloneValue() const
+{
+    return std::make_unique<Float>(*this);
+}
+
+std::unique_ptr<Expr> Float::cloneExpr() const
 {
     return std::make_unique<Float>(*this);
 }

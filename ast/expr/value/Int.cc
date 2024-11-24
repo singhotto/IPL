@@ -28,7 +28,12 @@ void Int::print() const
     std::cout<<value;
 }
 
-std::unique_ptr<Value> Int::clone() const
+std::unique_ptr<Value> Int::cloneValue() const
+{
+    return std::make_unique<Int>(*this);
+}
+
+std::unique_ptr<Expr> Int::cloneExpr() const
 {
     return std::make_unique<Int>(*this);
 }
