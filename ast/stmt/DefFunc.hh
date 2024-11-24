@@ -25,6 +25,7 @@ public:
     std::string getName();
     std::vector<Id*> funcArgs();
     std::vector<Statement*> funcStatements();
+    void print() const override;
     void accept(Visitor* visitor) override;
 };
 

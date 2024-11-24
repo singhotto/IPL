@@ -14,6 +14,8 @@ public:
     ~Int();
     
     float getValue() const override;
+    void setValue(float x) override;
+    void print() const override;
     void accept(Visitor* visitor) override;
 };
 

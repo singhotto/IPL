@@ -18,6 +18,15 @@ bool Bool::getValue() const
     return value;
 }
 
+void Bool::print() const
+{
+    if(value){
+        std::cout<<"true";
+    }else{
+        std::cout<<"false";
+    }
+}
+
 void Bool::accept(Visitor *visitor)
 {
     LOG_OPERATION_START("Bool::accept");

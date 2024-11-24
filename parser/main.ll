@@ -35,6 +35,8 @@ STRING \"(\\.|[^\"])*\"
 "--"          { return DECREASE; }
 "+="          { return ADDASSIGN; }
 "-="          { return SUBASSIGN; }
+"*="          { return MULASSIGN; }
+"/="          { return DIVASSIGN; }
 
 "=="          { return EQUAL; }
 "!="          { return NOTEQUAL; }
@@ -48,7 +50,7 @@ STRING \"(\\.|[^\"])*\"
 
 "var"         { return VAR; }
 "print"       { return PRINT; }
-"func"        { return FUNC; }
+"function"        { return FUNC; }
 "for"         { return FOR;}
 "while"       { return WHILE;}
 "if"          { return IF; }
@@ -62,7 +64,7 @@ STRING \"(\\.|[^\"])*\"
 {FLOAT}       { yylval.fnum = atof(yytext); return FLOAT; }
 {STRING}      { yylval.str = new std::string(yytext); return STRING; }
 
-"\n"          { return EOL; }
+"\n"          { /* ignore new line */ }
 
 "//".*        { /* ignore comments */ }
 [ \t]         { /* ignore whitespace */ }

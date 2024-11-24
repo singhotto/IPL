@@ -1,5 +1,10 @@
-var a = 50;
+var a = 8;
 
-if(a == 50){
-print(a);
+function foo(){ 
+    return "Gandu";
+}
+
+for(var i = 0; i<10; i++){
+    var x = foo();
+    print(x);
 }

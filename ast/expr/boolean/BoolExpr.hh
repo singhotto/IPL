@@ -8,7 +8,10 @@
 
 class BoolExpr : virtual public Expr {
 public:
-    virtual ~BoolExpr() { std::cout<<"~BoolExpr()\n"; };
+    virtual ~BoolExpr() { 
+        LOG_OPERATION_START("BoolExpr::~BoolExpr()");
+        LOG_OPERATION_END("BoolExpr::~BoolExpr()");
+    };
     virtual Expr* getLeft() const = 0;
     virtual Expr* getRight() const = 0;
 };

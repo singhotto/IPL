@@ -5,14 +5,25 @@
 #include "expr/arithmatic/AddExpr.hh"
 #include "expr/Expr.hh"
 #include "expr/value/Id.hh"
+
 #include "stmt/Statement.hh"
+#include "stmt/Block.hh"
 #include "stmt/DefVar.hh"
+#include "stmt/assignment/Assign.hh"
+#include "stmt/assignment/AddAssign.hh"
+#include "stmt/assignment/MulAssign.hh"
+#include "stmt/assignment/DivAssign.hh"
+#include "stmt/assignment/SubAssign.hh"
+#include "stmt/assignment/AddAssign.hh"
+#include "stmt/assignment/Decrease.hh"
+#include "stmt/assignment/Increase.hh"
 #include "stmt/DefFunc.hh"
 #include "stmt/Ifcond.hh"
 #include "stmt/Ifelse.hh"
 #include "expr/CallFunc.hh"
 #include "stmt/PrintExpr.hh"
 #include "stmt/ReturnStmt.hh"
+#include "stmt/ForLoop.hh"
 #include "Log.hh"
 
 bool g_logOperations = false;
@@ -185,6 +196,18 @@ void Interpreter::visit(Statement *stmt)
     LOG_OPERATION_END("Interpreter::visit(Statement *stmt)");
 }
 
+void Interpreter::visit(Block *stmt)
+{
+    LOG_OPERATION_START("Interpreter::visit(Block *stmt)");
+    auto stmts =  stmt->getStatemets();
+
+    for(Statement* s : stmts){
+        s->accept(this);
+    }
+
+    LOG_OPERATION_END("Interpreter::visit(Block *stmt)");
+}
+
 void Interpreter::visit(DefVar *stmt)
 {
     LOG_OPERATION_START("Interpreter::visit(DefVar *stmt)");
@@ -192,14 +215,138 @@ void Interpreter::visit(DefVar *stmt)
     Value* val = dynamic_cast<Value*>(current);
     assert(val != nullptr);
     Id* id = stmt->getId();
-    context.setVariable(id->getName(), val);
+    context.addNewVariable(id->getName(), val);
     LOG_OPERATION_END("Interpreter::visit(DefVar *stmt)");
+}
+
+void Interpreter::visit(Assign *stmt)
+{
+    LOG_OPERATION_START("Interpreter::visit(Assign *stmt)");
+
+    stmt->getValue()->accept(this);
+    Value* val = dynamic_cast<Value*>(current);
+    assert(val != nullptr);
+
+    const std::string& var_name = stmt->getId()->getName();
+    if(context.getVariable(var_name)){
+        context.updateVariable(var_name, val);
+    }else{
+        throw std::string("Undeclaired Varibale ") + var_name + "\n";
+    }
+
+    LOG_OPERATION_END("Interpreter::visit(Assign *stmt)");
+}
+
+void Interpreter::visit(AddAssign *stmt)
+{
+    LOG_OPERATION_START("Interpreter::visit(AddAssign *stmt)");
+    
+    stmt->getValue()->accept(this);
+    Number* val = dynamic_cast<Number*>(current);
+    assert(val != nullptr);
+
+    const std::string& var_name = stmt->getId()->getName();
+    Number* old = dynamic_cast<Number*>(context.getVariable(var_name));
+    if(old){
+        old->setValue(val->getValue() + old->getValue());
+    }else{
+        throw std::string("Undeclaired Varibale ") + var_name + "\n";
+    }
+
+    LOG_OPERATION_END("Interpreter::visit(AddAssign *stmt)");
+}
+
+void Interpreter::visit(Decrease *stmt)
+{
+    LOG_OPERATION_START("Interpreter::visit(Decrease *stmt)");
+
+    const std::string& var_name = stmt->getId()->getName();
+    Number* old = dynamic_cast<Number*>(context.getVariable(var_name));
+    if(old){
+        old->setValue(old->getValue() - 1);
+    }else{
+        throw std::string("Undeclaired Varibale ") + var_name + "\n";
+    }
+
+    LOG_OPERATION_END("Interpreter::visit(Decrease *stmt)");
+}
+
+void Interpreter::visit(Increase *stmt)
+{
+    LOG_OPERATION_START("Interpreter::visit(Increase *stmt)");
+
+    const std::string& var_name = stmt->getId()->getName();
+    Number* old = dynamic_cast<Number*>(context.getVariable(var_name));
+    if(old){
+        old->setValue(old->getValue() + 1);
+    }else{
+        throw std::string("Undeclaired Varibale ") + var_name + "\n";
+    }
+    
+    LOG_OPERATION_END("Interpreter::visit(Increase *stmt)");
+}
+
+void Interpreter::visit(DivAssign *stmt)
+{
+    LOG_OPERATION_START("Interpreter::visit(DivAssign *stmt)");
+    
+    stmt->getValue()->accept(this);
+    Number* val = dynamic_cast<Number*>(current);
+    assert(val != nullptr);
+
+    const std::string& var_name = stmt->getId()->getName();
+    Number* old = dynamic_cast<Number*>(context.getVariable(var_name));
+    if(old){
+        old->setValue((float)old->getValue() / val->getValue());
+    }else{
+        throw std::string("Undeclaired Varibale ") + var_name + "\n";
+    }
+
+    LOG_OPERATION_END("Interpreter::visit(DivAssign *stmt)");
+}
+
+void Interpreter::visit(SubAssign *stmt)
+{
+    LOG_OPERATION_START("Interpreter::visit(SubAssign *stmt)");
+    
+    stmt->getValue()->accept(this);
+    Number* val = dynamic_cast<Number*>(current);
+    assert(val != nullptr);
+
+    const std::string& var_name = stmt->getId()->getName();
+    Number* old = dynamic_cast<Number*>(context.getVariable(var_name));
+    if(old){
+        old->setValue(old->getValue() - val->getValue());
+    }else{
+        throw std::string("Undeclaired Varibale ") + var_name + "\n";
+    }
+
+    LOG_OPERATION_END("Interpreter::visit(SubAssign *stmt)");
+}
+
+void Interpreter::visit(MulAssign *stmt)
+{
+    LOG_OPERATION_START("Interpreter::visit(MulAssign *stmt)");
+    
+    stmt->getValue()->accept(this);
+    Number* val = dynamic_cast<Number*>(current);
+    assert(val != nullptr);
+
+    const std::string& var_name = stmt->getId()->getName();
+    Number* old = dynamic_cast<Number*>(context.getVariable(var_name));
+    if(old){
+        old->setValue(old->getValue() * val->getValue());
+    }else{
+        throw std::string("Undeclaired Varibale ") + var_name + "\n";
+    }
+
+    LOG_OPERATION_END("Interpreter::visit(MulAssign *stmt)");
 }
 
 void Interpreter::visit(DefFunc *func)
 {
     LOG_OPERATION_START("Interpreter::visit(DefFunc *func)");
-    context.setVariable(func->getName(), func);
+    context.addNewVariable(func->getName(), func);
     LOG_OPERATION_END("Interpreter::visit(DefFunc *func)");
 }
 
@@ -220,7 +367,7 @@ void Interpreter::visit(CallFunc *func)
     for(int i = 0; i<internalParms.size(); i++){
         const std::string& name = internalParms[i]->getName();
         Value* value = context.getVariable(globalParms[i]->getName());
-        context.setVariable(name, value);
+        context.addNewVariable(name, value);
     }
     auto statements = f->funcStatements();
     for(int i = 0; i<statements.size(); i++){
@@ -233,26 +380,17 @@ void Interpreter::visit(CallFunc *func)
 void Interpreter::visit(PrintExpr *expr)
 {
     LOG_OPERATION_START("Interpreter::visit(PrintExpr *expr)");
-    Expr* e = expr->getExpr();
-    assert(e != nullptr);
-    e->accept(this);
-    assert(current != nullptr);
-    Number* num = dynamic_cast<Number*>(current);
-    String* str = dynamic_cast<String*>(current);
-    Bool* bln = dynamic_cast<Bool*>(current);
-    if(num){
-        std::cout << num->getValue() << std::endl;
-    }else if(str){
-        std::cout << str->getStr() << std::endl;
-    }else if(bln){
-        if(bln->getValue()){
-            std::cout << "true" << std::endl;
-        }else{
-            std::cout << "false" << std::endl;
-        }
-    }else{
-        assert(0 && "it's not Printable");
+
+    for(Expr* e : expr->getExprs()){
+        assert(e != nullptr);
+        e->accept(this);
+
+        assert(current != nullptr);
+
+        current->print();
     }
+    
+    std::cout<<"\n";
 
     LOG_OPERATION_END("Interpreter::visit(PrintExpr *expr)");
 }
@@ -307,7 +445,7 @@ void Interpreter::visit(Ifelse *expr)
             statements[i]->accept(this);
         }
     }else{
-        auto statements = expr->getBody();
+        auto statements = expr->getElseBody();
         for(int i = 0; i<statements.size(); i++){
             statements[i]->accept(this);
         }
@@ -316,6 +454,44 @@ void Interpreter::visit(Ifelse *expr)
     context.exitScope();
     
     LOG_OPERATION_END("Interpreter::visit(Ifelse *expr)");
+}
+
+void Interpreter::visit(ForLoop *for_stmt)
+{
+    LOG_OPERATION_START("Interpreter::visit(ForLoop *expr)");
+
+    DefVar* var_def = dynamic_cast<DefVar*>(for_stmt->getInitial());
+
+    assert(var_def != nullptr);
+
+    var_def->accept(this);
+
+    for_stmt->getCond()->accept(this);
+
+    Bool* v = dynamic_cast<Bool*>(current);
+
+    assert(v != nullptr);
+
+    auto stmt_list = for_stmt->getBody();
+
+
+    while (v->getValue())
+    {
+        context.newScope();
+
+        for(auto& stmt : stmt_list)
+            stmt->accept(this);
+
+        context.exitScope();
+
+        for_stmt->getUpdate()->accept(this);
+
+        for_stmt->getCond()->accept(this);
+
+        v = dynamic_cast<Bool*>(current);
+    }
+
+    LOG_OPERATION_END("Interpreter::visit(ForLoop *expr)");
 }
 
 void Interpreter::visit(And *expr)

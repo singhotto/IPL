@@ -15,6 +15,7 @@ public:
     explicit String(const std::string str);
     ~String();
     std::string getStr() const;
+    void print() const override;
     void accept(Visitor* visitor) override;
 };
 

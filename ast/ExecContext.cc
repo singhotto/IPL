@@ -1,5 +1,7 @@
 #include "ExecContext.hh"
 #include "Log.hh"  // Include the macros header
+            #include "expr/value/Number.hh"
+
 
 ExecContext::ExecContext()
 {
@@ -12,12 +14,6 @@ ExecContext::~ExecContext()
 {
     LOG_OPERATION_START("ExecContext::~ExecContext");
     if (!scopeStack.empty()){
-        // for (auto& map : scopeStack) {
-        //     // Iterate over each unordered_map in the vector
-        //     for (auto& pair : map) {
-        //         std::cout << "Key: " << pair.first << ", Value: " << pair.second->getValue() << std::endl;
-        //     }
-        // }
         scopeStack.pop_back();
     }
     LOG_OPERATION_END("ExecContext::~ExecContext");
@@ -38,18 +34,36 @@ void ExecContext::exitScope()
     LOG_OPERATION_END("ExecContext::exitScope");
 }
 
-void ExecContext::setVariable(const std::string &name, Value *v)
+void ExecContext::addNewVariable(const std::string &name, Value *v)
 {
-    LOG_OPERATION_START("ExecContext::setVariable");
-    assert(v != nullptr && "ExecContext::setVariable got Deleted Value");
-
+    LOG_OPERATION_START("ExecContext::addNewVariable");
+    assert(v != nullptr && "ExecContext::addNewVariable got Deleted Value");
+    
     scopeStack.back()[name] = v;
-    LOG_OPERATION_END("ExecContext::setVariable");
+    LOG_OPERATION_END("ExecContext::addNewVariable");
+}
+
+void ExecContext::updateVariable(const std::string &name, Value *v)
+{
+    LOG_OPERATION_START("ExecContext::updateVariable");
+    assert(v != nullptr && "ExecContext::updateVariable got Deleted Value");
+    
+    for (auto it = scopeStack.rbegin(); it != scopeStack.rend(); ++it) {
+        auto& currentScope = *it;
+        if (currentScope.find(name) != currentScope.end()) {
+            LOG_OPERATION_END("ExecContext::updateVariable");
+            currentScope[name] = v;
+            return;
+        }
+    }
+
+    LOG_OPERATION_END("ExecContext::updateVariable");
 }
 
 Value *ExecContext::getVariable(const std::string name) const
 {
     LOG_OPERATION_START("ExecContext::getVariable");
+    
     for (auto it = scopeStack.rbegin(); it != scopeStack.rend(); ++it) {
         auto currentScope = *it;
         if (currentScope.find(name) != currentScope.end()) {
@@ -60,3 +74,4 @@ Value *ExecContext::getVariable(const std::string name) const
     LOG_OPERATION_END("ExecContext::getVariable BUT NOT FOUND");
     return nullptr;
 }
+

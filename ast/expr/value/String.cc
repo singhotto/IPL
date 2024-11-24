@@ -18,6 +18,11 @@ std::string String::getStr() const
     return str;
 }
 
+void String::print() const
+{
+    std::cout<<str;
+}
+
 void String::accept(Visitor *visitor)
 {
     LOG_OPERATION_START("void String::accept");

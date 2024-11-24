@@ -1,4 +1,4 @@
-#include "../Log.hh"  // Include the macros header
+#include "../Log.hh"  
 #include "ReturnStmt.hh"
 
 ReturnStmt::ReturnStmt(ExprPtr val) : val(std::move(val))

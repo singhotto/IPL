@@ -12,13 +12,13 @@ class Visitor;
 class PrintExpr : virtual public Statement {
 private:
     using ExprPtr = std::unique_ptr<Expr>;
-    ExprPtr expr;
+    std::vector<ExprPtr> exprs;
 
 public:
-    PrintExpr(ExprPtr expr);
+    PrintExpr(std::vector<Expr*> exprs);
     ~PrintExpr();
 
-    Expr* getExpr() const;
+    std::vector<Expr*> getExprs();
     void accept(Visitor* visitor) override;
 };
 

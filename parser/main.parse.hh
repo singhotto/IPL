@@ -78,21 +78,22 @@ extern int yydebug;
     DECREASE = 279,                /* DECREASE  */
     ADDASSIGN = 280,               /* ADDASSIGN  */
     SUBASSIGN = 281,               /* SUBASSIGN  */
-    EQUAL = 282,                   /* EQUAL  */
-    NOTEQUAL = 283,                /* NOTEQUAL  */
-    LESS = 284,                    /* LESS  */
-    GREATER = 285,                 /* GREATER  */
-    LESSEQUAL = 286,               /* LESSEQUAL  */
-    GREATEREQUAL = 287,            /* GREATEREQUAL  */
-    AND = 288,                     /* AND  */
-    OR = 289,                      /* OR  */
-    LPAREN = 290,                  /* LPAREN  */
-    RPAREN = 291,                  /* RPAREN  */
-    LBRACE = 292,                  /* LBRACE  */
-    RBRACE = 293,                  /* RBRACE  */
-    SEMICOLON = 294,               /* SEMICOLON  */
-    COMMA = 295,                   /* COMMA  */
-    EOL = 296                      /* EOL  */
+    MULASSIGN = 282,               /* MULASSIGN  */
+    DIVASSIGN = 283,               /* DIVASSIGN  */
+    EQUAL = 284,                   /* EQUAL  */
+    NOTEQUAL = 285,                /* NOTEQUAL  */
+    LESS = 286,                    /* LESS  */
+    GREATER = 287,                 /* GREATER  */
+    LESSEQUAL = 288,               /* LESSEQUAL  */
+    GREATEREQUAL = 289,            /* GREATEREQUAL  */
+    AND = 290,                     /* AND  */
+    OR = 291,                      /* OR  */
+    LPAREN = 292,                  /* LPAREN  */
+    RPAREN = 293,                  /* RPAREN  */
+    LBRACE = 294,                  /* LBRACE  */
+    RBRACE = 295,                  /* RBRACE  */
+    SEMICOLON = 296,               /* SEMICOLON  */
+    COMMA = 297                    /* COMMA  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -112,9 +113,10 @@ union YYSTYPE
     Value* val;     // For values
     std::vector<Id*>* args;
     StmtsVec* sBody;
+    ExprVec* sExprList;
     Id* IDENTIFIER;
 
-#line 118 "parser/main.parse.hh"
+#line 120 "parser/main.parse.hh"
 
 };
 typedef union YYSTYPE YYSTYPE;

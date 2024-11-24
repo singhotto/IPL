@@ -17,13 +17,23 @@
 #include "expr/arithmatic/SubtExpr.hh"
 
 #include "stmt/Statement.hh"
+#include "stmt/Block.hh"
 #include "stmt/DefVar.hh"
+#include "stmt/assignment/Assign.hh"
+#include "stmt/assignment/AddAssign.hh"
+#include "stmt/assignment/MulAssign.hh"
+#include "stmt/assignment/DivAssign.hh"
+#include "stmt/assignment/SubAssign.hh"
+#include "stmt/assignment/AddAssign.hh"
+#include "stmt/assignment/Decrease.hh"
+#include "stmt/assignment/Increase.hh"
 #include "stmt/DefFunc.hh"
 #include "expr/CallFunc.hh"
 #include "stmt/PrintExpr.hh"
 #include "stmt/ReturnStmt.hh"
 #include "stmt/Ifcond.hh"
 #include "stmt/Ifelse.hh"
+#include "stmt/ForLoop.hh"
 
 #include "expr/boolean/And.hh"
 #include "expr/boolean/Or.hh"
@@ -38,6 +48,7 @@ class IPLFactory
 {
 private:
     using ExprPtr = std::unique_ptr<Expr>;
+    using StmtPtr = std::unique_ptr<Statement>;
     using BoolPtr = std::unique_ptr<Bool>;
     using IdPtr = std::unique_ptr<Id>;
 
@@ -164,12 +175,79 @@ public:
         return new ModExpr(std::move(left), std::move(right));
     }
 
+    static Block *createBlock(
+        std::vector<Statement*> stmts)
+    {
+        return new Block(std::move(stmts));
+    }
+
+    static DefVar *createDefVar(
+        IdPtr id)
+    {
+        return new DefVar(std::move(id));
+    }
 
     static DefVar *createDefVar(
         IdPtr id,
         ExprPtr val)
     {
         return new DefVar(std::move(id), std::move(val));
+    }
+
+    static Assign *createAssign(
+        IdPtr id,
+        ExprPtr val)
+    {
+        return new Assign(std::move(id), std::move(val));
+    }
+
+    static AddAssign *createAddAssign(
+        IdPtr id,
+        ExprPtr val)
+    {
+        return new AddAssign(std::move(id), std::move(val));
+    }
+
+    static MulAssign *createMulAssign(
+        IdPtr id,
+        ExprPtr val)
+    {
+        return new MulAssign(std::move(id), std::move(val));
+    }
+
+    static DivAssign *createDivAssign(
+        IdPtr id,
+        ExprPtr val)
+    {
+        return new DivAssign(std::move(id), std::move(val));
+    }
+
+    static SubAssign *createSubAssign(
+        IdPtr id,
+        ExprPtr val)
+    {
+        return new SubAssign(std::move(id), std::move(val));
+    }
+
+    static Increase *createIncrease(
+        IdPtr id)
+    {
+        return new Increase(std::move(id));
+    }
+
+    static Decrease *createDecrease(
+        IdPtr id)
+    {
+        return new Decrease(std::move(id));
+    }
+
+    static ForLoop *createForLoop(
+        StmtPtr stmt,
+        ExprPtr cond, 
+        StmtPtr update, 
+        std::vector<Statement*> stmts)
+    {
+        return new ForLoop(std::move(stmt), std::move(cond), std::move(update), std::move(stmts));
     }
 
     static DefFunc *createDefFunc(
@@ -198,7 +276,7 @@ public:
     }
 
     static PrintExpr *createPrintExpr(
-        ExprPtr expr)
+        std::vector<Expr*> expr)
     {
         return new PrintExpr(std::move(expr));
     }

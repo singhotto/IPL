@@ -1,7 +1,13 @@
 #include "DefVar.hh"
 #include "../Log.hh"
 
-DefVar::DefVar(IdPtr idExp, ExprPtr value) 
+DefVar::DefVar(IdPtr idExp) : idExp(std::move(idExp)), value(ExprPtr())
+{
+    LOG_OPERATION_START("DefVar::DefVar(IdPtr)");
+    LOG_OPERATION_END("DefVar::DefVar(IdPtr)");
+}
+
+DefVar::DefVar(IdPtr idExp, ExprPtr value)
     : idExp(std::move(idExp)), value(std::move(value))
 {
     LOG_OPERATION_START("DefVar::DefVar(IdPtr, ExprPtr)");

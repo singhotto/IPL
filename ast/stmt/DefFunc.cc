@@ -7,7 +7,7 @@ DefFunc::~DefFunc()
     LOG_OPERATION_END("DefFunc::~DefFunc");
 }
 
-DefFunc::DefFunc(IdPtr id, std::vector<Id *> args, std::vector<Statement *> statements)
+DefFunc::DefFunc(IdPtr id, std::vector<Id *> args, std::vector<Statement *> statements) : funcName(std::move(id))
 {
     LOG_OPERATION_START("DefFunc::DefFunc(IdPtr, std::vector<Id *>, std::vector<Statement*>&&)");
     
@@ -68,6 +68,10 @@ std::vector<Statement *> DefFunc::funcStatements()
     return temp;
 }
 
+void DefFunc::print() const
+{
+    std::cout<<funcName->getName();
+}
 
 void DefFunc::accept(Visitor *visitor)
 {

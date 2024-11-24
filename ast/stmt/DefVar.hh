@@ -14,6 +14,7 @@ private:
     ExprPtr value;
 
 public:
+    DefVar(IdPtr idExp);
     DefVar(IdPtr idExp, ExprPtr value);
     ~DefVar();
 

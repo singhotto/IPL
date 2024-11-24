@@ -18,6 +18,16 @@ float Float::getValue() const
     return value;
 }
 
+void Float::setValue(float x)
+{
+    this->value = x;
+}
+
+void Float::print() const
+{
+    std::cout<<value;
+}
+
 void Float::accept(Visitor *visitor)
 {
     LOG_OPERATION_START("Float::accept");

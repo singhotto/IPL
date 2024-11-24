@@ -14,6 +14,7 @@ public:
     explicit Bool(const bool value);
     ~Bool();
     bool getValue() const;
+    void print() const override;
     void accept(Visitor* visitor) override;
 };
 

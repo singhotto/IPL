@@ -23,6 +23,7 @@ Interpreter& eval = Interpreter::getInstance();
     Value* val;     // For values
     std::vector<Id*>* args;
     StmtsVec* sBody;
+    ExprVec* sExprList;
     Id* IDENTIFIER;
 }
 
@@ -34,69 +35,133 @@ Interpreter& eval = Interpreter::getInstance();
 
 %token VAR PRINT FUNC FOR WHILE IF ELSE RETURN True False
 %token ADD SUB MUL DIV MOD ASSIGN 
-%token INCREASE DECREASE ADDASSIGN SUBASSIGN
+%token INCREASE DECREASE ADDASSIGN SUBASSIGN MULASSIGN DIVASSIGN
 %token EQUAL NOTEQUAL LESS GREATER LESSEQUAL GREATEREQUAL
-%token AND OR LPAREN RPAREN LBRACE RBRACE SEMICOLON COMMA EOL
+%token AND OR LPAREN RPAREN LBRACE RBRACE SEMICOLON COMMA
 
 // Non-terminal declarations
-%type <node> program stmt_list
-%type <stmt> stmt var_decl
-%type <expr> expr
+%type <node> program
+%type <stmt> stmt_no_semicolon stmt_semicolon var_decl var_assign func_decl
+%type <expr> expr func_call
 %type <IDENTIFIER> IDENTIFIER
 %type <sBody> body
+%type <sExprList> expr_list
 
+%right ASSIGN 
+%left OR
+%left AND
+%nonassoc EQUAL NOTEQUAL LESS GREATER LESSEQUAL GREATEREQUAL
 %left ADD SUB
 %left MUL DIV MOD
 
+
 %%
 program:
-      program EOL
-    | program stmt_list EOL
-    | stmt  { eval.visit($1); }
-    ;
-
-stmt_list:
-    stmt_list stmt   { eval.visit($2); }
-    | stmt { eval.visit($1); }
-    ;
-
-stmt:
-    var_decl
-    | PRINT LPAREN expr RPAREN SEMICOLON {
-        $$ = IPLFactory::createPrintExpr(U(Expr, $3));
+    /*blank*/
+    | body { 
+        Block* b = new Block(*$1);
+        eval.visit(b); 
+        delete b;
     }
-    | IF LPAREN expr RPAREN EOL_LIST LBRACE EOL_LIST body EOL_LIST RBRACE {
-        $$ = IPLFactory::createIfcond(U(Expr, $3), *$8);
-        delete $8;
+    ;
+
+body:
+    /*blank*/  { $$ = new StmtsVec(); }
+    | stmt_semicolon { $$ = new StmtsVec(); $$->push_back($1); }
+    | body stmt_semicolon { $1->push_back($2); }
+    | stmt_no_semicolon { $$ = new StmtsVec(); $$->push_back($1); }
+    | body stmt_no_semicolon { $1->push_back($2); }
+    ;
+
+stmt_no_semicolon:
+    func_decl
+    | IF LPAREN expr RPAREN LBRACE body RBRACE {
+        $$ = IPLFactory::createIfcond(U(Expr, $3), *$6);
+        delete $6;
+    }
+    | IF LPAREN expr RPAREN LBRACE body RBRACE ELSE LBRACE body RBRACE {
+        $$ = IPLFactory::createIfelse(U(Expr, $3), *$6, *$10);
+        delete $6;
+        delete $10;
+    }
+    | FOR LPAREN stmt_semicolon expr SEMICOLON var_assign RPAREN LBRACE body RBRACE {
+        $$ = IPLFactory::createForLoop(U(Statement, $3), U(Expr, $4), U(Statement, $6), *$9);
+        delete $9;
+    }
+    ;
+
+stmt_semicolon:
+    var_decl SEMICOLON | var_assign SEMICOLON | func_call SEMICOLON
+    | PRINT LPAREN expr_list RPAREN SEMICOLON {
+        $$ = IPLFactory::createPrintExpr(*$3);
+        delete $3;
     }
     | RETURN expr SEMICOLON {
         $$ = IPLFactory::createReturnStmt(U(Expr, $2));
     }
     ;
 
-EOL_LIST:
-    EOL               
-  | EOL EOL_LIST 
-
-
-var_decl: 
-    IDENTIFIER ASSIGN expr SEMICOLON {
-        $$ = IPLFactory::createDefVar(U(Id, $1), U(Expr, $3));
-    }
-    | VAR IDENTIFIER ASSIGN expr SEMICOLON {
-        $$ = IPLFactory::createDefVar(U(Id, $2), U(Expr, $4));
+func_decl:
+    FUNC IDENTIFIER LPAREN RPAREN LBRACE body RBRACE {
+        $$ = IPLFactory::createDefFunc(U(Id, $2), *$6);
+        delete $6;
     }
     ;
 
-body:
-    /*blank*/  { $$ = new StmtsVec(); }
-    | stmt { $$ = new StmtsVec(); $$->push_back($1); }
-    | body stmt { $1->push_back($2); }
+func_call:
+    | IDENTIFIER LPAREN RPAREN {
+        $$ = IPLFactory::createCallFunc(U(Id, $1));
+    }
+    ;
+
+
+var_decl: 
+    VAR IDENTIFIER {
+        $$ = IPLFactory::createDefVar(U(Id, $2));
+    }
+    | VAR IDENTIFIER ASSIGN expr {
+        $$ = IPLFactory::createDefVar(U(Id, $2), U(Expr, $4));
+    }
+    | VAR IDENTIFIER ASSIGN func_call {
+        $$ = IPLFactory::createDefVar(U(Id, $2), U(Expr, $4));
+    }
+    ;
+    
+var_assign:
+    IDENTIFIER ASSIGN expr {
+        $$ = IPLFactory::createAssign(U(Id, $1), U(Expr, $3));
+    }
+    | IDENTIFIER ASSIGN func_call {
+        $$ = IPLFactory::createAssign(U(Id, $1), U(Expr, $3));
+    }
+    | IDENTIFIER INCREASE {
+        $$ = IPLFactory::createIncrease(U(Id, $1));
+    }
+    | IDENTIFIER DECREASE {
+        $$ = IPLFactory::createDecrease(U(Id, $1));
+    }
+    | IDENTIFIER ADDASSIGN expr {
+        $$ = IPLFactory::createAddAssign(U(Id, $1), U(Expr, $3));
+    }
+    | IDENTIFIER SUBASSIGN expr {
+        $$ = IPLFactory::createSubAssign(U(Id, $1), U(Expr, $3));
+    }
+    | IDENTIFIER MULASSIGN expr {
+        $$ = IPLFactory::createMulAssign(U(Id, $1), U(Expr, $3));
+    }
+    | IDENTIFIER DIVASSIGN expr {
+        $$ = IPLFactory::createDivAssign(U(Id, $1), U(Expr, $3));
+    }
     ;
 
 IDENTIFIER:
     ID { $$ = IPLFactory::createId(*$1); delete $1; }
     ;
+
+expr_list:
+    /*blank*/ { $$ = new ExprVec(); }
+    | expr { $$ = new ExprVec(); $$->push_back($1); }
+    | expr_list COMMA expr { $$->push_back($3); }
 
 expr:
     expr ADD expr { $$ = IPLFactory::createAddExpr(U(Expr, $1), U(Expr, $3)); }
@@ -120,7 +185,6 @@ expr:
     ;
 
 %%
-
 
 int main(){
     return yyparse();

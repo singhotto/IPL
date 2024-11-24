@@ -17,6 +17,7 @@ ARITH_DIR = $(EXPR_DIR)/arithmatic
 VALUE_DIR = $(EXPR_DIR)/value
 BOOL_DIR = $(EXPR_DIR)/boolean
 STMT_DIR = $(AST_DIR)/stmt
+STMT_ASSIGN_DIR = $(STMT_DIR)/assignment
 OBJ_DIR = obj
 EXPR_OBJ_DIR = $(OBJ_DIR)/expr
 
@@ -24,7 +25,8 @@ EXPR_OBJ_DIR = $(OBJ_DIR)/expr
 SRC = $(wildcard $(VALUE_DIR)/*.cc) $(wildcard $(ARITH_DIR)/*.cc) \
       $(wildcard $(STMT_DIR)/*.cc) $(wildcard $(EXPR_DIR)/*.cc) \
       $(wildcard $(BOOL_DIR)/*.cc) $(wildcard $(AST_DIR)/*.cc) \
-	  $(PROGRAM_PATH).lex.cc $(PROGRAM_PATH).parse.cc
+	  $(wildcard $(STMT_ASSIGN_DIR)/*.cc) $(PROGRAM_PATH).lex.cc \
+	  $(PROGRAM_PATH).parse.cc
 
 # Object files
 OBJ = $(SRC:%.cc=$(OBJ_DIR)/%.o)
@@ -43,7 +45,7 @@ main: $(BISON_OUTPUT) $(OBJ)
 # $(BISON) --report=all --defines=$(BISON_HEADER) -o $(BISON_OUTPUT) $< -Wcounterexamples
 # Rule for generating the parser (runs first)
 $(BISON_OUTPUT) $(BISON_HEADER): $(BISON_FILE)
-	$(BISON) --report=all --defines=$(BISON_HEADER) -o $(BISON_OUTPUT) $<
+	$(BISON) --report=all --defines=$(BISON_HEADER) -o $(BISON_OUTPUT) $< -Wcounterexamples
 
 # Rule for generating the lexer
 $(LEX_OUTPUT): $(LEX_FILE) $(BISON_OUTPUT)

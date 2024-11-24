@@ -1,7 +1,8 @@
 #ifndef EXPR__GUARD
 #define EXPR__GUARD
 
-#include "../Node.hh" // Required for inheritance
+#include "../Node.hh"
+#include "../Log.hh"
 #include <iostream> 
 
 class Visitor; // Forward declaration
@@ -10,7 +11,10 @@ class Expr : virtual public Node {
 protected:
     using ExprPtr = std::unique_ptr<Expr>;
 public:
-    virtual ~Expr() { std::cout<<"Expr::~Expr\n"; };
+    virtual ~Expr() { 
+        LOG_OPERATION_START("Expr::~Expr()");
+        LOG_OPERATION_END("Expr::~Expr()");
+    };
 };
 
 #endif // EXPR__GUARD

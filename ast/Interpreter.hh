@@ -43,13 +43,24 @@ public:
     void visit(MulExpr* expr) override;
 
     void visit(Statement* stmt) override;
+    void visit(Block* stmt) override;
     void visit(DefVar* stmt) override;
+    void visit(Assign* stmt) override;
+    void visit(AddAssign* stmt) override;
+    void visit(Decrease* stmt) override;
+    void visit(Increase* stmt) override;
+    void visit(DivAssign* stmt) override;
+    void visit(SubAssign* stmt) override;
+    void visit(MulAssign* stmt) override;
+
+
     void visit(DefFunc* func) override;
     void visit(CallFunc* func) override;
     void visit(PrintExpr* expr) override;
     void visit(ReturnStmt* expr) override;
     void visit(Ifcond* expr) override;
     void visit(Ifelse* expr) override;
+    void visit(ForLoop* expr) override;
 
     void visit(And* expr) override;
     void visit(Equal* expr) override;
