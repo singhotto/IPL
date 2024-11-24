@@ -13,6 +13,7 @@ class Interpreter : virtual public Visitor
 private:
     ExecContext context;
     Value* current = nullptr;
+    bool funcReturn = false;
 
     // Private copy constructor and assignment operator to prevent copying
     Interpreter(const Interpreter&) = delete;

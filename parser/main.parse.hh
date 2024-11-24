@@ -114,9 +114,10 @@ union YYSTYPE
     std::vector<Id*>* args;
     StmtsVec* sBody;
     ExprVec* sExprList;
+    IdVec* sIdList;
     Id* IDENTIFIER;
 
-#line 120 "parser/main.parse.hh"
+#line 121 "parser/main.parse.hh"
 
 };
 typedef union YYSTYPE YYSTYPE;

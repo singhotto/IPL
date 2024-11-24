@@ -24,6 +24,7 @@ Interpreter& eval = Interpreter::getInstance();
     std::vector<Id*>* args;
     StmtsVec* sBody;
     ExprVec* sExprList;
+    IdVec* sIdList;
     Id* IDENTIFIER;
 }
 
@@ -46,6 +47,7 @@ Interpreter& eval = Interpreter::getInstance();
 %type <IDENTIFIER> IDENTIFIER
 %type <sBody> body
 %type <sExprList> expr_list
+%type <sIdList> func_args
 
 %right ASSIGN 
 %left OR
@@ -102,16 +104,24 @@ stmt_semicolon:
     ;
 
 func_decl:
-    FUNC IDENTIFIER LPAREN RPAREN LBRACE body RBRACE {
-        $$ = IPLFactory::createDefFunc(U(Id, $2), *$6);
-        delete $6;
+    FUNC IDENTIFIER LPAREN func_args RPAREN LBRACE body RBRACE {
+        $$ = IPLFactory::createDefFunc(U(Id, $2), *$4, *$7);
+        delete $4;
+        delete $7;
     }
     ;
 
 func_call:
-    | IDENTIFIER LPAREN RPAREN {
-        $$ = IPLFactory::createCallFunc(U(Id, $1));
+    | IDENTIFIER LPAREN expr_list RPAREN {
+        $$ = IPLFactory::createCallFunc(U(Id, $1), *$3);
+        delete $3;
     }
+    ;
+
+func_args:
+    /*blank*/  { $$ = new IdVec(); }
+    | IDENTIFIER { $$ = new IdVec(); $$->push_back($1); }
+    | func_args COMMA IDENTIFIER { $$->push_back($3); }
     ;
 
 

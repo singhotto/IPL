@@ -1,10 +1,20 @@
 var a = 8;
 
-function foo(){ 
-    return "Gandu";
+function pariDispari(x){ 
+    if(x % 2 == 0){
+        print(a);
+        return "   Pari";
+    }else {
+        return "Dispari";
+    }
 }
 
-for(var i = 0; i<10; i++){
-    var x = foo();
-    print(x);
+function add(x, y){
+    return x + y;
+}
+
+for(var i = 0; i<=10; i++){
+    var ans = add(i, i);
+
+    print(ans);
 }

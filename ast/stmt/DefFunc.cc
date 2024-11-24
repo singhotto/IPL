@@ -24,18 +24,6 @@ DefFunc::DefFunc(IdPtr id, std::vector<Id *> args, std::vector<Statement *> stat
     LOG_OPERATION_END("DefFunc::DefFunc(IdPtr, std::vector<Id *>, std::vector<Statement*>&&)");
 }
 
-DefFunc::DefFunc(IdPtr id, std::vector<Statement *> statements) : funcName(std::move(id))
-{
-    LOG_OPERATION_START("DefFunc::DefFunc(IdPtr, std::vector<Statement*>&&)");
-
-    this->statements.reserve(statements.size());
-    for(auto i : statements){
-        this->statements.push_back(StmtPtr(i));
-    }
-    
-    LOG_OPERATION_END("DefFunc::DefFunc(IdPtr, std::vector<Statement*>&&)");
-}
-
 std::string DefFunc::getName()
 {
     LOG_OPERATION_START("DefFunc::getName");

@@ -11,15 +11,15 @@
 class CallFunc : virtual public Statement, virtual public Expr {
 private:
     using IdPtr = std::unique_ptr<Id>;
+    using ExprPtr = std::unique_ptr<Expr>;
     IdPtr funcId;
-    std::vector<IdPtr> args;
+    std::vector<ExprPtr> args;
 
 public:
-   CallFunc(IdPtr funcName, std::vector<Id*> args);
-   CallFunc(IdPtr funcName);
+   CallFunc(IdPtr funcName, std::vector<Expr*> args);
    ~CallFunc();
    std::string funcName();
-   std::vector<Id*> funcArgs();
+   std::vector<Expr*> funcArgs();
    void accept(Visitor* visitor) override;
 };
 

@@ -1,20 +1,14 @@
 #include "../Log.hh"  // Include the macros header
 #include "CallFunc.hh"
 
-CallFunc::CallFunc(IdPtr funcName, std::vector<Id *> args) : funcId(std::move(funcName))
+CallFunc::CallFunc(IdPtr funcName, std::vector<Expr *> args) : funcId(std::move(funcName))
 {
-    LOG_OPERATION_START("CallFunc::CallFunc(IdPtr, std::vector<Id *>)");
+    LOG_OPERATION_START("CallFunc::CallFunc(IdPtr, std::vector<Expr *>)");
     this->args.reserve(args.size());
     for (auto i : args) {
-        this->args.push_back(IdPtr(i));
+        this->args.push_back(ExprPtr(i));
     }
-    LOG_OPERATION_END("CallFunc::CallFunc(IdPtr, std::vector<Id *>)");
-}
-
-CallFunc::CallFunc(IdPtr funcName) : funcId(std::move(funcName))
-{
-    LOG_OPERATION_START("CallFunc::CallFuncIdPtr)");
-    LOG_OPERATION_END("CallFunc::CallFuncIdPtr)");
+    LOG_OPERATION_END("CallFunc::CallFunc(IdPtr, std::vector<Expr *>)");
 }
 
 CallFunc::~CallFunc()
@@ -25,16 +19,20 @@ CallFunc::~CallFunc()
 
 std::string CallFunc::funcName()
 {
+    LOG_OPERATION_START("CallFunc::funcName");
+    LOG_OPERATION_END("CallFunc::funcName");
     return funcId->getName();
 }
 
-std::vector<Id *> CallFunc::funcArgs()
+std::vector<Expr *> CallFunc::funcArgs()
 {
-    std::vector<Id *> temp;
+    LOG_OPERATION_START("CallFunc::funcArgs()");
+    std::vector<Expr *> temp;
     temp.reserve(args.size());
-    for (IdPtr& id : args) {
+    for (ExprPtr& id : args) {
         temp.push_back(id.get());
     }
+    LOG_OPERATION_END("CallFunc::funcArgs()");
     return temp;
 }
 

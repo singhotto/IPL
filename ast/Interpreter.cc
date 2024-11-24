@@ -353,10 +353,11 @@ void Interpreter::visit(DefFunc *func)
 void Interpreter::visit(CallFunc *func)
 {
     LOG_OPERATION_START("Interpreter::visit(CallFunc *func)");
-    Value* fName = context.getVariable(func->funcName());
-    DefFunc* f = dynamic_cast<DefFunc*>(fName);
-    auto internalParms = func->funcArgs();
-    auto globalParms = f->funcArgs();
+
+    Value* fName = context.getVariable(func->funcName()); 
+    DefFunc* f = dynamic_cast<DefFunc*>(fName); //function
+    auto globalParms = func->funcArgs(); 
+    auto internalParms = f->funcArgs();
 
     assert(f != nullptr);
     assert(internalParms.size() == globalParms.size());
@@ -366,12 +367,17 @@ void Interpreter::visit(CallFunc *func)
 
     for(int i = 0; i<internalParms.size(); i++){
         const std::string& name = internalParms[i]->getName();
-        Value* value = context.getVariable(globalParms[i]->getName());
-        context.addNewVariable(name, value);
+        globalParms[i]->accept(this);
+        context.addNewVariable(name, current);
     }
     auto statements = f->funcStatements();
     for(int i = 0; i<statements.size(); i++){
         statements[i]->accept(this);
+
+        if(funcReturn){
+            funcReturn = false;
+            break;
+        }
     }
     context.exitScope();
     LOG_OPERATION_END("Interpreter::visit(CallFunc *func)");
@@ -399,6 +405,7 @@ void Interpreter::visit(ReturnStmt *expr)
 {
     LOG_OPERATION_START("Interpreter::visit(ReturnStmt *expr)");
     expr->getValue()->accept(this);
+    funcReturn = true;
     LOG_OPERATION_END("Interpreter::visit(ReturnStmt *expr)");
 }
 

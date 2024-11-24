@@ -256,23 +256,10 @@ public:
         return new DefFunc(std::move(id), args, stmts);
     }
 
-    static DefFunc *createDefFunc(
-        IdPtr id, std::vector<Statement*> stmts)
-    {
-        return new DefFunc(std::move(id), stmts);
-    }
-
     static CallFunc *createCallFunc(
-        IdPtr funcName, std::vector<Id *> args)
+        IdPtr funcName, std::vector<Expr *> args)
     {
         return new CallFunc(std::move(funcName), std::move(args));
-    }
-
-
-    static CallFunc *createCallFunc(
-        IdPtr funcName)
-    {
-        return new CallFunc(std::move(funcName));
     }
 
     static PrintExpr *createPrintExpr(

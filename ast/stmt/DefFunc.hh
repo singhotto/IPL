@@ -19,7 +19,6 @@ private:
 
 public:
     explicit DefFunc(IdPtr id, std::vector<Id*> args, std::vector<Statement*> statements);
-    explicit DefFunc(IdPtr id, std::vector<Statement*> statements);
     ~DefFunc();
     
     std::string getName();
