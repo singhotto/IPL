@@ -13,8 +13,8 @@
 class ExecContext
 {
 private:
-    using ValuePtr = Value*;
-    std::vector<std::unordered_map<std::string, Value*>> scopeStack;
+    using ValuePtr = std::unique_ptr<Value>;
+    std::vector<std::unordered_map<std::string, ValuePtr>> scopeStack;
 
 public:
     ExecContext();
@@ -23,8 +23,8 @@ public:
     void newScope();
     void exitScope();
 
-    void addNewVariable(const std::string& name, Value* v);
-    void updateVariable(const std::string& name, Value* v);
+    void addNewVariable(const std::string& name, ValuePtr v);
+    void updateVariable(const std::string& name, ValuePtr v);
 
     Value* getVariable(const std::string name) const;
 };

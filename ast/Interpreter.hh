@@ -5,15 +5,20 @@
 #include <iostream>
 #include "Visitor.hh"
 #include "Value.hh"
+#include "Value.hh"
 #include "ExecContext.hh"
 #include "expr/boolean/BoolExpr.hh"
+#include "expr/value/Float.hh"
+#include "expr/value/Bool.hh"
 
 class Interpreter : virtual public Visitor
 {
 private:
     ExecContext context;
-    Value* current = nullptr;
+    std::unique_ptr<Value> current;
     bool funcReturn = false;
+    using FloatPtr = std::unique_ptr<Float>;
+    using BoolPtr = std::unique_ptr<Bool>;
 
     // Private copy constructor and assignment operator to prevent copying
     Interpreter(const Interpreter&) = delete;

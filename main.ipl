@@ -1,6 +1,15 @@
-for(var i = 0; i<10; i++){
-    for(var j = 0; j<10; j++){
-        print(i, " ", j);
+function max(a, b){
+    if(a > b){
+        return a;
+    }else{
+        return b;
     }
-    print(i);
+}
+
+for(var i = 0; i<50; i++){
+    for(var j = 0; j<50; j++){
+        var m = max(i, j);
+    
+        print(m);
+    }
 }

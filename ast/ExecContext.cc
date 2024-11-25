@@ -34,16 +34,16 @@ void ExecContext::exitScope()
     LOG_OPERATION_END("ExecContext::exitScope");
 }
 
-void ExecContext::addNewVariable(const std::string &name, Value *v)
+void ExecContext::addNewVariable(const std::string &name, ValuePtr v)
 {
     LOG_OPERATION_START("ExecContext::addNewVariable");
     assert(v != nullptr && "ExecContext::addNewVariable got Deleted Value");
     
-    scopeStack.back()[name] = v;
+    scopeStack.back()[name] = std::move(v);
     LOG_OPERATION_END("ExecContext::addNewVariable");
 }
 
-void ExecContext::updateVariable(const std::string &name, Value *v)
+void ExecContext::updateVariable(const std::string &name, ValuePtr v)
 {
     LOG_OPERATION_START("ExecContext::updateVariable");
     assert(v != nullptr && "ExecContext::updateVariable got Deleted Value");
@@ -52,7 +52,7 @@ void ExecContext::updateVariable(const std::string &name, Value *v)
         auto& currentScope = *it;
         if (currentScope.find(name) != currentScope.end()) {
             LOG_OPERATION_END("ExecContext::updateVariable");
-            currentScope[name] = v;
+            currentScope[name] = std::move(v);
             return;
         }
     }
@@ -60,18 +60,19 @@ void ExecContext::updateVariable(const std::string &name, Value *v)
     LOG_OPERATION_END("ExecContext::updateVariable");
 }
 
-Value *ExecContext::getVariable(const std::string name) const
+Value* ExecContext::getVariable(const std::string name) const
 {
     LOG_OPERATION_START("ExecContext::getVariable");
     
     for (auto it = scopeStack.rbegin(); it != scopeStack.rend(); ++it) {
-        auto currentScope = *it;
-        if (currentScope.find(name) != currentScope.end()) {
+        const auto& currentScope = *it; // Use reference instead of copying
+        auto varIt = currentScope.find(name);
+        if (varIt != currentScope.end()) {
             LOG_OPERATION_END("ExecContext::getVariable");
-            return currentScope[name];
+            return varIt->second.get();
         }
     }
+
     LOG_OPERATION_END("ExecContext::getVariable BUT NOT FOUND");
     return nullptr;
 }
-
