@@ -1,5 +1,5 @@
-#include "LessEqual.hh"
-#include "../../Log.hh"
+#include "expr/boolean/LessEqual.hh"
+#include "Log.hh"
 
 LessEqual::LessEqual(ExprPtr left, ExprPtr right) : left(std::move(left)), right(std::move(right))
 {

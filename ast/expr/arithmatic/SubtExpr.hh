@@ -1,8 +1,8 @@
 #ifndef SUBTEXPR__GUARD
 #define SUBTEXPR__GUARD
 
-#include "BinaryExpr.hh"
-#include "../../Visitor.hh"
+#include "expr/arithmatic/BinaryExpr.hh"
+#include "Visitor.hh"
 
 class SubtExpr : virtual public BinaryExpr {
 private:

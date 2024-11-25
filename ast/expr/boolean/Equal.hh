@@ -1,8 +1,8 @@
 #ifndef EQUAL__GUARD
 #define EQUAL__GUARD
 
-#include "BoolExpr.hh"
-#include "../../Visitor.hh"
+#include "expr/boolean/BoolExpr.hh"
+#include "Visitor.hh"
 
 class Equal : virtual public BoolExpr {
 private:

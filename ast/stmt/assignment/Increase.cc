@@ -1,5 +1,5 @@
-#include "Increase.hh"
-#include "../../Log.hh"
+#include "stmt/assignment/Increase.hh"
+#include "Log.hh"
 
 Increase::Increase(IdPtr idExp) 
     : idExp(std::move(idExp))

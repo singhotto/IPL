@@ -1,5 +1,5 @@
-#include "../Log.hh" // Include the macros header
-#include "CallFunc.hh"
+#include "Log.hh" // Include the macros header
+#include "expr/CallFunc.hh"
 
 CallFunc::CallFunc(IdPtr funcName, std::vector<Expr *> args) : funcId(std::move(funcName))
 {

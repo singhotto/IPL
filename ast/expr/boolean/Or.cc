@@ -1,5 +1,5 @@
-#include "Or.hh"
-#include "../../Log.hh"
+#include "expr/boolean/Or.hh"
+#include "Log.hh"
 
 Or::Or(ExprPtr left, ExprPtr right) : left(std::move(left)), right(std::move(right))
 {

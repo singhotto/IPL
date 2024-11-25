@@ -1,6 +1,6 @@
 %{
-#include "main.hh"
-#include "main.parse.hh"
+#include "ipl.hh"
+#include "ipl.parse.hh"
 #include <iostream>
 #include <string>
 #include <memory>
@@ -192,14 +192,10 @@ expr:
     | expr GREATEREQUAL expr { $$ = IPLFactory::createGreaterEqual(U(Expr, $1), U(Expr, $3)); }
     | expr AND expr { $$ = IPLFactory::createAnd(U(Expr, $1), U(Expr, $3)); }
     | expr OR expr { $$ = IPLFactory::createOr(U(Expr, $1), U(Expr, $3)); }
-    | INTEGER { $$ = IPLFactory::createInt($1); }
+    | INTEGER { $$ = IPLFactory::createFloat($1); }
     | FLOAT { $$ = IPLFactory::createFloat($1); }
     | STRING { $$ = IPLFactory::createString(*$1); }
     | IDENTIFIER { $$ = $1; }
     ;
 
 %%
-
-int main(){
-    return yyparse();
-}

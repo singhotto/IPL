@@ -1,10 +1,10 @@
 #ifndef SUBASSIGN__GUARD
 #define SUBASSIGN__GUARD
 
-#include "../Statement.hh"
-#include "../../Visitor.hh" 
-#include "../../expr/value/Id.hh"
-#include "../../expr/Expr.hh"
+#include "stmt/Statement.hh"
+#include "Visitor.hh" 
+#include "expr/value/Id.hh"
+#include "expr/Expr.hh"
 
 class SubAssign : virtual public Statement {
 private:

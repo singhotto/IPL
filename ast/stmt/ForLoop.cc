@@ -1,5 +1,5 @@
-#include "ForLoop.hh"
-#include "../Log.hh"
+#include "stmt/ForLoop.hh"
+#include "Log.hh"
 
 ForLoop::ForLoop(StmtPtr initial, ExprPtr cond, StmtPtr update, std::vector<Statement *> statements) : initial(std::move(initial)), cond(std::move(cond)), update(std::move(update))
 {

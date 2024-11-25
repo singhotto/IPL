@@ -1,9 +1,9 @@
 #ifndef BOOL__GUARD
 #define BOOL__GUARD
 
-#include "../../Value.hh"
-#include "../Expr.hh"
-#include "../../Visitor.hh" // Only necessary to define `accept`
+#include "Value.hh"
+#include "expr/Expr.hh"
+#include "Visitor.hh" 
 
 class Visitor;
 

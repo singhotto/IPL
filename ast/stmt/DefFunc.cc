@@ -1,5 +1,5 @@
-#include "DefFunc.hh"
-#include "../Log.hh" // Include the macros header
+#include "stmt/DefFunc.hh"
+#include "Log.hh" 
 
 DefFunc::~DefFunc()
 {

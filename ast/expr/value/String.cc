@@ -1,5 +1,5 @@
-#include "String.hh"
-#include "../../Log.hh"
+#include "expr/value/String.hh"
+#include "Log.hh"
 
 String::String(const std::string str) : str(str)
 {

@@ -1,6 +1,6 @@
-#line 1 "parser/main.lex.cc"
+#line 1 "/Users/singhotto/Documents/IPL/parser/ipl.lex.cc"
 
-#line 3 "parser/main.lex.cc"
+#line 3 "/Users/singhotto/Documents/IPL/parser/ipl.lex.cc"
 
 #define  YY_INT_ALIGNED short int
 
@@ -539,15 +539,15 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "parser/main.ll"
-#line 2 "parser/main.ll"
+#line 1 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
+#line 2 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 
-#include "main.hh"
-#include "main.parse.hh"
+#include "ipl.hh"
+#include "ipl.parse.hh"
 #include <string>
 
-#line 549 "parser/main.lex.cc"
-#line 550 "parser/main.lex.cc"
+#line 549 "/Users/singhotto/Documents/IPL/parser/ipl.lex.cc"
+#line 550 "/Users/singhotto/Documents/IPL/parser/ipl.lex.cc"
 
 #define INITIAL 0
 
@@ -762,10 +762,10 @@ YY_DECL
 		}
 
 	{
-#line 19 "parser/main.ll"
+#line 19 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 
 
-#line 768 "parser/main.lex.cc"
+#line 768 "/Users/singhotto/Documents/IPL/parser/ipl.lex.cc"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -834,224 +834,224 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 21 "parser/main.ll"
+#line 21 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { return LPAREN; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 22 "parser/main.ll"
+#line 22 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { return RPAREN; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 23 "parser/main.ll"
+#line 23 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { return LBRACE; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 24 "parser/main.ll"
+#line 24 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { return RBRACE; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 25 "parser/main.ll"
+#line 25 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { return ADD; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 26 "parser/main.ll"
+#line 26 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { return SUB; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 27 "parser/main.ll"
+#line 27 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { return MUL; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 28 "parser/main.ll"
+#line 28 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { return DIV; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 29 "parser/main.ll"
+#line 29 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { return MOD; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 30 "parser/main.ll"
+#line 30 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { return ASSIGN; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 31 "parser/main.ll"
+#line 31 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { return COMMA; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 32 "parser/main.ll"
+#line 32 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { return SEMICOLON; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 34 "parser/main.ll"
+#line 34 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { return INCREASE; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 35 "parser/main.ll"
+#line 35 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { return DECREASE; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 36 "parser/main.ll"
+#line 36 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { return ADDASSIGN; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 37 "parser/main.ll"
+#line 37 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { return SUBASSIGN; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 38 "parser/main.ll"
+#line 38 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { return MULASSIGN; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 39 "parser/main.ll"
+#line 39 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { return DIVASSIGN; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 41 "parser/main.ll"
+#line 41 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { return EQUAL; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 42 "parser/main.ll"
+#line 42 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { return NOTEQUAL; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 43 "parser/main.ll"
+#line 43 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { return LESS; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 44 "parser/main.ll"
+#line 44 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { return GREATER; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 45 "parser/main.ll"
+#line 45 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { return LESSEQUAL; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 46 "parser/main.ll"
+#line 46 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { return GREATEREQUAL; }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 48 "parser/main.ll"
+#line 48 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { return AND; }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 49 "parser/main.ll"
+#line 49 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { return OR; }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 51 "parser/main.ll"
+#line 51 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { return VAR; }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 52 "parser/main.ll"
+#line 52 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { return PRINT; }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 53 "parser/main.ll"
+#line 53 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { return FUNC; }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 54 "parser/main.ll"
+#line 54 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { return FOR;}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 55 "parser/main.ll"
+#line 55 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { return WHILE;}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 56 "parser/main.ll"
+#line 56 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { return IF; }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 57 "parser/main.ll"
+#line 57 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { return ELSE; }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 58 "parser/main.ll"
+#line 58 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { return RETURN; }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 59 "parser/main.ll"
+#line 59 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { return True; }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 60 "parser/main.ll"
+#line 60 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { return False; }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 62 "parser/main.ll"
+#line 62 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { yylval.str = new std::string(yytext); return ID; }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 63 "parser/main.ll"
+#line 63 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { yylval.inum = atoi(yytext); return INTEGER; }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 64 "parser/main.ll"
+#line 64 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { yylval.fnum = atof(yytext); return FLOAT; }
 	YY_BREAK
 case 40:
 /* rule 40 can match eol */
 YY_RULE_SETUP
-#line 65 "parser/main.ll"
+#line 65 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { yylval.str = new std::string(yytext); return STRING; }
 	YY_BREAK
 case 41:
 /* rule 41 can match eol */
 YY_RULE_SETUP
-#line 67 "parser/main.ll"
+#line 67 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { /* ignore new line */ }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 69 "parser/main.ll"
+#line 69 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { /* ignore comments */ }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 70 "parser/main.ll"
+#line 70 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 { /* ignore whitespace */ }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 71 "parser/main.ll"
+#line 71 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 {
                 auto msg = std::string("Unknown character: ") + *yytext;
                 yyerror(msg.c_str());
@@ -1059,10 +1059,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 76 "parser/main.ll"
+#line 76 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 YY_FATAL_ERROR( "flex scanner jammed" );
 	YY_BREAK
-#line 1065 "parser/main.lex.cc"
+#line 1065 "/Users/singhotto/Documents/IPL/parser/ipl.lex.cc"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2038,7 +2038,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 76 "parser/main.ll"
+#line 76 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 
 
 

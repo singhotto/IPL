@@ -1,8 +1,8 @@
 #ifndef OR__GUARD
 #define OR__GUARD
 
-#include "BoolExpr.hh"
-#include "../../Visitor.hh"
+#include "expr/boolean/BoolExpr.hh"
+#include "Visitor.hh"
 
 class Or : virtual public BoolExpr {
 private:

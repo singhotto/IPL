@@ -1,5 +1,5 @@
-#include "Block.hh"
-#include "../Log.hh" // Include the macros header
+#include "stmt/Block.hh"
+#include "Log.hh" // Include the macros header
 
 Block::~Block()
 {

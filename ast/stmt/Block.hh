@@ -2,8 +2,8 @@
 #define BLOCK__GUARD
 
 #include <vector>
-#include "Statement.hh"
-#include "../Visitor.hh"
+#include "stmt/Statement.hh"
+#include "Visitor.hh"
 
 class Visitor;
 

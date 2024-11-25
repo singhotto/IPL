@@ -1,5 +1,5 @@
-#include "../../Log.hh"
-#include "Float.hh"
+#include "Log.hh"
+#include "expr/value/Float.hh"
 
 Float::Float(float value) : value(value)
 {

@@ -2,10 +2,11 @@
 #define DEF_FUNC__GUARD
 
 #include <vector>
+#include "stmt/Statement.hh"
+#include "Value.hh"
+#include "expr/value/Id.hh"
 #include "Statement.hh"
-#include "../Value.hh"
-#include "../Visitor.hh"
-#include "../expr/value/Id.hh"
+#include "Visitor.hh"
 
 class Visitor;
 

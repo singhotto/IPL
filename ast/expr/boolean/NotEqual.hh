@@ -1,8 +1,8 @@
 #ifndef NOTEQUAL__GUARD
 #define NOTEQUAL__GUARD
 
-#include "BoolExpr.hh"
-#include "../../Visitor.hh"
+#include "expr/boolean/BoolExpr.hh"
+#include "Visitor.hh"
 
 class NotEqual : virtual public BoolExpr {
 private:

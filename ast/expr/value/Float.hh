@@ -1,8 +1,8 @@
 #ifndef FLOAT__GUARD
 #define FLOAT__GUARD
 
-#include "Number.hh"
-#include "../../Visitor.hh" 
+#include "expr/value/Number.hh"
+#include "Visitor.hh" 
 
 class Visitor;
 

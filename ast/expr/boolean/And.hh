@@ -1,8 +1,8 @@
 #ifndef AND__GUARD
 #define AND__GUARD
 
-#include "BoolExpr.hh"
-#include "../../Visitor.hh"
+#include "expr/boolean/BoolExpr.hh"
+#include "Visitor.hh"
 
 class And : virtual public BoolExpr {
 private:

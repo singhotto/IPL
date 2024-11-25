@@ -2,9 +2,9 @@
 #define STRING__GUARD
 
 #include<string>
-#include "../../Value.hh"
-#include "../Expr.hh"
-#include "../../Visitor.hh" // Only necessary to define `accept`
+#include "Value.hh"
+#include "expr/Expr.hh"
+#include "Visitor.hh" 
 
 class Visitor;
 
@@ -21,4 +21,4 @@ public:
     void accept(Visitor* visitor) override;
 };
 
-#endif // INT__GUARD
+#endif 

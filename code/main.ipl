@@ -6,10 +6,10 @@ function max(a, b){
     }
 }
 
-for(var i = 0; i<50; i++){
-    for(var j = 0; j<50; j++){
+
+for(var i = 0; i<5; i++){
+    for(var j = 0; j<5; j++){
         var m = max(i, j);
-    
-        print(m);
+        print("i: ", i, " j: ", j, " m: ", m);
     }
 }

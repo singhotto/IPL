@@ -1,5 +1,5 @@
-#include "Equal.hh"
-#include "../../Log.hh"
+#include "expr/boolean/Equal.hh"
+#include "Log.hh"
 
 Equal::Equal(ExprPtr left, ExprPtr right) : left(std::move(left)), right(std::move(right))
 {

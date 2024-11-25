@@ -1,8 +1,8 @@
 #ifndef GREATER__GUARD
 #define GREATER__GUARD
 
-#include "BoolExpr.hh"
-#include "../../Visitor.hh"
+#include "expr/boolean/BoolExpr.hh"
+#include "Visitor.hh"
 
 class Greater : virtual public BoolExpr {
 private:

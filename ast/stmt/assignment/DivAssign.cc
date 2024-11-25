@@ -1,5 +1,5 @@
-#include "DivAssign.hh"
-#include "../../Log.hh"
+#include "stmt/assignment/DivAssign.hh"
+#include "Log.hh"
 
 DivAssign::DivAssign(IdPtr idExp, ExprPtr value) 
     : idExp(std::move(idExp)), value(std::move(value))

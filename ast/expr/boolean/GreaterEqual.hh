@@ -1,8 +1,8 @@
 #ifndef GREATEREQUAL__GUARD
 #define GREATEREQUAL__GUARD
 
-#include "BoolExpr.hh"
-#include "../../Visitor.hh"
+#include "expr/boolean/BoolExpr.hh"
+#include "Visitor.hh"
 
 class GreaterEqual : virtual public BoolExpr {
 private:

@@ -1,12 +1,12 @@
 #ifndef CALL_FUNC__GUARD
 #define CALL_FUNC__GUARD
 
-#include "../Value.hh"
-#include "../stmt/Statement.hh"
-#include "Expr.hh"
-#include "value/Id.hh"
 #include <vector>
-#include "../Visitor.hh" // Only necessary to define `accept`
+#include "Value.hh"
+#include "stmt/Statement.hh"
+#include "expr/Expr.hh"
+#include "expr/value/Id.hh"
+#include "Visitor.hh" 
 
 class CallFunc : virtual public Statement, virtual public Expr {
 private:

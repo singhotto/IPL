@@ -1,8 +1,8 @@
 #ifndef EXPR__GUARD
 #define EXPR__GUARD
 
-#include "../Node.hh"
-#include "../Log.hh"
+#include "Node.hh"
+#include "Log.hh"
 #include <iostream> 
 
 class Visitor; // Forward declaration

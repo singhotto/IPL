@@ -1,5 +1,5 @@
-#include "DefVar.hh"
-#include "../Log.hh"
+#include "stmt/DefVar.hh"
+#include "Log.hh"
 
 DefVar::DefVar(IdPtr idExp) : idExp(std::move(idExp)), value(ExprPtr())
 {

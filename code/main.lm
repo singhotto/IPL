@@ -1,0 +1,7 @@
+var a = load("image.png");
+
+conv2Bin(a);
+
+print(a);
+
+save(a);

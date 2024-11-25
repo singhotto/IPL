@@ -1,5 +1,5 @@
-#include "Ifcond.hh"
-#include "../Log.hh"
+#include "stmt/Ifcond.hh"
+#include "Log.hh"
 
 Ifcond::Ifcond(ExprPtr cond, std::vector<Statement *> statements)
     : cond(std::move(cond))

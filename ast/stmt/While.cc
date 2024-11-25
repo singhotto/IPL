@@ -1,5 +1,5 @@
-#include "While.hh"
-#include "../Log.hh"
+#include "stmt/While.hh"
+#include "Log.hh"
 
 While::While(ExprPtr cond, std::vector<Statement *> statements) : cond(std::move(cond))
 {

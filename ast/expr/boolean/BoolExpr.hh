@@ -1,10 +1,10 @@
 #ifndef BOOLEXPR__GUARD
 #define BOOLEXPR__GUARD
 
-#include "../Expr.hh"
+#include "expr/Expr.hh"
 #include <iostream>
-#include "../../Visitor.hh"
-#include "../../Log.hh"
+#include "Visitor.hh"
+#include "Log.hh"
 
 class BoolExpr : virtual public Expr {
 public:

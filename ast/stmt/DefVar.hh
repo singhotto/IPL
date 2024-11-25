@@ -1,10 +1,10 @@
 #ifndef DEFVAR__GUARD
 #define DEFVAR__GUARD
 
-#include "Statement.hh"
-#include "../Visitor.hh" 
-#include "../expr/value/Id.hh"
-#include "../expr/Expr.hh"
+#include "stmt/Statement.hh"
+#include "expr/value/Id.hh"
+#include "Visitor.hh"
+#include "expr/Expr.hh"
 
 class DefVar : virtual public Statement {
 private:

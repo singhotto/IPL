@@ -1,8 +1,8 @@
 #ifndef LESS__GUARD
 #define LESS__GUARD
 
-#include "BoolExpr.hh"
-#include "../../Visitor.hh"
+#include "expr/boolean/BoolExpr.hh"
+#include "Visitor.hh"
 
 class Less : virtual public BoolExpr {
 private:

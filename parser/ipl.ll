@@ -1,7 +1,7 @@
 %{
 
-#include "main.hh"
-#include "main.parse.hh"
+#include "ipl.hh"
+#include "ipl.parse.hh"
 #include <string>
 
 %}

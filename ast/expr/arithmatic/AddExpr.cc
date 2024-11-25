@@ -1,5 +1,5 @@
-#include "../../Log.hh"
-#include "AddExpr.hh"
+#include "Log.hh"
+#include "expr/arithmatic/AddExpr.hh"
 
 AddExpr::AddExpr(ExprPtr left, ExprPtr right) : left(std::move(left)), right(std::move(right))
 {

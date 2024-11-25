@@ -1,5 +1,5 @@
-#include "And.hh"
-#include "../../Log.hh"
+#include "expr/boolean/And.hh"
+#include "Log.hh"
 
 And::And(ExprPtr left, ExprPtr right) : left(std::move(left)), right(std::move(right))
 {

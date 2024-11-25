@@ -1,10 +1,10 @@
 #ifndef NUMBER__GUARD
 #define NUMBER__GUARD
 
-#include "../../Value.hh"
-#include "../../Log.hh"
-#include "../Expr.hh"
-#include "../../Visitor.hh" // Only necessary to define `accept`
+#include "Log.hh"
+#include "Value.hh"
+#include "expr/Expr.hh"
+#include "Visitor.hh" 
 
 class Visitor; // Forward declaration
 

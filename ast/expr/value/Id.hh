@@ -2,8 +2,8 @@
 #define ID__GUARD
 
 #include<string>
-#include "../Expr.hh"
-#include "../../Visitor.hh" 
+#include "expr/Expr.hh"
+#include "Visitor.hh" 
 
 class Visitor;
 

@@ -8,7 +8,6 @@
 #include <memory>
 #include <cassert>
 #include "Value.hh"
-#include "expr/value/Number.hh"
 
 class ExecContext
 {

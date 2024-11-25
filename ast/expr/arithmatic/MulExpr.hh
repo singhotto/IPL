@@ -1,8 +1,8 @@
 #ifndef MULEXPR__GUARD
 #define MULEXPR__GUARD
 
-#include "BinaryExpr.hh"
-#include "../../Visitor.hh"
+#include "expr/arithmatic/BinaryExpr.hh"
+#include "Visitor.hh"
 
 class MulExpr : virtual public BinaryExpr {
 private:

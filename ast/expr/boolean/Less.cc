@@ -1,5 +1,5 @@
-#include "Less.hh"
-#include "../../Log.hh"
+#include "expr/boolean/Less.hh"
+#include "Log.hh"
 
 Less::Less(ExprPtr left, ExprPtr right) : left(std::move(left)), right(std::move(right))
 {

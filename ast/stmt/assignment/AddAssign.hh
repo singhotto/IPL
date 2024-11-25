@@ -1,10 +1,10 @@
 #ifndef ADDASSIGN__GUARD
 #define ADDASSIGN__GUARD
 
-#include "../Statement.hh"
-#include "../../Visitor.hh" 
-#include "../../expr/value/Id.hh"
-#include "../../expr/Expr.hh"
+#include "stmt/Statement.hh"
+#include "Visitor.hh" 
+#include "expr/value/Id.hh"
+#include "expr/Expr.hh"
 
 class AddAssign : virtual public Statement {
 private:

@@ -2,9 +2,9 @@
 #define FORLOOP__GUARD
 
 #include <vector>
-#include "Statement.hh"
-#include "../expr/Expr.hh"
-#include "../Visitor.hh"
+#include "stmt/Statement.hh"
+#include "Visitor.hh"
+#include "expr/Expr.hh"
 
 class Visitor;
 

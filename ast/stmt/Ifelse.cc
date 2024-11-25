@@ -1,5 +1,5 @@
-#include "Ifelse.hh"
-#include "../Log.hh"
+#include "stmt/Ifelse.hh"
+#include "Log.hh"
 
 Ifelse::Ifelse(ExprPtr cond, std::vector<Statement *> thenBody, std::vector<Statement *> elseBody)
     : cond(std::move(cond))

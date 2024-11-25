@@ -1,5 +1,5 @@
-#include "NotEqual.hh"
-#include "../../Log.hh"
+#include "expr/boolean/NotEqual.hh"
+#include "Log.hh"
 
 NotEqual::NotEqual(ExprPtr left, ExprPtr right) : left(std::move(left)), right(std::move(right))
 {

@@ -1,5 +1,5 @@
-#include "PrintExpr.hh"
-#include "../Log.hh" // Include the macros header
+#include "stmt/PrintExpr.hh"
+#include "Log.hh" // Include the macros header
 
 PrintExpr::PrintExpr(std::vector<Expr *> exprs)
 {

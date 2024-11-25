@@ -1,5 +1,5 @@
-#include "SubtExpr.hh"
-#include "../../Log.hh"
+#include "expr/arithmatic/SubtExpr.hh"
+#include "Log.hh"
 
 SubtExpr::SubtExpr(ExprPtr left, ExprPtr right) : left(std::move(left)), right(std::move(right))
 {

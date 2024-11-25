@@ -1,5 +1,5 @@
-#include "../../Log.hh"
-#include "Bool.hh"
+#include "Log.hh"
+#include "expr/value/Bool.hh"
 
 Bool::Bool(bool value) : value(value)
 {

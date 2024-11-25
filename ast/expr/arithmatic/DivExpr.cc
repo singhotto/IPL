@@ -1,5 +1,5 @@
-#include "../../Log.hh"
-#include "DivExpr.hh"
+#include "Log.hh"
+#include "expr/arithmatic/DivExpr.hh"
 
 DivExpr::DivExpr(ExprPtr left, ExprPtr right) : left(std::move(left)), right(std::move(right))
 {

@@ -1,5 +1,5 @@
-#include "MulAssign.hh"
-#include "../../Log.hh"
+#include "stmt/assignment/MulAssign.hh"
+#include "Log.hh"
 
 MulAssign::MulAssign(IdPtr idExp, ExprPtr value) 
     : idExp(std::move(idExp)), value(std::move(value))

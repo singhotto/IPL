@@ -1,8 +1,8 @@
 #ifndef DIVEXPR__GUARD
 #define DIVEXPR__GUARD
 
-#include "BinaryExpr.hh"
-#include "../../Visitor.hh"
+#include "expr/arithmatic/BinaryExpr.hh"
+#include "Visitor.hh"
 
 class DivExpr : virtual public BinaryExpr {
 private:

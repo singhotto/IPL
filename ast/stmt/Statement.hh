@@ -1,8 +1,8 @@
 #ifndef STATEMENT__GUARD
 #define STATEMENT__GUARD
 
-#include "../Node.hh" 
-#include "../Log.hh"  
+#include "Node.hh" 
+#include "Log.hh"  
 #include <memory>
 #include <iostream>
 

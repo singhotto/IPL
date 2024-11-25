@@ -1,5 +1,5 @@
-#include "Greater.hh"
-#include "../../Log.hh"
+#include "expr/boolean/Greater.hh"
+#include "Log.hh"
 
 Greater::Greater(ExprPtr left, ExprPtr right) : left(std::move(left)), right(std::move(right))
 {

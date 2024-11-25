@@ -1,5 +1,5 @@
-#include "../../Log.hh"
-#include "Int.hh"
+#include "Log.hh"
+#include "expr/value/Int.hh"
 
 Int::Int(int value) : value(value)
 {

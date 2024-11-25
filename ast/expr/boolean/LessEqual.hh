@@ -1,8 +1,8 @@
 #ifndef LESSEQUAL__GUARD
 #define LESSEQUAL__GUARD
 
-#include "BoolExpr.hh"
-#include "../../Visitor.hh"
+#include "expr/boolean/BoolExpr.hh"
+#include "Visitor.hh"
 
 class LessEqual : virtual public BoolExpr {
 private:

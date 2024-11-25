@@ -1,10 +1,10 @@
 #ifndef PRINTEXPR__GUARD
 #define PRINTEXPR__GUARD
 
-#include "Statement.hh"
 #include <vector>
-#include "../Visitor.hh" // Only necessary to define `accept`
-#include "../expr/Expr.hh"
+#include "stmt/Statement.hh"
+#include "Visitor.hh"
+#include "expr/Expr.hh"
 
 class Expr;
 class Visitor;

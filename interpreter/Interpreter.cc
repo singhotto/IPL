@@ -5,6 +5,7 @@
 #include "expr/arithmatic/AddExpr.hh"
 #include "expr/Expr.hh"
 #include "expr/value/Id.hh"
+#include "expr/CallFunc.hh"
 
 #include "stmt/Statement.hh"
 #include "stmt/Block.hh"
@@ -20,14 +21,11 @@
 #include "stmt/DefFunc.hh"
 #include "stmt/Ifcond.hh"
 #include "stmt/Ifelse.hh"
-#include "expr/CallFunc.hh"
 #include "stmt/PrintExpr.hh"
 #include "stmt/ReturnStmt.hh"
 #include "stmt/ForLoop.hh"
 #include "stmt/While.hh"
 #include "Log.hh"
-
-bool g_logOperations = false;
 
 float Interpreter::binaryNumber(BinaryExpr* expr, char op)
 {
@@ -402,12 +400,12 @@ void Interpreter::visit(PrintExpr *expr)
     LOG_OPERATION_END("Interpreter::visit(PrintExpr *expr)");
 }
 
-void Interpreter::visit(ReturnStmt *expr)
+void Interpreter::visit(ReturnStmt *stmt)
 {
-    LOG_OPERATION_START("Interpreter::visit(ReturnStmt *expr)");
-    expr->getValue()->accept(this);
+    LOG_OPERATION_START("Interpreter::visit(ReturnStmt *stmt)");
+    stmt->getValue()->accept(this);
     funcReturn = true;
-    LOG_OPERATION_END("Interpreter::visit(ReturnStmt *expr)");
+    LOG_OPERATION_END("Interpreter::visit(ReturnStmt *stmt)");
 }
 
 void Interpreter::visit(Ifcond *expr)

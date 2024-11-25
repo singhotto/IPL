@@ -1,7 +1,5 @@
 #include "ExecContext.hh"
-#include "Log.hh"  // Include the macros header
-            #include "expr/value/Number.hh"
-
+#include "Log.hh" 
 
 ExecContext::ExecContext()
 {

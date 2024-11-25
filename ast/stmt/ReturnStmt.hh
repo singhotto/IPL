@@ -1,9 +1,9 @@
 #ifndef RETURN_STMT__GUARD
 #define RETURN_STMT__GUARD
 
-#include "Statement.hh"
-#include "../Visitor.hh" 
-#include "../expr/Expr.hh"
+#include "stmt/Statement.hh"
+#include "Visitor.hh"
+#include "expr/Expr.hh"
 
 class ReturnStmt : virtual public Statement 
 {

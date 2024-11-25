@@ -1,5 +1,5 @@
-#include "GreaterEqual.hh"
-#include "../../Log.hh"
+#include "expr/boolean/GreaterEqual.hh"
+#include "Log.hh"
 
 GreaterEqual::GreaterEqual(ExprPtr left, ExprPtr right) : left(std::move(left)), right(std::move(right))
 {

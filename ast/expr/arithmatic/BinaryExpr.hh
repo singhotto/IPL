@@ -1,10 +1,10 @@
 #ifndef BINEXPR__GUARD
 #define BINEXPR__GUARD
 
-#include "../Expr.hh"
+#include "expr/Expr.hh"
 #include <iostream>
-#include "../../Visitor.hh"
-#include "../../Log.hh"
+#include "Visitor.hh"
+#include "Log.hh"
 
 class BinaryExpr : virtual public Expr {
 public:
