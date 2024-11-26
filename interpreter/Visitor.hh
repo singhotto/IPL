@@ -46,6 +46,15 @@ class LessEqual;
 class NotEqual;  
 class Or;  
 
+//Images
+class JpgImage;
+class PngImage;
+class TIFFImage;
+
+//Image Operations
+class Load;
+class Save;
+
 class Visitor {
 public:
     virtual ~Visitor() = default;
@@ -91,6 +100,13 @@ public:
     virtual void visit(LessEqual* expr) = 0;
     virtual void visit(NotEqual* expr) = 0;
     virtual void visit(Or* expr) = 0;
+
+    virtual void visit(JpgImage* img) = 0;
+    virtual void visit(PngImage* img) = 0;
+    virtual void visit(TIFFImage* img) = 0;
+
+    virtual void visit(Load* img) = 0;
+    virtual void visit(Save* img) = 0;
 };
 
 #endif // VISITOR__GUARD

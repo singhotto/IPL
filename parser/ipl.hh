@@ -7,9 +7,13 @@
 using StmtsVec = std::vector<Statement*>;
 using IdVec = std::vector<Id*>;
 using ExprVec = std::vector<Expr*>;
+extern int yylineno;
 
-inline void
+
+inline int
 yyerror(const char* msg) {
-  std::cerr << msg << std::endl;
+  std::cerr << "Syntax error at line " << yylineno << ": " << msg << std::endl;
   exit(1);
 }
+
+

@@ -3,6 +3,7 @@
 #include "ipl.hh"
 #include "ipl.parse.hh"
 #include <string>
+extern int yylineno;
 
 %}
 
@@ -50,21 +51,24 @@ STRING \"(\\.|[^\"])*\"
 
 "var"         { return VAR; }
 "print"       { return PRINT; }
-"function"        { return FUNC; }
+"function"    { return FUNC; }
 "for"         { return FOR;}
 "while"       { return WHILE;}
 "if"          { return IF; }
 "else"        { return ELSE; }
 "return"      { return RETURN; }
-"true"        { return True; }
-"false"       { return False; }
+"true"        { return TRUE; }
+"false"       { return FALSE; }
+
+"load"        { return LOAD; }
+"save"        { return SAVE; }
 
 {ID}          { yylval.str = new std::string(yytext); return ID; }
 {INT}         { yylval.inum = atoi(yytext); return INTEGER; }
 {FLOAT}       { yylval.fnum = atof(yytext); return FLOAT; }
 {STRING}      { yylval.str = new std::string(yytext); return STRING; }
 
-"\n"          { /* ignore new line */ }
+"\n"          {  }
 
 "//".*        { /* ignore comments */ }
 [ \t]         { /* ignore whitespace */ }

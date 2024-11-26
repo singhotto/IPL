@@ -1,15 +1,23 @@
-function max(a, b){
-    if(a > b){
-        return a;
-    }else{
-        return b;
-    }
-}
 
 
-for(var i = 0; i<5; i++){
-    for(var j = 0; j<5; j++){
-        var m = max(i, j);
-        print("i: ", i, " j: ", j, " m: ", m);
-    }
+function sumRange1(a, b){
+    return (a + b) * (b - a + 1) / 2;
 }
+
+function sumRange2(a, b){
+    var res = 0;
+    for(var i = a; i<=b; i++){
+        res+=i;
+    }
+    return res;
+}
+
+var a = 100;
+var b = 2000;
+
+var res1 = sumRange1(a, b);
+
+var res2 = sumRange2(a, b);
+
+print(res1 == res2);
+print(res1, " ", res2);

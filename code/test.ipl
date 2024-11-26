@@ -1,0 +1,7 @@
+var img = load("../images/a.jpg");
+
+print(img);
+
+var x = "../test.jpg";
+
+save(img, x);

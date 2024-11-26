@@ -66,8 +66,8 @@ extern int yydebug;
     IF = 267,                      /* IF  */
     ELSE = 268,                    /* ELSE  */
     RETURN = 269,                  /* RETURN  */
-    True = 270,                    /* True  */
-    False = 271,                   /* False  */
+    TRUE = 270,                    /* TRUE  */
+    FALSE = 271,                   /* FALSE  */
     ADD = 272,                     /* ADD  */
     SUB = 273,                     /* SUB  */
     MUL = 274,                     /* MUL  */
@@ -93,7 +93,9 @@ extern int yydebug;
     LBRACE = 294,                  /* LBRACE  */
     RBRACE = 295,                  /* RBRACE  */
     SEMICOLON = 296,               /* SEMICOLON  */
-    COMMA = 297                    /* COMMA  */
+    COMMA = 297,                   /* COMMA  */
+    LOAD = 298,                    /* LOAD  */
+    SAVE = 299                     /* SAVE  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -102,7 +104,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 16 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+#line 17 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
 
     int inum;       // For integer literals
     float fnum;     // For float literals
@@ -117,7 +119,7 @@ union YYSTYPE
     IdVec* sIdList;
     Id* IDENTIFIER;
 
-#line 121 "/Users/singhotto/Documents/IPL/parser/ipl.parse.hh"
+#line 123 "/Users/singhotto/Documents/IPL/parser/ipl.parse.hh"
 
 };
 typedef union YYSTYPE YYSTYPE;

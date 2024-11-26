@@ -13,11 +13,13 @@
 class Interpreter : virtual public Visitor
 {
 private:
-    ExecContext context;
-    std::unique_ptr<Value> current;
-    bool funcReturn = false;
+    using ValuePtr = std::unique_ptr<Value>;
     using FloatPtr = std::unique_ptr<Float>;
     using BoolPtr = std::unique_ptr<Bool>;
+
+    ExecContext context;
+    ValuePtr current;
+    bool funcReturn = false;
 
     // Private copy constructor and assignment operator to prevent copying
     Interpreter(const Interpreter&) = delete;
@@ -76,6 +78,13 @@ public:
     void visit(LessEqual* expr) override;
     void visit(NotEqual* expr) override;
     void visit(Or* expr) override;
+
+    void visit(JpgImage* img) override;
+    void visit(PngImage* img) override;
+    void visit(TIFFImage* img) override;
+
+    void visit(Load* img) override;
+    void visit(Save* img) override;
 };
 
 #endif // INTERPRETER__GUARD

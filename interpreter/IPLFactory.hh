@@ -8,6 +8,11 @@
 #include "expr/value/Float.hh"
 #include "expr/value/Id.hh"
 #include "expr/value/Bool.hh"
+#include "expr/value/image/Image.hh"
+#include "expr/value/image/JpgImage.hh"
+#include "expr/value/image/PngImage.hh"
+#include "expr/value/image/TiffImage.hh"
+#include "ImageType.hh"
 
 #include "expr/Expr.hh"
 #include "expr/arithmatic/AddExpr.hh"
@@ -15,6 +20,9 @@
 #include "expr/arithmatic/MulExpr.hh"
 #include "expr/arithmatic/ModExpr.hh"
 #include "expr/arithmatic/SubtExpr.hh"
+
+#include "expr/imgOp/Load.hh"
+#include "expr/imgOp/Save.hh"
 
 #include "stmt/Statement.hh"
 #include "stmt/Block.hh"
@@ -83,6 +91,49 @@ public:
     static Bool *createBool(bool val)
     {
         return new Bool(val);
+    }
+
+    static Load *createLoad(std::string str)
+    {
+        std::string new_str = str.substr(1, str.size() - 2);
+        return new Load(new_str);
+    }
+
+    static Save *createSave(ExprPtr id, ExprPtr expr)
+    {
+        return new Save(std::move(id), std::move(expr));
+    }
+
+    static Image *createImage(std::string filename)
+    {
+        ImageType type = getImageType(filename);
+
+
+        Image* img = nullptr; // Declare once
+
+        switch (type)
+        {
+        case ImageType::JPEG:
+        case ImageType::JPG:
+            img = new JpgImage();
+            break;
+
+        case ImageType::PNG:
+            img = new PngImage();
+            break;
+
+        case ImageType::TIFF:
+            img = new TIFFImage();
+            break;
+
+        default:
+            throw std::invalid_argument("Unsupported image type for file: " + filename);
+        }
+
+        // Load the image after it's created
+        img->load(filename);
+
+        return img;
     }
 
     static Equal *createEqual(
@@ -177,7 +228,7 @@ public:
     }
 
     static Block *createBlock(
-        std::vector<Statement*> stmts)
+        std::vector<Statement *> stmts)
     {
         return new Block(std::move(stmts));
     }
@@ -244,22 +295,22 @@ public:
 
     static ForLoop *createForLoop(
         StmtPtr stmt,
-        ExprPtr cond, 
-        StmtPtr update, 
-        std::vector<Statement*> stmts)
+        ExprPtr cond,
+        StmtPtr update,
+        std::vector<Statement *> stmts)
     {
         return new ForLoop(std::move(stmt), std::move(cond), std::move(update), std::move(stmts));
     }
 
     static While *createWhile(
-        ExprPtr cond, 
-        std::vector<Statement*> stmts)
+        ExprPtr cond,
+        std::vector<Statement *> stmts)
     {
         return new While(std::move(cond), std::move(stmts));
     }
 
     static DefFunc *createDefFunc(
-        IdPtr  id, std::vector<Id*> args, std::vector<Statement*> stmts)
+        IdPtr id, std::vector<Id *> args, std::vector<Statement *> stmts)
     {
         return new DefFunc(std::move(id), args, stmts);
     }
@@ -271,7 +322,7 @@ public:
     }
 
     static PrintExpr *createPrintExpr(
-        std::vector<Expr*> expr)
+        std::vector<Expr *> expr)
     {
         return new PrintExpr(std::move(expr));
     }
@@ -283,13 +334,13 @@ public:
     }
 
     static Ifcond *createIfcond(
-        ExprPtr cond, std::vector<Statement*> statements)
+        ExprPtr cond, std::vector<Statement *> statements)
     {
         return new Ifcond(std::move(cond), std::move(statements));
     }
 
     static Ifelse *createIfelse(
-        ExprPtr cond, std::vector<Statement*> thanBody, std::vector<Statement*> elseBody)
+        ExprPtr cond, std::vector<Statement *> thanBody, std::vector<Statement *> elseBody)
     {
         return new Ifelse(std::move(cond), std::move(thanBody), std::move(elseBody));
     }

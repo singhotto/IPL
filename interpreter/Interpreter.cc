@@ -1,6 +1,16 @@
 #include "Interpreter.hh"
 #include "IPLFactory.hh"
 #include "Value.hh"
+
+#include "ImageProcessor.hh"
+
+#include "expr/value/image/JpgImage.hh"
+#include "expr/value/image/PngImage.hh"
+#include "expr/value/image/TIFFImage.hh"
+
+#include "expr/imgOp/Load.hh"
+#include "expr/imgOp/Save.hh"
+
 #include "expr/value/Int.hh"
 #include "expr/arithmatic/AddExpr.hh"
 #include "expr/Expr.hh"
@@ -8,8 +18,6 @@
 #include "expr/CallFunc.hh"
 
 #include "stmt/Statement.hh"
-#include "stmt/Block.hh"
-#include "stmt/DefVar.hh"
 #include "stmt/assignment/Assign.hh"
 #include "stmt/assignment/AddAssign.hh"
 #include "stmt/assignment/MulAssign.hh"
@@ -18,6 +26,9 @@
 #include "stmt/assignment/AddAssign.hh"
 #include "stmt/assignment/Decrease.hh"
 #include "stmt/assignment/Increase.hh"
+
+#include "stmt/Block.hh"
+#include "stmt/DefVar.hh"
 #include "stmt/DefFunc.hh"
 #include "stmt/Ifcond.hh"
 #include "stmt/Ifelse.hh"
@@ -25,6 +36,7 @@
 #include "stmt/ReturnStmt.hh"
 #include "stmt/ForLoop.hh"
 #include "stmt/While.hh"
+
 #include "Log.hh"
 
 float Interpreter::binaryNumber(BinaryExpr* expr, char op)
@@ -600,6 +612,61 @@ void Interpreter::visit(Or *expr)
     current = BoolPtr(IPLFactory::createBool(boolean(expr, 2)));
     
     LOG_OPERATION_END("Interpreter::visit(Or *expr)");
+}
+
+void Interpreter::visit(JpgImage *img)
+{
+    LOG_OPERATION_START("Interpreter::visit(JpgImage *img)");
+
+    current = img->cloneValue();
+    
+    LOG_OPERATION_END("Interpreter::visit(JpgImage *img)");
+}
+
+void Interpreter::visit(PngImage *img)
+{
+    LOG_OPERATION_START("Interpreter::visit(PngImage *img)");
+
+    current = img->cloneValue();
+    
+    LOG_OPERATION_END("Interpreter::visit(PngImage *img)");
+}
+
+void Interpreter::visit(TIFFImage *img)
+{
+    LOG_OPERATION_START("Interpreter::visit(TIFFImage *img)");
+
+    current = img->cloneValue();
+    
+    LOG_OPERATION_END("Interpreter::visit(TIFFImage *img)");
+}
+
+void Interpreter::visit(Load *img)
+{
+    LOG_OPERATION_START("Interpreter::visit(Load *img)");
+    
+    current = ValuePtr(IPLFactory::createImage(img->getPath()));
+    
+    LOG_OPERATION_END("Interpreter::visit(Load *img)");
+}
+
+void Interpreter::visit(Save *img)
+{
+    LOG_OPERATION_START("Interpreter::visit(TIFFImage *img)");
+
+    img->getImage()->accept(this);
+
+    Image* image = dynamic_cast<Image*>(current.get());
+
+    assert(image != nullptr);
+
+    img->getPath()->accept(this);
+
+    String* path = dynamic_cast<String*>(current.get());
+
+    image->save(path->getStr());
+    
+    LOG_OPERATION_END("Interpreter::visit(TIFFImage *img)");
 }
 
 void Interpreter::visit(Expr *expr)

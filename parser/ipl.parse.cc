@@ -78,11 +78,12 @@
 // Declare external lexer functions
 extern int yylex();
 extern int yyparse();
-extern void yyerror(const char* s);
+extern int yyerror(const char* s);
+extern int yylineno;
 
 Interpreter& eval = Interpreter::getInstance();
 
-#line 86 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+#line 87 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -125,8 +126,8 @@ enum yysymbol_kind_t
   YYSYMBOL_IF = 12,                        /* IF  */
   YYSYMBOL_ELSE = 13,                      /* ELSE  */
   YYSYMBOL_RETURN = 14,                    /* RETURN  */
-  YYSYMBOL_True = 15,                      /* True  */
-  YYSYMBOL_False = 16,                     /* False  */
+  YYSYMBOL_TRUE = 15,                      /* TRUE  */
+  YYSYMBOL_FALSE = 16,                     /* FALSE  */
   YYSYMBOL_ADD = 17,                       /* ADD  */
   YYSYMBOL_SUB = 18,                       /* SUB  */
   YYSYMBOL_MUL = 19,                       /* MUL  */
@@ -153,19 +154,21 @@ enum yysymbol_kind_t
   YYSYMBOL_RBRACE = 40,                    /* RBRACE  */
   YYSYMBOL_SEMICOLON = 41,                 /* SEMICOLON  */
   YYSYMBOL_COMMA = 42,                     /* COMMA  */
-  YYSYMBOL_YYACCEPT = 43,                  /* $accept  */
-  YYSYMBOL_program = 44,                   /* program  */
-  YYSYMBOL_body = 45,                      /* body  */
-  YYSYMBOL_stmt_no_semicolon = 46,         /* stmt_no_semicolon  */
-  YYSYMBOL_stmt_semicolon = 47,            /* stmt_semicolon  */
-  YYSYMBOL_func_decl = 48,                 /* func_decl  */
-  YYSYMBOL_func_call = 49,                 /* func_call  */
-  YYSYMBOL_func_args = 50,                 /* func_args  */
-  YYSYMBOL_var_decl = 51,                  /* var_decl  */
-  YYSYMBOL_var_assign = 52,                /* var_assign  */
-  YYSYMBOL_IDENTIFIER = 53,                /* IDENTIFIER  */
-  YYSYMBOL_expr_list = 54,                 /* expr_list  */
-  YYSYMBOL_expr = 55                       /* expr  */
+  YYSYMBOL_LOAD = 43,                      /* LOAD  */
+  YYSYMBOL_SAVE = 44,                      /* SAVE  */
+  YYSYMBOL_YYACCEPT = 45,                  /* $accept  */
+  YYSYMBOL_program = 46,                   /* program  */
+  YYSYMBOL_body = 47,                      /* body  */
+  YYSYMBOL_stmt_no_semicolon = 48,         /* stmt_no_semicolon  */
+  YYSYMBOL_stmt_semicolon = 49,            /* stmt_semicolon  */
+  YYSYMBOL_func_decl = 50,                 /* func_decl  */
+  YYSYMBOL_func_call = 51,                 /* func_call  */
+  YYSYMBOL_func_args = 52,                 /* func_args  */
+  YYSYMBOL_var_decl = 53,                  /* var_decl  */
+  YYSYMBOL_var_assign = 54,                /* var_assign  */
+  YYSYMBOL_IDENTIFIER = 55,                /* IDENTIFIER  */
+  YYSYMBOL_expr_list = 56,                 /* expr_list  */
+  YYSYMBOL_expr = 57                       /* expr  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -282,7 +285,7 @@ typedef int yytype_uint16;
 
 
 /* Stored state numbers (used for stacks). */
-typedef yytype_int8 yy_state_t;
+typedef yytype_uint8 yy_state_t;
 
 /* State numbers in computations.  */
 typedef int yy_state_fast_t;
@@ -491,21 +494,21 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  30
+#define YYFINAL  32
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   383
+#define YYLAST   449
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  43
+#define YYNTOKENS  45
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  13
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  57
+#define YYNRULES  59
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  123
+#define YYNSTATES  133
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   297
+#define YYMAXUTOK   299
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -548,19 +551,19 @@ static const yytype_int8 yytranslate[] =
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
       25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
-      35,    36,    37,    38,    39,    40,    41,    42
+      35,    36,    37,    38,    39,    40,    41,    42,    43,    44
 };
 
 #if YYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    61,    61,    63,    71,    72,    73,    74,    75,    79,
-      80,    84,    89,    93,   100,   100,   100,   101,   105,   111,
-     118,   119,   126,   127,   128,   133,   136,   139,   145,   148,
-     151,   154,   157,   160,   163,   166,   172,   176,   177,   178,
-     181,   182,   183,   184,   185,   186,   187,   188,   189,   190,
-     191,   192,   193,   194,   195,   196,   197,   198
+       0,    63,    63,    65,    73,    74,    75,    76,    77,    81,
+      82,    86,    91,    95,   102,   102,   102,   103,   107,   113,
+     120,   121,   129,   130,   131,   136,   139,   142,   148,   151,
+     154,   157,   160,   163,   166,   169,   175,   179,   180,   181,
+     184,   185,   188,   189,   190,   191,   192,   193,   194,   195,
+     196,   197,   198,   199,   200,   201,   202,   203,   204,   205
 };
 #endif
 
@@ -578,13 +581,13 @@ static const char *const yytname[] =
 {
   "\"end of file\"", "error", "\"invalid token\"", "INTEGER", "FLOAT",
   "ID", "STRING", "VAR", "PRINT", "FUNC", "FOR", "WHILE", "IF", "ELSE",
-  "RETURN", "True", "False", "ADD", "SUB", "MUL", "DIV", "MOD", "ASSIGN",
+  "RETURN", "TRUE", "FALSE", "ADD", "SUB", "MUL", "DIV", "MOD", "ASSIGN",
   "INCREASE", "DECREASE", "ADDASSIGN", "SUBASSIGN", "MULASSIGN",
   "DIVASSIGN", "EQUAL", "NOTEQUAL", "LESS", "GREATER", "LESSEQUAL",
   "GREATEREQUAL", "AND", "OR", "LPAREN", "RPAREN", "LBRACE", "RBRACE",
-  "SEMICOLON", "COMMA", "$accept", "program", "body", "stmt_no_semicolon",
-  "stmt_semicolon", "func_decl", "func_call", "func_args", "var_decl",
-  "var_assign", "IDENTIFIER", "expr_list", "expr", YY_NULLPTR
+  "SEMICOLON", "COMMA", "LOAD", "SAVE", "$accept", "program", "body",
+  "stmt_no_semicolon", "stmt_semicolon", "func_decl", "func_call",
+  "func_args", "var_decl", "var_assign", "IDENTIFIER", "expr_list", "expr", YY_NULLPTR
 };
 
 static const char *
@@ -594,7 +597,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-34)
+#define YYPACT_NINF (-103)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -608,19 +611,20 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int16 yypact[] =
 {
-      65,   -34,    -4,   -25,    -4,     9,    13,    15,     2,    51,
-      76,   -34,   -34,   -34,    25,    27,    28,   338,    58,     2,
-      45,    24,     2,     2,   -34,   -34,   -34,     2,   -34,   164,
-     -34,   -34,   -34,   -34,   -34,   -34,     2,   -34,   -34,     2,
-       2,     2,     2,     2,     2,   -12,   280,    -4,     2,   214,
-     236,   258,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,   -34,   -34,    62,   280,   280,
-     280,   280,   280,    29,   -34,   280,    56,     2,    70,   -34,
-     189,    61,    68,   -34,    14,    14,   -34,   -34,   -34,   307,
-     307,   307,   307,   307,   307,   325,   300,   -34,   -34,   280,
-      81,    -4,    -4,   362,   362,   362,   -34,    85,   355,     8,
-      84,   132,    90,   -34,   117,   -34,   362,    92,   140,   362,
-     -34,   148,   -34
+      89,  -103,     8,   -22,     8,   -17,   -15,   -14,    13,    34,
+     141,  -103,  -103,  -103,    -5,    -4,    10,   404,    31,    13,
+      23,    -2,    13,    13,  -103,  -103,  -103,    13,    24,    27,
+    -103,   226,  -103,  -103,  -103,  -103,  -103,  -103,    13,  -103,
+    -103,    13,    13,    13,    13,    13,    13,    -3,   364,     8,
+      13,   276,   298,   320,    48,    13,    13,    13,    13,    13,
+      13,    13,    13,    13,    13,    13,    13,    13,    13,  -103,
+    -103,    28,   364,   364,   364,   364,   364,    17,  -103,   364,
+      29,    13,    20,  -103,   251,    37,    38,  -103,    40,   200,
+      53,    53,  -103,  -103,  -103,    11,    11,    11,    11,    11,
+      11,   391,   384,  -103,  -103,   364,    56,     8,     8,   428,
+     428,  -103,    13,   428,  -103,    41,   421,   149,   157,   342,
+     165,    63,  -103,    91,  -103,  -103,   428,    66,   176,   428,
+    -103,   199,  -103
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -630,150 +634,164 @@ static const yytype_int8 yydefact[] =
 {
        2,    36,     0,     0,     0,     0,     0,     0,     0,     0,
        3,     7,     5,     9,     0,     0,     0,     0,    25,    37,
-       0,    20,     0,     0,    54,    55,    56,     0,    57,     0,
-       1,     8,     6,    16,    14,    15,    20,    30,    31,     0,
-       0,     0,     0,    37,    20,     0,    38,    22,     0,     0,
+       0,    20,     0,     0,    56,    57,    58,     0,     0,     0,
+      59,     0,     1,     8,     6,    16,    14,    15,    20,    30,
+      31,     0,     0,     0,     0,    37,    20,     0,    38,    22,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,    18,    29,    57,    28,    32,
-      33,    34,    35,     0,    27,    26,     0,     0,     0,    23,
-       0,     0,     0,    45,    40,    41,    42,    43,    44,    46,
-      47,    48,    49,    50,    51,    52,    53,    21,    17,    39,
-       0,     0,     0,     4,     4,     4,    24,     0,     0,    20,
-      20,    20,     0,    13,    10,    19,     4,     0,    20,     4,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,    18,
+      29,    59,    28,    32,    33,    34,    35,     0,    27,    26,
+       0,     0,     0,    23,     0,     0,     0,    47,     0,     0,
+      42,    43,    44,    45,    46,    48,    49,    50,    51,    52,
+      53,    54,    55,    21,    17,    39,     0,     0,     0,     4,
+       4,    40,     0,     4,    24,     0,     0,    20,    20,     0,
+      20,     0,    13,    10,    41,    19,     4,     0,    20,     4,
       12,    20,    11
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -34,   -34,    60,    17,     4,   -34,   -33,   -34,   -34,    30,
-       0,    91,     1
+    -103,  -103,  -102,    16,     4,  -103,   -37,  -103,  -103,     3,
+       0,    67,    25
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     9,    10,    11,    12,    13,    14,    78,    15,    16,
-      28,    45,    46
+       0,     9,    10,    11,    12,    13,    14,    82,    15,    16,
+      30,    47,    48
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
    positive, shift that token.  If negative, reduce the rule whose
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
-static const yytype_int8 yytable[] =
+static const yytype_int16 yytable[] =
 {
-      17,     1,    18,    66,    20,    24,    25,     1,    26,    29,
-      17,    74,    19,     1,    32,     2,     3,     4,     5,     6,
-       7,    17,     8,    49,    50,    48,    76,    31,    51,     1,
-      77,     2,     3,    54,    55,    56,    67,    68,     8,    27,
-      69,    70,    71,    72,    67,    75,    21,    79,   113,    80,
-      22,    30,    23,    84,    85,    86,    87,    88,    89,    90,
-      91,    92,    93,    94,    95,    96,    33,    97,    34,    35,
-       1,    77,     2,     3,     4,     5,     6,     7,    99,     8,
-      44,     1,    47,     2,     3,     4,     5,     6,     7,     1,
-       8,     2,     3,     4,     5,     6,     7,    98,     8,    43,
-     103,   106,   108,    17,    17,    17,    -4,   104,   100,    17,
-      17,    17,   101,    32,    32,    32,    17,   -20,    17,    17,
-     105,    17,    32,   112,   114,    32,    31,    31,    31,   116,
-     117,   119,   107,     0,    73,    31,     0,     1,    31,     2,
-       3,     4,     5,     6,     7,     1,     8,     2,     3,     4,
-       5,     6,     7,     1,     8,     2,     3,     4,     5,     6,
-       7,     0,     8,   109,   110,   111,     0,     0,     0,     0,
-       0,     0,   115,     0,     0,     0,   118,     0,     0,   121,
-     120,    52,    53,    54,    55,    56,     0,     0,   122,     0,
-       0,     0,     0,    57,    58,    59,    60,    61,    62,    63,
-      64,     0,     0,     0,     0,    65,    52,    53,    54,    55,
-      56,     0,     0,     0,     0,     0,     0,     0,    57,    58,
-      59,    60,    61,    62,    63,    64,     0,     0,     0,     0,
-     102,    52,    53,    54,    55,    56,     0,     0,     0,     0,
-       0,     0,     0,    57,    58,    59,    60,    61,    62,    63,
-      64,     0,    81,    52,    53,    54,    55,    56,     0,     0,
-       0,     0,     0,     0,     0,    57,    58,    59,    60,    61,
-      62,    63,    64,     0,    82,    52,    53,    54,    55,    56,
-       0,     0,     0,     0,     0,     0,     0,    57,    58,    59,
-      60,    61,    62,    63,    64,     0,    83,    52,    53,    54,
-      55,    56,     0,     0,     0,     0,     0,     0,     0,    57,
-      58,    59,    60,    61,    62,    63,    64,    52,    53,    54,
-      55,    56,     0,     0,    52,    53,    54,    55,    56,    57,
-      58,    59,    60,    61,    62,    63,   -21,   -21,   -21,   -21,
-     -21,   -21,    52,    53,    54,    55,    56,     0,     0,     0,
-       0,     0,     0,     0,    57,    58,    59,    60,    61,    62,
-      36,    37,    38,    39,    40,    41,    42,     1,     0,     2,
-       3,     4,     5,     6,     7,    43,     8,    36,    37,    38,
-      39,    40,    41,    42
+      17,    70,    18,     1,    20,     2,     3,   117,   118,    78,
+      17,   120,     8,     1,    34,    19,    24,    25,     1,    26,
+      21,    17,    22,    23,   128,    50,    33,   131,    56,    57,
+      58,    59,    60,    31,    32,    80,    35,    36,    71,    81,
+     -21,   -21,   -21,   -21,   -21,   -21,    71,    51,    52,    83,
+      27,    37,    53,    46,    88,   103,    28,    29,   106,    81,
+      49,    54,   107,    72,    55,    45,    73,    74,    75,    76,
+     104,    79,    58,    59,    60,    84,   109,   110,   111,   121,
+      89,    90,    91,    92,    93,    94,    95,    96,    97,    98,
+      99,   100,   101,   102,     1,   113,     2,     3,     4,     5,
+       6,     7,   126,     8,   127,   129,   105,   114,   116,    17,
+      17,   115,    77,    17,     0,     0,     0,    17,    17,     0,
+      17,    34,    34,     0,    34,     0,    17,     0,    17,    17,
+      -4,    17,    34,    33,    33,    34,    33,   119,     0,     0,
+       0,     0,     0,     0,    33,     0,     1,    33,     2,     3,
+       4,     5,     6,     7,     1,     8,     2,     3,     4,     5,
+       6,     7,     1,     8,     2,     3,     4,     5,     6,     7,
+       1,     8,     2,     3,     4,     5,     6,     7,     0,     8,
+       0,     1,   -20,     2,     3,     4,     5,     6,     7,   122,
+       8,     0,     0,     0,     0,     0,     0,   123,     0,     0,
+       0,     0,     0,     0,     1,   125,     2,     3,     4,     5,
+       6,     7,     0,     8,     0,     0,   130,    56,    57,    58,
+      59,    60,     0,     0,     0,     0,     0,     0,     0,    61,
+      62,    63,    64,    65,    66,    67,    68,     0,     0,   132,
+       0,     0,   112,    56,    57,    58,    59,    60,     0,     0,
+       0,     0,     0,     0,     0,    61,    62,    63,    64,    65,
+      66,    67,    68,     0,     0,     0,     0,    69,    56,    57,
+      58,    59,    60,     0,     0,     0,     0,     0,     0,     0,
+      61,    62,    63,    64,    65,    66,    67,    68,     0,     0,
+       0,     0,   108,    56,    57,    58,    59,    60,     0,     0,
+       0,     0,     0,     0,     0,    61,    62,    63,    64,    65,
+      66,    67,    68,     0,    85,    56,    57,    58,    59,    60,
+       0,     0,     0,     0,     0,     0,     0,    61,    62,    63,
+      64,    65,    66,    67,    68,     0,    86,    56,    57,    58,
+      59,    60,     0,     0,     0,     0,     0,     0,     0,    61,
+      62,    63,    64,    65,    66,    67,    68,     0,    87,    56,
+      57,    58,    59,    60,     0,     0,     0,     0,     0,     0,
+       0,    61,    62,    63,    64,    65,    66,    67,    68,     0,
+     124,    56,    57,    58,    59,    60,     0,     0,     0,     0,
+       0,     0,     0,    61,    62,    63,    64,    65,    66,    67,
+      68,    56,    57,    58,    59,    60,     0,     0,    56,    57,
+      58,    59,    60,    61,    62,    63,    64,    65,    66,    67,
+      61,    62,    63,    64,    65,    66,    38,    39,    40,    41,
+      42,    43,    44,     1,     0,     2,     3,     4,     5,     6,
+       7,    45,     8,    38,    39,    40,    41,    42,    43,    44
 };
 
-static const yytype_int8 yycheck[] =
+static const yytype_int16 yycheck[] =
 {
-       0,     5,     2,    36,     4,     3,     4,     5,     6,     8,
-      10,    44,    37,     5,    10,     7,     8,     9,    10,    11,
-      12,    21,    14,    22,    23,    21,    38,    10,    27,     5,
-      42,     7,     8,    19,    20,    21,    36,    36,    14,    37,
-      39,    40,    41,    42,    44,    44,    37,    47,    40,    48,
-      37,     0,    37,    52,    53,    54,    55,    56,    57,    58,
-      59,    60,    61,    62,    63,    64,    41,    38,    41,    41,
-       5,    42,     7,     8,     9,    10,    11,    12,    77,    14,
-      22,     5,    37,     7,     8,     9,    10,    11,    12,     5,
-      14,     7,     8,     9,    10,    11,    12,    41,    14,    37,
-      39,   101,   102,   103,   104,   105,    41,    39,    38,   109,
-     110,   111,    42,   109,   110,   111,   116,    41,   118,   119,
-      39,   121,   118,    38,    40,   121,   109,   110,   111,    39,
-      13,    39,   102,    -1,    43,   118,    -1,     5,   121,     7,
-       8,     9,    10,    11,    12,     5,    14,     7,     8,     9,
-      10,    11,    12,     5,    14,     7,     8,     9,    10,    11,
-      12,    -1,    14,   103,   104,   105,    -1,    -1,    -1,    -1,
-      -1,    -1,    40,    -1,    -1,    -1,   116,    -1,    -1,   119,
-      40,    17,    18,    19,    20,    21,    -1,    -1,    40,    -1,
-      -1,    -1,    -1,    29,    30,    31,    32,    33,    34,    35,
-      36,    -1,    -1,    -1,    -1,    41,    17,    18,    19,    20,
-      21,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    29,    30,
-      31,    32,    33,    34,    35,    36,    -1,    -1,    -1,    -1,
-      41,    17,    18,    19,    20,    21,    -1,    -1,    -1,    -1,
-      -1,    -1,    -1,    29,    30,    31,    32,    33,    34,    35,
-      36,    -1,    38,    17,    18,    19,    20,    21,    -1,    -1,
+       0,    38,     2,     5,     4,     7,     8,   109,   110,    46,
+      10,   113,    14,     5,    10,    37,     3,     4,     5,     6,
+      37,    21,    37,    37,   126,    21,    10,   129,    17,    18,
+      19,    20,    21,     8,     0,    38,    41,    41,    38,    42,
+      29,    30,    31,    32,    33,    34,    46,    22,    23,    49,
+      37,    41,    27,    22,     6,    38,    43,    44,    38,    42,
+      37,    37,    42,    38,    37,    37,    41,    42,    43,    44,
+      41,    46,    19,    20,    21,    50,    39,    39,    38,    38,
+      55,    56,    57,    58,    59,    60,    61,    62,    63,    64,
+      65,    66,    67,    68,     5,    39,     7,     8,     9,    10,
+      11,    12,    39,    14,    13,    39,    81,   107,   108,   109,
+     110,   108,    45,   113,    -1,    -1,    -1,   117,   118,    -1,
+     120,   117,   118,    -1,   120,    -1,   126,    -1,   128,   129,
+      41,   131,   128,   117,   118,   131,   120,   112,    -1,    -1,
+      -1,    -1,    -1,    -1,   128,    -1,     5,   131,     7,     8,
+       9,    10,    11,    12,     5,    14,     7,     8,     9,    10,
+      11,    12,     5,    14,     7,     8,     9,    10,    11,    12,
+       5,    14,     7,     8,     9,    10,    11,    12,    -1,    14,
+      -1,     5,    41,     7,     8,     9,    10,    11,    12,    40,
+      14,    -1,    -1,    -1,    -1,    -1,    -1,    40,    -1,    -1,
+      -1,    -1,    -1,    -1,     5,    40,     7,     8,     9,    10,
+      11,    12,    -1,    14,    -1,    -1,    40,    17,    18,    19,
+      20,    21,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    29,
+      30,    31,    32,    33,    34,    35,    36,    -1,    -1,    40,
+      -1,    -1,    42,    17,    18,    19,    20,    21,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    29,    30,    31,    32,    33,
+      34,    35,    36,    -1,    -1,    -1,    -1,    41,    17,    18,
+      19,    20,    21,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      29,    30,    31,    32,    33,    34,    35,    36,    -1,    -1,
+      -1,    -1,    41,    17,    18,    19,    20,    21,    -1,    -1,
       -1,    -1,    -1,    -1,    -1,    29,    30,    31,    32,    33,
       34,    35,    36,    -1,    38,    17,    18,    19,    20,    21,
       -1,    -1,    -1,    -1,    -1,    -1,    -1,    29,    30,    31,
       32,    33,    34,    35,    36,    -1,    38,    17,    18,    19,
       20,    21,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    29,
-      30,    31,    32,    33,    34,    35,    36,    17,    18,    19,
-      20,    21,    -1,    -1,    17,    18,    19,    20,    21,    29,
-      30,    31,    32,    33,    34,    35,    29,    30,    31,    32,
-      33,    34,    17,    18,    19,    20,    21,    -1,    -1,    -1,
-      -1,    -1,    -1,    -1,    29,    30,    31,    32,    33,    34,
-      22,    23,    24,    25,    26,    27,    28,     5,    -1,     7,
-       8,     9,    10,    11,    12,    37,    14,    22,    23,    24,
-      25,    26,    27,    28
+      30,    31,    32,    33,    34,    35,    36,    -1,    38,    17,
+      18,    19,    20,    21,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    29,    30,    31,    32,    33,    34,    35,    36,    -1,
+      38,    17,    18,    19,    20,    21,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    29,    30,    31,    32,    33,    34,    35,
+      36,    17,    18,    19,    20,    21,    -1,    -1,    17,    18,
+      19,    20,    21,    29,    30,    31,    32,    33,    34,    35,
+      29,    30,    31,    32,    33,    34,    22,    23,    24,    25,
+      26,    27,    28,     5,    -1,     7,     8,     9,    10,    11,
+      12,    37,    14,    22,    23,    24,    25,    26,    27,    28
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     5,     7,     8,     9,    10,    11,    12,    14,    44,
-      45,    46,    47,    48,    49,    51,    52,    53,    53,    37,
-      53,    37,    37,    37,     3,     4,     6,    37,    53,    55,
-       0,    46,    47,    41,    41,    41,    22,    23,    24,    25,
-      26,    27,    28,    37,    22,    54,    55,    37,    47,    55,
-      55,    55,    17,    18,    19,    20,    21,    29,    30,    31,
-      32,    33,    34,    35,    36,    41,    49,    53,    55,    55,
-      55,    55,    55,    54,    49,    55,    38,    42,    50,    53,
-      55,    38,    38,    38,    55,    55,    55,    55,    55,    55,
-      55,    55,    55,    55,    55,    55,    55,    38,    41,    55,
-      38,    42,    41,    39,    39,    39,    53,    52,    53,    45,
-      45,    45,    38,    40,    40,    40,    39,    13,    45,    39,
-      40,    45,    40
+       0,     5,     7,     8,     9,    10,    11,    12,    14,    46,
+      47,    48,    49,    50,    51,    53,    54,    55,    55,    37,
+      55,    37,    37,    37,     3,     4,     6,    37,    43,    44,
+      55,    57,     0,    48,    49,    41,    41,    41,    22,    23,
+      24,    25,    26,    27,    28,    37,    22,    56,    57,    37,
+      49,    57,    57,    57,    37,    37,    17,    18,    19,    20,
+      21,    29,    30,    31,    32,    33,    34,    35,    36,    41,
+      51,    55,    57,    57,    57,    57,    57,    56,    51,    57,
+      38,    42,    52,    55,    57,    38,    38,    38,     6,    57,
+      57,    57,    57,    57,    57,    57,    57,    57,    57,    57,
+      57,    57,    57,    38,    41,    57,    38,    42,    41,    39,
+      39,    38,    42,    39,    55,    54,    55,    47,    47,    57,
+      47,    38,    40,    40,    38,    40,    39,    13,    47,    39,
+      40,    47,    40
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    43,    44,    44,    45,    45,    45,    45,    45,    46,
-      46,    46,    46,    46,    47,    47,    47,    47,    47,    48,
-      49,    49,    50,    50,    50,    51,    51,    51,    52,    52,
-      52,    52,    52,    52,    52,    52,    53,    54,    54,    54,
-      55,    55,    55,    55,    55,    55,    55,    55,    55,    55,
-      55,    55,    55,    55,    55,    55,    55,    55
+       0,    45,    46,    46,    47,    47,    47,    47,    47,    48,
+      48,    48,    48,    48,    49,    49,    49,    49,    49,    50,
+      51,    51,    52,    52,    52,    53,    53,    53,    54,    54,
+      54,    54,    54,    54,    54,    54,    55,    56,    56,    56,
+      57,    57,    57,    57,    57,    57,    57,    57,    57,    57,
+      57,    57,    57,    57,    57,    57,    57,    57,    57,    57
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
@@ -783,8 +801,8 @@ static const yytype_int8 yyr2[] =
        7,    11,    10,     7,     2,     2,     2,     5,     3,     8,
        0,     4,     0,     1,     3,     2,     4,     4,     3,     3,
        2,     2,     3,     3,     3,     3,     1,     0,     1,     3,
-       3,     3,     3,     3,     3,     3,     3,     3,     3,     3,
-       3,     3,     3,     3,     1,     1,     1,     1
+       4,     6,     3,     3,     3,     3,     3,     3,     3,     3,
+       3,     3,     3,     3,     3,     3,     1,     1,     1,     1
 };
 
 
@@ -1248,358 +1266,373 @@ yyreduce:
   switch (yyn)
     {
   case 3: /* program: body  */
-#line 63 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+#line 65 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
            { 
         Block* b = new Block(*(yyvsp[0].sBody));
         eval.visit(b); 
         delete b;
     }
-#line 1258 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
-    break;
-
-  case 4: /* body: %empty  */
-#line 71 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
-               { (yyval.sBody) = new StmtsVec(); }
-#line 1264 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
-    break;
-
-  case 5: /* body: stmt_semicolon  */
-#line 72 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
-                     { (yyval.sBody) = new StmtsVec(); (yyval.sBody)->push_back((yyvsp[0].stmt)); }
-#line 1270 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
-    break;
-
-  case 6: /* body: body stmt_semicolon  */
-#line 73 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
-                          { (yyvsp[-1].sBody)->push_back((yyvsp[0].stmt)); }
 #line 1276 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
-  case 7: /* body: stmt_no_semicolon  */
-#line 74 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
-                        { (yyval.sBody) = new StmtsVec(); (yyval.sBody)->push_back((yyvsp[0].stmt)); }
+  case 4: /* body: %empty  */
+#line 73 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+               { (yyval.sBody) = new StmtsVec(); }
 #line 1282 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
-  case 8: /* body: body stmt_no_semicolon  */
-#line 75 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
-                             { (yyvsp[-1].sBody)->push_back((yyvsp[0].stmt)); }
+  case 5: /* body: stmt_semicolon  */
+#line 74 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+                     { (yyval.sBody) = new StmtsVec(); (yyval.sBody)->push_back((yyvsp[0].stmt)); }
 #line 1288 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
+  case 6: /* body: body stmt_semicolon  */
+#line 75 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+                          { (yyvsp[-1].sBody)->push_back((yyvsp[0].stmt)); }
+#line 1294 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+    break;
+
+  case 7: /* body: stmt_no_semicolon  */
+#line 76 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+                        { (yyval.sBody) = new StmtsVec(); (yyval.sBody)->push_back((yyvsp[0].stmt)); }
+#line 1300 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+    break;
+
+  case 8: /* body: body stmt_no_semicolon  */
+#line 77 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+                             { (yyvsp[-1].sBody)->push_back((yyvsp[0].stmt)); }
+#line 1306 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+    break;
+
   case 10: /* stmt_no_semicolon: IF LPAREN expr RPAREN LBRACE body RBRACE  */
-#line 80 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+#line 82 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
                                                {
         (yyval.stmt) = IPLFactory::createIfcond(U(Expr, (yyvsp[-4].expr)), *(yyvsp[-1].sBody));
         delete (yyvsp[-1].sBody);
     }
-#line 1297 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+#line 1315 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
   case 11: /* stmt_no_semicolon: IF LPAREN expr RPAREN LBRACE body RBRACE ELSE LBRACE body RBRACE  */
-#line 84 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+#line 86 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
                                                                        {
         (yyval.stmt) = IPLFactory::createIfelse(U(Expr, (yyvsp[-8].expr)), *(yyvsp[-5].sBody), *(yyvsp[-1].sBody));
         delete (yyvsp[-5].sBody);
         delete (yyvsp[-1].sBody);
     }
-#line 1307 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+#line 1325 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
   case 12: /* stmt_no_semicolon: FOR LPAREN stmt_semicolon expr SEMICOLON var_assign RPAREN LBRACE body RBRACE  */
-#line 89 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+#line 91 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
                                                                                     {
         (yyval.stmt) = IPLFactory::createForLoop(U(Statement, (yyvsp[-7].stmt)), U(Expr, (yyvsp[-6].expr)), U(Statement, (yyvsp[-4].stmt)), *(yyvsp[-1].sBody));
         delete (yyvsp[-1].sBody);
     }
-#line 1316 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+#line 1334 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
   case 13: /* stmt_no_semicolon: WHILE LPAREN expr RPAREN LBRACE body RBRACE  */
-#line 93 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+#line 95 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
                                                   {
         (yyval.stmt) = IPLFactory::createWhile(U(Expr, (yyvsp[-4].expr)), *(yyvsp[-1].sBody));
         delete (yyvsp[-1].sBody);
     }
-#line 1325 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+#line 1343 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
   case 17: /* stmt_semicolon: PRINT LPAREN expr_list RPAREN SEMICOLON  */
-#line 101 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+#line 103 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
                                               {
         (yyval.stmt) = IPLFactory::createPrintExpr(*(yyvsp[-2].sExprList));
         delete (yyvsp[-2].sExprList);
     }
-#line 1334 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+#line 1352 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
   case 18: /* stmt_semicolon: RETURN expr SEMICOLON  */
-#line 105 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+#line 107 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
                             {
         (yyval.stmt) = IPLFactory::createReturnStmt(U(Expr, (yyvsp[-1].expr)));
     }
-#line 1342 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+#line 1360 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
   case 19: /* func_decl: FUNC IDENTIFIER LPAREN func_args RPAREN LBRACE body RBRACE  */
-#line 111 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+#line 113 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
                                                                {
         (yyval.stmt) = IPLFactory::createDefFunc(U(Id, (yyvsp[-6].IDENTIFIER)), *(yyvsp[-4].sIdList), *(yyvsp[-1].sBody));
         delete (yyvsp[-4].sIdList);
         delete (yyvsp[-1].sBody);
     }
-#line 1352 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+#line 1370 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
   case 21: /* func_call: IDENTIFIER LPAREN expr_list RPAREN  */
-#line 119 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+#line 121 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
                                          {
+        std::cout<<"Dont match"<<"\n";
         (yyval.expr) = IPLFactory::createCallFunc(U(Id, (yyvsp[-3].IDENTIFIER)), *(yyvsp[-1].sExprList));
         delete (yyvsp[-1].sExprList);
     }
-#line 1361 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+#line 1380 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
   case 22: /* func_args: %empty  */
-#line 126 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+#line 129 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
                { (yyval.sIdList) = new IdVec(); }
-#line 1367 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+#line 1386 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
   case 23: /* func_args: IDENTIFIER  */
-#line 127 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+#line 130 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
                  { (yyval.sIdList) = new IdVec(); (yyval.sIdList)->push_back((yyvsp[0].IDENTIFIER)); }
-#line 1373 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+#line 1392 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
   case 24: /* func_args: func_args COMMA IDENTIFIER  */
-#line 128 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+#line 131 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
                                  { (yyval.sIdList)->push_back((yyvsp[0].IDENTIFIER)); }
-#line 1379 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+#line 1398 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
   case 25: /* var_decl: VAR IDENTIFIER  */
-#line 133 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+#line 136 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
                    {
         (yyval.stmt) = IPLFactory::createDefVar(U(Id, (yyvsp[0].IDENTIFIER)));
     }
-#line 1387 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+#line 1406 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
   case 26: /* var_decl: VAR IDENTIFIER ASSIGN expr  */
-#line 136 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+#line 139 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
                                  {
         (yyval.stmt) = IPLFactory::createDefVar(U(Id, (yyvsp[-2].IDENTIFIER)), U(Expr, (yyvsp[0].expr)));
     }
-#line 1395 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+#line 1414 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
   case 27: /* var_decl: VAR IDENTIFIER ASSIGN func_call  */
-#line 139 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+#line 142 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
                                       {
         (yyval.stmt) = IPLFactory::createDefVar(U(Id, (yyvsp[-2].IDENTIFIER)), U(Expr, (yyvsp[0].expr)));
     }
-#line 1403 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+#line 1422 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
   case 28: /* var_assign: IDENTIFIER ASSIGN expr  */
-#line 145 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+#line 148 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
                            {
         (yyval.stmt) = IPLFactory::createAssign(U(Id, (yyvsp[-2].IDENTIFIER)), U(Expr, (yyvsp[0].expr)));
     }
-#line 1411 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+#line 1430 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
   case 29: /* var_assign: IDENTIFIER ASSIGN func_call  */
-#line 148 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+#line 151 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
                                   {
         (yyval.stmt) = IPLFactory::createAssign(U(Id, (yyvsp[-2].IDENTIFIER)), U(Expr, (yyvsp[0].expr)));
     }
-#line 1419 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+#line 1438 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
   case 30: /* var_assign: IDENTIFIER INCREASE  */
-#line 151 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+#line 154 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
                           {
         (yyval.stmt) = IPLFactory::createIncrease(U(Id, (yyvsp[-1].IDENTIFIER)));
     }
-#line 1427 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+#line 1446 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
   case 31: /* var_assign: IDENTIFIER DECREASE  */
-#line 154 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+#line 157 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
                           {
         (yyval.stmt) = IPLFactory::createDecrease(U(Id, (yyvsp[-1].IDENTIFIER)));
     }
-#line 1435 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+#line 1454 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
   case 32: /* var_assign: IDENTIFIER ADDASSIGN expr  */
-#line 157 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+#line 160 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
                                 {
         (yyval.stmt) = IPLFactory::createAddAssign(U(Id, (yyvsp[-2].IDENTIFIER)), U(Expr, (yyvsp[0].expr)));
     }
-#line 1443 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+#line 1462 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
   case 33: /* var_assign: IDENTIFIER SUBASSIGN expr  */
-#line 160 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+#line 163 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
                                 {
         (yyval.stmt) = IPLFactory::createSubAssign(U(Id, (yyvsp[-2].IDENTIFIER)), U(Expr, (yyvsp[0].expr)));
     }
-#line 1451 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+#line 1470 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
   case 34: /* var_assign: IDENTIFIER MULASSIGN expr  */
-#line 163 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+#line 166 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
                                 {
         (yyval.stmt) = IPLFactory::createMulAssign(U(Id, (yyvsp[-2].IDENTIFIER)), U(Expr, (yyvsp[0].expr)));
     }
-#line 1459 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+#line 1478 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
   case 35: /* var_assign: IDENTIFIER DIVASSIGN expr  */
-#line 166 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+#line 169 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
                                 {
         (yyval.stmt) = IPLFactory::createDivAssign(U(Id, (yyvsp[-2].IDENTIFIER)), U(Expr, (yyvsp[0].expr)));
     }
-#line 1467 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+#line 1486 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
   case 36: /* IDENTIFIER: ID  */
-#line 172 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+#line 175 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
        { (yyval.IDENTIFIER) = IPLFactory::createId(*(yyvsp[0].str)); delete (yyvsp[0].str); }
-#line 1473 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+#line 1492 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
   case 37: /* expr_list: %empty  */
-#line 176 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+#line 179 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
               { (yyval.sExprList) = new ExprVec(); }
-#line 1479 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+#line 1498 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
   case 38: /* expr_list: expr  */
-#line 177 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+#line 180 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
            { (yyval.sExprList) = new ExprVec(); (yyval.sExprList)->push_back((yyvsp[0].expr)); }
-#line 1485 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+#line 1504 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
   case 39: /* expr_list: expr_list COMMA expr  */
-#line 178 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
-                           { (yyval.sExprList)->push_back((yyvsp[0].expr)); }
-#line 1491 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
-    break;
-
-  case 40: /* expr: expr ADD expr  */
 #line 181 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
-                  { (yyval.expr) = IPLFactory::createAddExpr(U(Expr, (yyvsp[-2].expr)), U(Expr, (yyvsp[0].expr))); }
-#line 1497 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+                           { (yyval.sExprList)->push_back((yyvsp[0].expr)); }
+#line 1510 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
-  case 41: /* expr: expr SUB expr  */
-#line 182 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
-                    { (yyval.expr) = IPLFactory::createSubtExpr(U(Expr, (yyvsp[-2].expr)), U(Expr, (yyvsp[0].expr))); }
-#line 1503 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
-    break;
-
-  case 42: /* expr: expr MUL expr  */
-#line 183 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
-                    { (yyval.expr) = IPLFactory::createMulExpr(U(Expr, (yyvsp[-2].expr)), U(Expr, (yyvsp[0].expr))); }
-#line 1509 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
-    break;
-
-  case 43: /* expr: expr DIV expr  */
+  case 40: /* expr: LOAD LPAREN STRING RPAREN  */
 #line 184 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
-                    { (yyval.expr) = IPLFactory::createDivExpr(U(Expr, (yyvsp[-2].expr)), U(Expr, (yyvsp[0].expr))); }
-#line 1515 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+                                { (yyval.expr) = IPLFactory::createLoad(*(yyvsp[-1].str)); }
+#line 1516 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
-  case 44: /* expr: expr MOD expr  */
+  case 41: /* expr: SAVE LPAREN expr COMMA expr RPAREN  */
 #line 185 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
-                    { (yyval.expr) = IPLFactory::createModExpr(U(Expr, (yyvsp[-2].expr)), U(Expr, (yyvsp[0].expr))); }
-#line 1521 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+                                         {
+        (yyval.expr) = IPLFactory::createSave(U(Expr, (yyvsp[-3].expr)), U(Expr, (yyvsp[-1].expr)));
+    }
+#line 1524 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
-  case 45: /* expr: LPAREN expr RPAREN  */
-#line 186 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
-                         { (yyval.expr) = (yyvsp[-1].expr); }
-#line 1527 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
-    break;
-
-  case 46: /* expr: expr EQUAL expr  */
-#line 187 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
-                      { (yyval.expr) = IPLFactory::createEqual(U(Expr, (yyvsp[-2].expr)), U(Expr, (yyvsp[0].expr))); }
-#line 1533 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
-    break;
-
-  case 47: /* expr: expr NOTEQUAL expr  */
+  case 42: /* expr: expr ADD expr  */
 #line 188 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
-                         { (yyval.expr) = IPLFactory::createNotEqual(U(Expr, (yyvsp[-2].expr)), U(Expr, (yyvsp[0].expr))); }
-#line 1539 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+                    { (yyval.expr) = IPLFactory::createAddExpr(U(Expr, (yyvsp[-2].expr)), U(Expr, (yyvsp[0].expr))); }
+#line 1530 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
-  case 48: /* expr: expr LESS expr  */
+  case 43: /* expr: expr SUB expr  */
 #line 189 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
-                     { (yyval.expr) = IPLFactory::createLess(U(Expr, (yyvsp[-2].expr)), U(Expr, (yyvsp[0].expr))); }
-#line 1545 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+                    { (yyval.expr) = IPLFactory::createSubtExpr(U(Expr, (yyvsp[-2].expr)), U(Expr, (yyvsp[0].expr))); }
+#line 1536 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
-  case 49: /* expr: expr GREATER expr  */
+  case 44: /* expr: expr MUL expr  */
 #line 190 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
-                        { (yyval.expr) = IPLFactory::createGreater(U(Expr, (yyvsp[-2].expr)), U(Expr, (yyvsp[0].expr))); }
-#line 1551 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+                    { (yyval.expr) = IPLFactory::createMulExpr(U(Expr, (yyvsp[-2].expr)), U(Expr, (yyvsp[0].expr))); }
+#line 1542 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
-  case 50: /* expr: expr LESSEQUAL expr  */
+  case 45: /* expr: expr DIV expr  */
 #line 191 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
-                          { (yyval.expr) = IPLFactory::createLessEqual(U(Expr, (yyvsp[-2].expr)), U(Expr, (yyvsp[0].expr))); }
-#line 1557 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+                    { (yyval.expr) = IPLFactory::createDivExpr(U(Expr, (yyvsp[-2].expr)), U(Expr, (yyvsp[0].expr))); }
+#line 1548 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
-  case 51: /* expr: expr GREATEREQUAL expr  */
+  case 46: /* expr: expr MOD expr  */
 #line 192 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
-                             { (yyval.expr) = IPLFactory::createGreaterEqual(U(Expr, (yyvsp[-2].expr)), U(Expr, (yyvsp[0].expr))); }
-#line 1563 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+                    { (yyval.expr) = IPLFactory::createModExpr(U(Expr, (yyvsp[-2].expr)), U(Expr, (yyvsp[0].expr))); }
+#line 1554 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
-  case 52: /* expr: expr AND expr  */
+  case 47: /* expr: LPAREN expr RPAREN  */
 #line 193 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
-                    { (yyval.expr) = IPLFactory::createAnd(U(Expr, (yyvsp[-2].expr)), U(Expr, (yyvsp[0].expr))); }
-#line 1569 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+                         { (yyval.expr) = (yyvsp[-1].expr); }
+#line 1560 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
-  case 53: /* expr: expr OR expr  */
+  case 48: /* expr: expr EQUAL expr  */
 #line 194 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
-                   { (yyval.expr) = IPLFactory::createOr(U(Expr, (yyvsp[-2].expr)), U(Expr, (yyvsp[0].expr))); }
-#line 1575 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+                      { (yyval.expr) = IPLFactory::createEqual(U(Expr, (yyvsp[-2].expr)), U(Expr, (yyvsp[0].expr))); }
+#line 1566 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
-  case 54: /* expr: INTEGER  */
+  case 49: /* expr: expr NOTEQUAL expr  */
 #line 195 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
-              { (yyval.expr) = IPLFactory::createFloat((yyvsp[0].inum)); }
-#line 1581 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+                         { (yyval.expr) = IPLFactory::createNotEqual(U(Expr, (yyvsp[-2].expr)), U(Expr, (yyvsp[0].expr))); }
+#line 1572 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
-  case 55: /* expr: FLOAT  */
+  case 50: /* expr: expr LESS expr  */
 #line 196 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
-            { (yyval.expr) = IPLFactory::createFloat((yyvsp[0].fnum)); }
-#line 1587 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+                     { (yyval.expr) = IPLFactory::createLess(U(Expr, (yyvsp[-2].expr)), U(Expr, (yyvsp[0].expr))); }
+#line 1578 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
-  case 56: /* expr: STRING  */
+  case 51: /* expr: expr GREATER expr  */
 #line 197 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
-             { (yyval.expr) = IPLFactory::createString(*(yyvsp[0].str)); }
-#line 1593 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+                        { (yyval.expr) = IPLFactory::createGreater(U(Expr, (yyvsp[-2].expr)), U(Expr, (yyvsp[0].expr))); }
+#line 1584 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
-  case 57: /* expr: IDENTIFIER  */
+  case 52: /* expr: expr LESSEQUAL expr  */
 #line 198 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+                          { (yyval.expr) = IPLFactory::createLessEqual(U(Expr, (yyvsp[-2].expr)), U(Expr, (yyvsp[0].expr))); }
+#line 1590 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+    break;
+
+  case 53: /* expr: expr GREATEREQUAL expr  */
+#line 199 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+                             { (yyval.expr) = IPLFactory::createGreaterEqual(U(Expr, (yyvsp[-2].expr)), U(Expr, (yyvsp[0].expr))); }
+#line 1596 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+    break;
+
+  case 54: /* expr: expr AND expr  */
+#line 200 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+                    { (yyval.expr) = IPLFactory::createAnd(U(Expr, (yyvsp[-2].expr)), U(Expr, (yyvsp[0].expr))); }
+#line 1602 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+    break;
+
+  case 55: /* expr: expr OR expr  */
+#line 201 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+                   { (yyval.expr) = IPLFactory::createOr(U(Expr, (yyvsp[-2].expr)), U(Expr, (yyvsp[0].expr))); }
+#line 1608 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+    break;
+
+  case 56: /* expr: INTEGER  */
+#line 202 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+              { (yyval.expr) = IPLFactory::createFloat((yyvsp[0].inum)); }
+#line 1614 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+    break;
+
+  case 57: /* expr: FLOAT  */
+#line 203 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+            { (yyval.expr) = IPLFactory::createFloat((yyvsp[0].fnum)); }
+#line 1620 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+    break;
+
+  case 58: /* expr: STRING  */
+#line 204 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+             { (yyval.expr) = IPLFactory::createString(*(yyvsp[0].str)); }
+#line 1626 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+    break;
+
+  case 59: /* expr: IDENTIFIER  */
+#line 205 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
                  { (yyval.expr) = (yyvsp[0].IDENTIFIER); }
-#line 1599 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+#line 1632 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
     break;
 
 
-#line 1603 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
+#line 1636 "/Users/singhotto/Documents/IPL/parser/ipl.parse.cc"
 
       default: break;
     }
@@ -1792,4 +1825,4 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 201 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
+#line 208 "/Users/singhotto/Documents/IPL/parser/ipl.yy"
