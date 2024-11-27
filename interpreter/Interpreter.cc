@@ -3,13 +3,12 @@
 #include "Value.hh"
 
 #include "ImageProcessor.hh"
+#include "ImageOperation.hh"
 
+#include "expr/value/image/Image.hh"
 #include "expr/value/image/JpgImage.hh"
 #include "expr/value/image/PngImage.hh"
 #include "expr/value/image/TIFFImage.hh"
-
-#include "expr/imgOp/Load.hh"
-#include "expr/imgOp/Save.hh"
 
 #include "expr/value/Int.hh"
 #include "expr/arithmatic/AddExpr.hh"
@@ -38,6 +37,52 @@
 #include "stmt/While.hh"
 
 #include "Log.hh"
+
+bool Interpreter::isDefaultFunction(const std::string &funcName)
+{
+    return isImageOperation(funcName);
+}
+
+void Interpreter::defaultFunction(CallFunc *func)
+{
+    LOG_OPERATION_START("Interpreter::defaultFunction(CallFunc *func)");
+    ImageOperation op = getImageOperation(func->funcName());
+    auto globalParms = func->funcArgs(); 
+
+    switch (op)
+    {
+    case ImageOperation::LOAD: {
+        assert(globalParms.size() == 1);
+        globalParms[0]->accept(this);
+        String* str = dynamic_cast<String*>(current.get());
+        assert(str != nullptr);
+        std::string path = str->getStr();  // Now inside a block scope
+        current = ValuePtr(IPLFactory::createImage(path));
+        break;
+    }
+
+    case ImageOperation::SAVE: {
+        assert(globalParms.size() == 2);
+
+        globalParms[1]->accept(this);
+        String* str = dynamic_cast<String*>(current.get());
+        assert(str != nullptr);
+        std::string path = str->getStr(); 
+
+        globalParms[0]->accept(this);
+        Image* image = dynamic_cast<Image*>(current.get());
+        assert(image != nullptr);
+
+        image->save(path);
+        break;
+    }
+    
+    default:
+        break;
+    }
+    LOG_OPERATION_END("Interpreter::defaultFunction(CallFunc *func)");
+}
+
 
 float Interpreter::binaryNumber(BinaryExpr* expr, char op)
 {
@@ -365,32 +410,36 @@ void Interpreter::visit(CallFunc *func)
 {
     LOG_OPERATION_START("Interpreter::visit(CallFunc *func)");
 
-    Value* fName = context.getVariable(func->funcName()); 
-    DefFunc* f = dynamic_cast<DefFunc*>(fName); //function
-    auto globalParms = func->funcArgs(); 
-    auto internalParms = f->funcArgs();
+    Value* fName = context.getVariable(func->funcName());
+    if(isDefaultFunction(func->funcName())){
+        defaultFunction(func);
+    } else{
+        DefFunc* f = dynamic_cast<DefFunc*>(fName); //function
+        auto globalParms = func->funcArgs(); 
+        auto internalParms = f->funcArgs();
 
-    assert(f != nullptr);
-    assert(internalParms.size() == globalParms.size());
-    
-    context.newScope();
+        assert(f != nullptr);
+        assert(internalParms.size() == globalParms.size());
+        
+        context.newScope();
 
 
-    for(int i = 0; i<internalParms.size(); i++){
-        const std::string& name = internalParms[i]->getName();
-        globalParms[i]->accept(this);
-        context.addNewVariable(name, current->cloneValue());
-    }
-    auto statements = f->funcStatements();
-    for(int i = 0; i<statements.size(); i++){
-        statements[i]->accept(this);
-
-        if(funcReturn){
-            funcReturn = false;
-            break;
+        for(int i = 0; i<internalParms.size(); i++){
+            const std::string& name = internalParms[i]->getName();
+            globalParms[i]->accept(this);
+            context.addNewVariable(name, current->cloneValue());
         }
+        auto statements = f->funcStatements();
+        for(int i = 0; i<statements.size(); i++){
+            statements[i]->accept(this);
+
+            if(funcReturn){
+                funcReturn = false;
+                break;
+            }
+        }
+        context.exitScope();
     }
-    context.exitScope();
     LOG_OPERATION_END("Interpreter::visit(CallFunc *func)");
 }
 
@@ -637,34 +686,6 @@ void Interpreter::visit(TIFFImage *img)
     LOG_OPERATION_START("Interpreter::visit(TIFFImage *img)");
 
     current = img->cloneValue();
-    
-    LOG_OPERATION_END("Interpreter::visit(TIFFImage *img)");
-}
-
-void Interpreter::visit(Load *img)
-{
-    LOG_OPERATION_START("Interpreter::visit(Load *img)");
-    
-    current = ValuePtr(IPLFactory::createImage(img->getPath()));
-    
-    LOG_OPERATION_END("Interpreter::visit(Load *img)");
-}
-
-void Interpreter::visit(Save *img)
-{
-    LOG_OPERATION_START("Interpreter::visit(TIFFImage *img)");
-
-    img->getImage()->accept(this);
-
-    Image* image = dynamic_cast<Image*>(current.get());
-
-    assert(image != nullptr);
-
-    img->getPath()->accept(this);
-
-    String* path = dynamic_cast<String*>(current.get());
-
-    image->save(path->getStr());
     
     LOG_OPERATION_END("Interpreter::visit(TIFFImage *img)");
 }

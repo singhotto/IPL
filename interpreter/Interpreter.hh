@@ -28,6 +28,9 @@ private:
     float binaryNumber(BinaryExpr* expr, char op);
     bool boolean(BoolExpr* expr, int op);
 
+    bool isDefaultFunction(const std::string& funcName);
+    void defaultFunction(CallFunc* func);
+
 public:
     
     // Private constructor to prevent direct instantiation
@@ -82,9 +85,6 @@ public:
     void visit(JpgImage* img) override;
     void visit(PngImage* img) override;
     void visit(TIFFImage* img) override;
-
-    void visit(Load* img) override;
-    void visit(Save* img) override;
 };
 
 #endif // INTERPRETER__GUARD

@@ -1,6 +1,5 @@
-// ImageType.h
-#ifndef IMAGETYPE_H
-#define IMAGETYPE_H
+#ifndef IMAGE_TYPE_GUARD
+#define IMAGE_TYPE_GUARD
 
 enum class ImageType {
     JPEG,

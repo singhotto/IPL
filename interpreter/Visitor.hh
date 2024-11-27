@@ -51,10 +51,6 @@ class JpgImage;
 class PngImage;
 class TIFFImage;
 
-//Image Operations
-class Load;
-class Save;
-
 class Visitor {
 public:
     virtual ~Visitor() = default;
@@ -104,9 +100,6 @@ public:
     virtual void visit(JpgImage* img) = 0;
     virtual void visit(PngImage* img) = 0;
     virtual void visit(TIFFImage* img) = 0;
-
-    virtual void visit(Load* img) = 0;
-    virtual void visit(Save* img) = 0;
 };
 
 #endif // VISITOR__GUARD

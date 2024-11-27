@@ -21,9 +21,6 @@
 #include "expr/arithmatic/ModExpr.hh"
 #include "expr/arithmatic/SubtExpr.hh"
 
-#include "expr/imgOp/Load.hh"
-#include "expr/imgOp/Save.hh"
-
 #include "stmt/Statement.hh"
 #include "stmt/Block.hh"
 #include "stmt/DefVar.hh"
@@ -91,17 +88,6 @@ public:
     static Bool *createBool(bool val)
     {
         return new Bool(val);
-    }
-
-    static Load *createLoad(std::string str)
-    {
-        std::string new_str = str.substr(1, str.size() - 2);
-        return new Load(new_str);
-    }
-
-    static Save *createSave(ExprPtr id, ExprPtr expr)
-    {
-        return new Save(std::move(id), std::move(expr));
     }
 
     static Image *createImage(std::string filename)

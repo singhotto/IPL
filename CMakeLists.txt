@@ -21,7 +21,6 @@ set(VALUE_DIR ${EXPR_DIR}/value)
 set(IMG_DIR ${VALUE_DIR}/image)
 set(PIXEL_DIR ${IMG_DIR}/pixel)
 set(BOOL_DIR ${EXPR_DIR}/boolean)
-set(IMGOP_DIR ${EXPR_DIR}/imgOp)
 set(STMT_DIR ${AST_DIR}/stmt)
 set(STMT_ASSIGN_DIR ${STMT_DIR}/assignment)
 set(PARSER_DIR ${CMAKE_SOURCE_DIR}/parser)
@@ -33,7 +32,6 @@ file(GLOB PIXEL_SRC ${PIXEL_DIR}/*.cc)
 file(GLOB ARITH_SRC ${ARITH_DIR}/*.cc)
 file(GLOB BOOL_SRC ${BOOL_DIR}/*.cc)
 file(GLOB EXPR_SRC ${EXPR_DIR}/*.cc)
-file(GLOB IMGOP_SRC ${IMGOP_DIR}/*.cc)
 file(GLOB STMT_SRC ${STMT_DIR}/*.cc)
 file(GLOB STMT_ASSIGN_SRC ${STMT_ASSIGN_DIR}/*.cc)
 file(GLOB AST_SRC ${AST_DIR}/*.cc)
@@ -50,7 +48,6 @@ set(SOURCE_FILES
     ${ARITH_SRC}
     ${BOOL_SRC}
     ${EXPR_SRC}
-    ${IMGOP_SRC}
     ${STMT_SRC}
     ${STMT_ASSIGN_SRC}
     ${AST_SRC}

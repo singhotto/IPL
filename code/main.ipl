@@ -4,20 +4,7 @@ function sumRange1(a, b){
     return (a + b) * (b - a + 1) / 2;
 }
 
-function sumRange2(a, b){
-    var res = 0;
-    for(var i = a; i<=b; i++){
-        res+=i;
-    }
-    return res;
-}
+var res1 = sumRange1(5, 7);
 
-var a = 100;
-var b = 2000;
 
-var res1 = sumRange1(a, b);
-
-var res2 = sumRange2(a, b);
-
-print(res1 == res2);
-print(res1, " ", res2);
+print(res1);

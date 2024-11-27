@@ -93,9 +93,7 @@ extern int yydebug;
     LBRACE = 294,                  /* LBRACE  */
     RBRACE = 295,                  /* RBRACE  */
     SEMICOLON = 296,               /* SEMICOLON  */
-    COMMA = 297,                   /* COMMA  */
-    LOAD = 298,                    /* LOAD  */
-    SAVE = 299                     /* SAVE  */
+    COMMA = 297                    /* COMMA  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -119,7 +117,7 @@ union YYSTYPE
     IdVec* sIdList;
     Id* IDENTIFIER;
 
-#line 123 "/Users/singhotto/Documents/IPL/parser/ipl.parse.hh"
+#line 121 "/Users/singhotto/Documents/IPL/parser/ipl.parse.hh"
 
 };
 typedef union YYSTYPE YYSTYPE;

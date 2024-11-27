@@ -1,7 +1,0 @@
-Image Name: a.jpg
-Width: 1440px
-Height: 960px
-Channels: 3
-Bits Per Sample: 8
-Image Type: JPG
-

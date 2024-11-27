@@ -40,7 +40,6 @@ Interpreter& eval = Interpreter::getInstance();
 %token INCREASE DECREASE ADDASSIGN SUBASSIGN MULASSIGN DIVASSIGN
 %token EQUAL NOTEQUAL LESS GREATER LESSEQUAL GREATEREQUAL
 %token AND OR LPAREN RPAREN LBRACE RBRACE SEMICOLON COMMA
-%token LOAD SAVE
 
 // Non-terminal declarations
 %type <node> program
@@ -180,11 +179,7 @@ expr_list:
     | expr_list COMMA expr { $$->push_back($3); }
 
 expr:
-      LOAD LPAREN STRING RPAREN { $$ = IPLFactory::createLoad(*$3); }
-    | SAVE LPAREN expr COMMA expr RPAREN {
-        $$ = IPLFactory::createSave(U(Expr, $3), U(Expr, $5));
-    }
-    | expr ADD expr { $$ = IPLFactory::createAddExpr(U(Expr, $1), U(Expr, $3)); }
+     expr ADD expr { $$ = IPLFactory::createAddExpr(U(Expr, $1), U(Expr, $3)); }
     | expr SUB expr { $$ = IPLFactory::createSubtExpr(U(Expr, $1), U(Expr, $3)); }
     | expr MUL expr { $$ = IPLFactory::createMulExpr(U(Expr, $1), U(Expr, $3)); }
     | expr DIV expr { $$ = IPLFactory::createDivExpr(U(Expr, $1), U(Expr, $3)); }

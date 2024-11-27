@@ -60,9 +60,6 @@ STRING \"(\\.|[^\"])*\"
 "true"        { return TRUE; }
 "false"       { return FALSE; }
 
-"load"        { return LOAD; }
-"save"        { return SAVE; }
-
 {ID}          { yylval.str = new std::string(yytext); return ID; }
 {INT}         { yylval.inum = atoi(yytext); return INTEGER; }
 {FLOAT}       { yylval.fnum = atof(yytext); return FLOAT; }
