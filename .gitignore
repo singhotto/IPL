@@ -4,5 +4,7 @@ build/*
 .vscode
 .vscode/*
 
+output/*
+
 
 parser/*.output
