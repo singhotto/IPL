@@ -47,12 +47,15 @@ void Interpreter::defaultFunction(CallFunc *func)
 {
     LOG_OPERATION_START("Interpreter::defaultFunction(CallFunc *func)");
     ImageOperation op = getImageOperation(func->funcName());
+    ImageProcessor& proc = ImageProcessor::getInstance();
+
     auto globalParms = func->funcArgs(); 
+    int gs = globalParms.size();
 
     switch (op)
     {
     case ImageOperation::LOAD: {
-        assert(globalParms.size() == 1);
+        assert(gs == 1);
         globalParms[0]->accept(this);
         String* str = dynamic_cast<String*>(current.get());
         assert(str != nullptr);
@@ -62,7 +65,7 @@ void Interpreter::defaultFunction(CallFunc *func)
     }
 
     case ImageOperation::SAVE: {
-        assert(globalParms.size() == 2);
+        assert(gs == 2);
 
         globalParms[1]->accept(this);
         String* str = dynamic_cast<String*>(current.get());
@@ -74,6 +77,20 @@ void Interpreter::defaultFunction(CallFunc *func)
         assert(image != nullptr);
 
         image->save(path);
+        break;
+    }
+
+    case ImageOperation::CONV2BIN: {
+        assert(gs == 1 || gs == 2);
+
+        if(gs == 1){
+            Id* id = dynamic_cast<Id*>(globalParms[0]);
+            assert(id != nullptr);
+            Image* img = dynamic_cast<Image*>(context.getVariable(id->getName()));
+            proc.toBinary(img);
+        }else{
+
+        }
         break;
     }
     

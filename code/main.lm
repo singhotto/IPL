@@ -1,7 +1,13 @@
-var a = load("image.png");
+function toBinary(imgPath, output){
+    var img = load(imgPath);
 
-conv2Bin(a);
+    conv2Bin(img);
 
-print(a);
+    save(img, output);
+    
+    print(img);
+    print("saved!!!");
+}
 
-save(a);
+
+toBinary("../images/a.jpg", "../output/a.jpg");

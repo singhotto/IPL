@@ -21,7 +21,6 @@ void JpgImage::load(const std::string &filename) {
 }
 
 void JpgImage::save(const std::string &filename) {
-    std::cout<<"JpgImage::save(const std::string &filename)\n";
     LOG_OPERATION_START("JpgImage::save(string)");
     unsigned char *data = Utility::getInstance().cast2char(Image::getData(), Image::getWidth() * Image::getHeight() * Image::getChannels());
     // Save as JPEG

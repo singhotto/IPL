@@ -199,7 +199,7 @@ void ImageProcessor::conv2rgba(std::unique_ptr<Image> &image)
     grayscale2color(image, 'a');
 }
 
-void ImageProcessor::toBinary(std::unique_ptr<Image> &image, int threshold)
+void ImageProcessor::toBinary(Image* image, int threshold)
 {
     int cnls = image->getChannels();
     float temp, v;

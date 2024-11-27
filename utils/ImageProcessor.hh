@@ -41,7 +41,7 @@ public:
     void conv2rgb(std::unique_ptr<Image>& image);
     void conv2rgba(std::unique_ptr<Image>& image);
 
-    void toBinary(std::unique_ptr<Image>& image, int threshold = 150);
+    void toBinary(Image* image, int threshold = 150);
     void setIntensity(std::unique_ptr<Image>& image, const float intensity);
     void addBrightness(std::unique_ptr<Image>& image, int threshold);
     void negativeImage(std::unique_ptr<Image>& image);
