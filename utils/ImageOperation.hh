@@ -6,6 +6,10 @@ enum class ImageOperation {
     SAVE,
     CONV2BIN,
     CONV2GRAY,
+    SETINTENSITY,
+    ADDBRIGHTNESS,
+    NEGATIVEIMAGE,
+    HISTEQUALIZATION,
     UNKNOWN
 };
 
@@ -16,8 +20,12 @@ inline const char* toString(ImageOperation type) {
     switch (type) {
         case ImageOperation::LOAD: return "load";
         case ImageOperation::SAVE: return "save";
-        case ImageOperation::CONV2BIN: return "conv2bin";
-        case ImageOperation::CONV2GRAY: return "conv2gray";
+        case ImageOperation::CONV2BIN: return "conv2Bin";
+        case ImageOperation::CONV2GRAY: return "conv2Gray";
+        case ImageOperation::SETINTENSITY: return "setIntensity";
+        case ImageOperation::ADDBRIGHTNESS: return "addBrightness";
+        case ImageOperation::NEGATIVEIMAGE: return "negativeImage";
+        case ImageOperation::HISTEQUALIZATION: return "histEqualization";
         default: return "Unknown";
     }
 }
@@ -27,18 +35,12 @@ const ImageOperation allImageOperations[] = {
     ImageOperation::SAVE,
     ImageOperation::CONV2BIN,
     ImageOperation::CONV2GRAY,
+    ImageOperation::SETINTENSITY,
     ImageOperation::UNKNOWN
 };
 
 inline ImageOperation getImageOperation(std::string operation)
 {
-    // Convert extension to lowercase for case-insensitive comparison
-    for (auto &c : operation)
-    {
-        c = tolower(c);
-    }
-
-    // Match extension to ImageOperation
     for (ImageOperation type : allImageOperations)
     {
         if (operation == toString(type))
@@ -48,20 +50,5 @@ inline ImageOperation getImageOperation(std::string operation)
     return ImageOperation::UNKNOWN;
 }
 
-inline bool isImageOperation(const std::string& operation) {
-    std::string lowerOp = operation;
-    for (auto &c : lowerOp) {
-        c = tolower(c);
-    }
 
-    for (ImageOperation type : allImageOperations) {
-        if (lowerOp == toString(type) && type != ImageOperation::UNKNOWN) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-
-#endif // ImageOperation_H
+#endif 

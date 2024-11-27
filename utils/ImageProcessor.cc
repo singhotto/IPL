@@ -98,7 +98,7 @@ void applykernel(Image &img, float *kernel, int ksize)
     delete[] sumArr;
 }
 
-std::vector<float> ImageProcessor::getHistogram(std::unique_ptr<Image> &img)
+std::vector<float> ImageProcessor::getHistogram(Image* img)
 {
     
     std::vector<float> hist(256, 0);
@@ -118,7 +118,7 @@ std::vector<float> ImageProcessor::getHistogram(std::unique_ptr<Image> &img)
     return hist;
 }
 
-void ImageProcessor::grayscale2color(std::unique_ptr<Image> &image, char x)
+void ImageProcessor::grayscale2color(Image* image, char x)
 {
     int cnls = 3;
     int height = image->getHeight();
@@ -134,7 +134,7 @@ void ImageProcessor::grayscale2color(std::unique_ptr<Image> &image, char x)
 
     std::string name = image->getName();
 
-    std::unique_ptr<Image> newImg = nullptr;
+    Image* newImg = nullptr;
 
     if (x == 'a')
     {
@@ -189,17 +189,17 @@ void ImageProcessor::conv2Grayscale(Image* image)
     }
 }
 
-void ImageProcessor::conv2rgb(std::unique_ptr<Image> &image)
+void ImageProcessor::conv2rgb(Image* image)
 {
     grayscale2color(image, 'c');
 }
 
-void ImageProcessor::conv2rgba(std::unique_ptr<Image> &image)
+void ImageProcessor::conv2rgba(Image* image)
 {
     grayscale2color(image, 'a');
 }
 
-void ImageProcessor::toBinary(Image* image, int threshold)
+void ImageProcessor::conv2Bin(Image* image, int threshold)
 {
     int cnls = image->getChannels();
     float temp, v;
@@ -227,7 +227,7 @@ void ImageProcessor::toBinary(Image* image, int threshold)
     }
 }
 
-void ImageProcessor::setIntensity(std::unique_ptr<Image> &image, const float intensity)
+void ImageProcessor::setIntensity(Image*  image, const float intensity)
 {
     if (image->getChannels() != 4)
         throw std::runtime_error("It's not a four channel image!!!");
@@ -243,7 +243,7 @@ void ImageProcessor::setIntensity(std::unique_ptr<Image> &image, const float int
     }
 }
 
-void ImageProcessor::addBrightness(std::unique_ptr<Image> &image, int threshold)
+void ImageProcessor::addBrightness(Image*  image, int threshold)
 {
     int cnls = image->getChannels();
     float r, g, b;
@@ -268,7 +268,7 @@ void ImageProcessor::addBrightness(std::unique_ptr<Image> &image, int threshold)
     }
 }
 
-void ImageProcessor::negativeImage(std::unique_ptr<Image> &image)
+void ImageProcessor::negativeImage(Image*  image)
 {
     int height = image->getHeight();
     int width = image->getWidth();
@@ -296,7 +296,7 @@ void ImageProcessor::negativeImage(std::unique_ptr<Image> &image)
     }
 }
 
-void ImageProcessor::histEqualization(std::unique_ptr<Image> &image)
+void ImageProcessor::histEqualization(Image*  image)
 {
     std::vector<float> hist = getHistogram(image);
     std::vector<int> histEq(256, 0);

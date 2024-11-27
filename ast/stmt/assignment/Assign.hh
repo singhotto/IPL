@@ -19,7 +19,7 @@ public:
 
     Id* getId() const;
     Expr* getValue() const;
-    std::unique_ptr<Statement> clone() const;
+    std::unique_ptr<Statement> clone() const override;
 
     void accept(Visitor* visitor) override;
 };

@@ -1,7 +1,7 @@
 function toBinary(imgPath, output){
     var img = load(imgPath);
 
-    conv2Bin(img);
+    conv2Bin(img, 150);
 
     save(img, output);
     

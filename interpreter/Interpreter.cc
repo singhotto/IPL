@@ -38,95 +38,103 @@
 
 #include "Log.hh"
 
-bool Interpreter::isDefaultFunction(const std::string &funcName)
+std::string Interpreter::getString(Expr *e)
 {
-    return isImageOperation(funcName);
+    e->accept(this);
+    String *str = dynamic_cast<String *>(current.get());
+    assert(str != nullptr);
+    return str->getStr();
 }
 
-void Interpreter::defaultFunction(CallFunc *func)
+Image *Interpreter::getImage(Expr *e)
 {
-    LOG_OPERATION_START("Interpreter::defaultFunction(CallFunc *func)");
+    Id *id = dynamic_cast<Id *>(e);
+    assert(id != nullptr);
+    Image *image = dynamic_cast<Image *>(context.getVariable(id->getName()));
+
+    assert(image != nullptr);
+    return image;
+}
+
+float Interpreter::getNumber(Expr *expr)
+{
+    expr->accept(this);
+    Number *num = dynamic_cast<Number *>(current.get());
+    assert(num != nullptr);
+    return num->getValue();
+}
+
+bool Interpreter::isIPFunction(const std::string &funcName)
+{
+    return ImageOperation::UNKNOWN != getImageOperation(funcName);
+}
+
+void Interpreter::ipFunction(CallFunc *func)
+{
+    LOG_OPERATION_START("Interpreter::ipFunction(CallFunc *func)");
     ImageOperation op = getImageOperation(func->funcName());
     ImageProcessor &proc = ImageProcessor::getInstance();
 
     auto globalParms = func->funcArgs();
     int gs = globalParms.size();
 
-    switch (op)
-    {
-    case ImageOperation::LOAD:
+    assert(gs > 0);
+
+    if (op == ImageOperation::LOAD)
     {
         assert(gs == 1);
-        globalParms[0]->accept(this);
-        String *str = dynamic_cast<String *>(current.get());
-        assert(str != nullptr);
-        std::string path = str->getStr(); // Now inside a block scope
+
+        std::string path = getString(globalParms[0]);
+
         current = ValuePtr(IPLFactory::createImage(path));
-        break;
+        return;
     }
 
-    case ImageOperation::SAVE:
+    if (op == ImageOperation::SAVE)
     {
         assert(gs == 2);
 
-        globalParms[1]->accept(this);
-        String *str = dynamic_cast<String *>(current.get());
-        assert(str != nullptr);
-        std::string path = str->getStr();
+        Image *image = getImage(globalParms[0]);
+        std::string path = getString(globalParms[1]);
 
-        globalParms[0]->accept(this);
-        Image *image = dynamic_cast<Image *>(current.get());
-        assert(image != nullptr);
 
         image->save(path);
-        break;
+
+        return;
     }
 
-    case ImageOperation::CONV2BIN:
+    Image *img = getImage(globalParms[0]);    
+
+    if (op == ImageOperation::CONV2BIN)
     {
-        assert(gs == 1 || gs == 2);
+        assert(gs <= 2);
 
         if (gs == 1)
         {
-            Id *id = dynamic_cast<Id *>(globalParms[0]);
-            assert(id != nullptr);
-            Image *img = dynamic_cast<Image *>(context.getVariable(id->getName()));
             proc.toBinary(img);
         }
         else
         {
+            proc.conv2Bin(img, getNumber(globalParms[1]));
         }
-        break;
+
+        return;
     }
 
-    case ImageOperation::CONV2GRAY:
+    if (gs == 1)
     {
-        assert(gs == 1);
-
-        Id *id = dynamic_cast<Id *>(globalParms[0]);
-        assert(id != nullptr);
-        Image *img = dynamic_cast<Image *>(context.getVariable(id->getName()));
         proc.conv2Grayscale(img);
-        break;
+
+        return;
     }
 
-    default:
-        break;
-    }
-    LOG_OPERATION_END("Interpreter::defaultFunction(CallFunc *func)");
+    LOG_OPERATION_END("Interpreter::ipFunction(CallFunc *func)");
 }
 
 float Interpreter::binaryNumber(BinaryExpr *expr, char op)
 {
-    expr->getLeft()->accept(this);
-    Number *l = dynamic_cast<Number *>(current.get());
-    assert(l != nullptr);
-    float left = l->getValue();
-
-    expr->getRight()->accept(this);
-    Number *r = dynamic_cast<Number *>(current.get());
-    assert(r != nullptr);
-    float right = r->getValue();
+    float left = getNumber(expr->getLeft());
+    float right = getNumber(expr->getRight());
 
     switch (op)
     {
@@ -148,15 +156,8 @@ float Interpreter::binaryNumber(BinaryExpr *expr, char op)
 
 bool Interpreter::boolean(BoolExpr *expr, int op)
 {
-    expr->getLeft()->accept(this);
-    Number *l = dynamic_cast<Number *>(current.get());
-    assert(l != nullptr);
-    int left = l->getValue();
-
-    expr->getRight()->accept(this);
-    Number *r = dynamic_cast<Number *>(current.get());
-    assert(r != nullptr);
-    int right = r->getValue();
+    float left = getNumber(expr->getLeft());
+    float right = getNumber(expr->getRight());
 
     switch (op)
     {
@@ -339,15 +340,11 @@ void Interpreter::visit(AddAssign *stmt)
 {
     LOG_OPERATION_START("Interpreter::visit(AddAssign *stmt)");
 
-    stmt->getValue()->accept(this);
-    Number *val = dynamic_cast<Number *>(current.get());
-    assert(val != nullptr);
-
     const std::string &var_name = stmt->getId()->getName();
     Number *old = dynamic_cast<Number *>(context.getVariable(var_name));
     if (old)
     {
-        old->setValue(val->getValue() + old->getValue());
+        old->setValue(getNumber(stmt->getValue()) + old->getValue());
     }
     else
     {
@@ -397,15 +394,11 @@ void Interpreter::visit(DivAssign *stmt)
 {
     LOG_OPERATION_START("Interpreter::visit(DivAssign *stmt)");
 
-    stmt->getValue()->accept(this);
-    Number *val = dynamic_cast<Number *>(current.get());
-    assert(val != nullptr);
-
     const std::string &var_name = stmt->getId()->getName();
     Number *old = dynamic_cast<Number *>(context.getVariable(var_name));
     if (old)
     {
-        old->setValue((float)old->getValue() / val->getValue());
+        old->setValue(old->getValue() / getNumber(stmt->getValue()));
     }
     else
     {
@@ -419,15 +412,11 @@ void Interpreter::visit(SubAssign *stmt)
 {
     LOG_OPERATION_START("Interpreter::visit(SubAssign *stmt)");
 
-    stmt->getValue()->accept(this);
-    Number *val = dynamic_cast<Number *>(current.get());
-    assert(val != nullptr);
-
     const std::string &var_name = stmt->getId()->getName();
     Number *old = dynamic_cast<Number *>(context.getVariable(var_name));
     if (old)
     {
-        old->setValue(old->getValue() - val->getValue());
+        old->setValue(old->getValue() - getNumber(stmt->getValue()));
     }
     else
     {
@@ -441,15 +430,11 @@ void Interpreter::visit(MulAssign *stmt)
 {
     LOG_OPERATION_START("Interpreter::visit(MulAssign *stmt)");
 
-    stmt->getValue()->accept(this);
-    Number *val = dynamic_cast<Number *>(current.get());
-    assert(val != nullptr);
-
     const std::string &var_name = stmt->getId()->getName();
     Number *old = dynamic_cast<Number *>(context.getVariable(var_name));
     if (old)
     {
-        old->setValue(old->getValue() * val->getValue());
+        old->setValue(old->getValue() * getNumber(stmt->getValue()));
     }
     else
     {
@@ -471,17 +456,18 @@ void Interpreter::visit(CallFunc *func)
     LOG_OPERATION_START("Interpreter::visit(CallFunc *func)");
 
     Value *fName = context.getVariable(func->funcName());
-    if (isDefaultFunction(func->funcName()))
+    if (isIPFunction(func->funcName()))
     {
-        defaultFunction(func);
+        ipFunction(func);
     }
     else
     {
-        DefFunc *f = dynamic_cast<DefFunc *>(fName); // function
+        DefFunc *f = dynamic_cast<DefFunc *>(fName);
+        assert(f != nullptr);
+
         auto globalParms = func->funcArgs();
         auto internalParms = f->funcArgs();
 
-        assert(f != nullptr);
         assert(internalParms.size() == globalParms.size());
 
         context.newScope();

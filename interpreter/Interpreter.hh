@@ -9,6 +9,7 @@
 #include "expr/boolean/BoolExpr.hh"
 #include "expr/value/Float.hh"
 #include "expr/value/Bool.hh"
+#include "expr/value/image/Image.hh"
 
 class Interpreter : virtual public Visitor
 {
@@ -28,8 +29,12 @@ private:
     float binaryNumber(BinaryExpr* expr, char op);
     bool boolean(BoolExpr* expr, int op);
 
-    bool isDefaultFunction(const std::string& funcName);
-    void defaultFunction(CallFunc* func);
+    bool isIPFunction(const std::string& funcName);
+    void ipFunction(CallFunc* func);
+
+    std::string getString(Expr* e);
+    Image* getImage(Expr* e);
+    float getNumber(Expr* e);
 
 public:
     
