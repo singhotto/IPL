@@ -74,3 +74,20 @@ Value* ExecContext::getVariable(const std::string name) const
     LOG_OPERATION_END("ExecContext::getVariable BUT NOT FOUND");
     return nullptr;
 }
+
+std::unique_ptr<Value> &ExecContext::getVariableRef(const std::string name)
+{
+    LOG_OPERATION_START("ExecContext::getVariableRef");
+
+    for (auto it = scopeStack.rbegin(); it != scopeStack.rend(); ++it) {
+        auto& currentScope = *it; // Use reference
+        auto varIt = currentScope.find(name);
+        if (varIt != currentScope.end()) {
+            LOG_OPERATION_END("ExecContext::getVariableRef");
+            return varIt->second; // Return reference to unique_ptr
+        }
+    }
+
+    LOG_OPERATION_END("ExecContext::getVariableRef BUT NOT FOUND");
+    throw std::runtime_error("Variable not found"); // Handle error properly
+}

@@ -26,6 +26,7 @@ public:
     void updateVariable(const std::string& name, ValuePtr v);
 
     Value* getVariable(const std::string name) const;
+    ValuePtr& getVariableRef(const std::string name);
 };
 
 #endif

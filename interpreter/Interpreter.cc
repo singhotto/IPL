@@ -46,14 +46,11 @@ std::string Interpreter::getString(Expr *e)
     return str->getStr();
 }
 
-Image *Interpreter::getImage(Expr *e)
+std::unique_ptr<Value> &Interpreter::getImage(Expr *e)
 {
     Id *id = dynamic_cast<Id *>(e);
     assert(id != nullptr);
-    Image *image = dynamic_cast<Image *>(context.getVariable(id->getName()));
-
-    assert(image != nullptr);
-    return image;
+    return context.getVariableRef(id->getName());
 }
 
 float Interpreter::getNumber(Expr *expr)
@@ -68,64 +65,58 @@ bool Interpreter::isIPFunction(const std::string &funcName)
 {
     return ImageOperation::UNKNOWN != getImageOperation(funcName);
 }
-
-void Interpreter::ipFunction(CallFunc *func)
-{
+void Interpreter::ipFunction(CallFunc* func) {
     LOG_OPERATION_START("Interpreter::ipFunction(CallFunc *func)");
-    ImageOperation op = getImageOperation(func->funcName());
-    ImageProcessor &proc = ImageProcessor::getInstance();
 
-    auto globalParms = func->funcArgs();
-    int gs = globalParms.size();
+    try {
+        // Retrieve operation and processor
+        ImageOperation op = getImageOperation(func->funcName());
+        ImageProcessor& proc = ImageProcessor::getInstance();
 
-    assert(gs > 0);
+        // Get function arguments
+        auto globalParms = func->funcArgs();
+        int gs = globalParms.size();
+        assert(gs > 0);
 
-    if (op == ImageOperation::LOAD)
-    {
-        assert(gs == 1);
+        // Handle the LOAD operation
+        if (op == ImageOperation::LOAD) {
+            assert(gs == 1);
+            std::string path = getString(globalParms[0]);
+            current = ValuePtr(IPLFactory::createImage(path));
+        } else {
+            // Retrieve the image for other operations
+            std::unique_ptr<Value>& img = getImage(globalParms[0]);
+            Image* image = dynamic_cast<Image*>(img.get());
 
-        std::string path = getString(globalParms[0]);
-
-        current = ValuePtr(IPLFactory::createImage(path));
-        return;
-    }
-
-    if (op == ImageOperation::SAVE)
-    {
-        assert(gs == 2);
-
-        Image *image = getImage(globalParms[0]);
-        std::string path = getString(globalParms[1]);
-
-
-        image->save(path);
-
-        return;
-    }
-
-    Image *img = getImage(globalParms[0]);    
-
-    if (op == ImageOperation::CONV2BIN)
-    {
-        assert(gs <= 2);
-
-        if (gs == 1)
-        {
-            proc.toBinary(img);
+            // Handle SAVE operation
+            if (op == ImageOperation::SAVE) {
+                assert(gs == 2 && image != nullptr);
+                std::string path = getString(globalParms[1]);
+                image->save(path);
+            } else if (gs == 2) {
+                // Handle operations with two parameters
+                double param = getNumber(globalParms[1]);
+                switch (op) {
+                    case ImageOperation::SETINTENSITY: proc.setIntensity(img, param); break;
+                    case ImageOperation::ADDBRIGHTNESS: proc.addBrightness(img, param); break;
+                    case ImageOperation::CONV2BIN: proc.conv2Bin(img, param); break;
+                    default: throw std::invalid_argument("Invalid operation with two parameters");
+                }
+            } else {
+                // Handle operations with one parameter
+                switch (op) {
+                    case ImageOperation::CONV2BIN: proc.conv2Bin(img); break;
+                    case ImageOperation::CONV2GRAY: proc.conv2Grayscale(img); break;
+                    case ImageOperation::NEGATIVEIMAGE: proc.negativeImage(img); break;
+                    case ImageOperation::HISTEQUALIZATION: proc.histEqualization(img); break;
+                    case ImageOperation::CONV2RGB: proc.conv2rgb(img); break;
+                    case ImageOperation::CONV2RGBA: proc.conv2rgba(img); break;
+                    default: throw std::invalid_argument("Invalid single-parameter operation");
+                }
+            }
         }
-        else
-        {
-            proc.conv2Bin(img, getNumber(globalParms[1]));
-        }
-
-        return;
-    }
-
-    if (gs == 1)
-    {
-        proc.conv2Grayscale(img);
-
-        return;
+    } catch (const std::exception& e) {
+        std::cout<<("Error in ipFunction: ", e.what())<<"\n";
     }
 
     LOG_OPERATION_END("Interpreter::ipFunction(CallFunc *func)");
@@ -462,6 +453,7 @@ void Interpreter::visit(CallFunc *func)
     }
     else
     {
+        std::cout<<func->funcName()<<"\n";
         DefFunc *f = dynamic_cast<DefFunc *>(fName);
         assert(f != nullptr);
 

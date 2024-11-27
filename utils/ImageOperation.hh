@@ -10,6 +10,8 @@ enum class ImageOperation {
     ADDBRIGHTNESS,
     NEGATIVEIMAGE,
     HISTEQUALIZATION,
+    CONV2RGBA,
+    CONV2RGB,
     UNKNOWN
 };
 
@@ -26,6 +28,8 @@ inline const char* toString(ImageOperation type) {
         case ImageOperation::ADDBRIGHTNESS: return "addBrightness";
         case ImageOperation::NEGATIVEIMAGE: return "negativeImage";
         case ImageOperation::HISTEQUALIZATION: return "histEqualization";
+        case ImageOperation::CONV2RGBA: return "conv2Rgba";
+        case ImageOperation::CONV2RGB: return "conv2Rgb";
         default: return "Unknown";
     }
 }
@@ -36,6 +40,11 @@ const ImageOperation allImageOperations[] = {
     ImageOperation::CONV2BIN,
     ImageOperation::CONV2GRAY,
     ImageOperation::SETINTENSITY,
+    ImageOperation::ADDBRIGHTNESS,
+    ImageOperation::NEGATIVEIMAGE,
+    ImageOperation::HISTEQUALIZATION,
+    ImageOperation::CONV2RGBA,
+    ImageOperation::CONV2RGB,
     ImageOperation::UNKNOWN
 };
 

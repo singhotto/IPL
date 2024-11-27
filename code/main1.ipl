@@ -1,18 +1,8 @@
-function toBinary(imgPath, output){
+function toInt(imgPath, output){
     var img = load(imgPath);
 
-    conv2Bin(img, 150);
-
-    save(img, output);
-    
-    print(img);
-    print("saved!!!");
-}
-
-function toGray(imgPath, output){
-    var img = load(imgPath);
-
-    conv2Gray(img);
+    conv2Rgba(img);
+    setIntensity(img, 150);
 
     save(img, output);
     
@@ -21,5 +11,4 @@ function toGray(imgPath, output){
 }
 
 
-toBinary("../images/a.jpg", "../output/a.jpg");
-toGray("../images/a.jpg", "../output/b.jpg");
+toInt("../images/a.jpg", "../output/d.jpg");

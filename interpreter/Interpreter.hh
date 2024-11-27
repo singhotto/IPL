@@ -33,7 +33,7 @@ private:
     void ipFunction(CallFunc* func);
 
     std::string getString(Expr* e);
-    Image* getImage(Expr* e);
+    ValuePtr& getImage(Expr* e);
     float getNumber(Expr* e);
 
 public:
