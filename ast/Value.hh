@@ -2,6 +2,7 @@
 #define VALUE__GUARD
 
 #include <iostream>
+#include<memory>
 #include "Log.hh"
 
 class Value {

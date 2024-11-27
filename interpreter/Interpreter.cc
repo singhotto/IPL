@@ -8,7 +8,7 @@
 #include "expr/value/image/Image.hh"
 #include "expr/value/image/JpgImage.hh"
 #include "expr/value/image/PngImage.hh"
-#include "expr/value/image/TIFFImage.hh"
+#include "expr/value/image/TiffImage.hh"
 
 #include "expr/value/Int.hh"
 #include "expr/arithmatic/AddExpr.hh"
@@ -47,121 +47,138 @@ void Interpreter::defaultFunction(CallFunc *func)
 {
     LOG_OPERATION_START("Interpreter::defaultFunction(CallFunc *func)");
     ImageOperation op = getImageOperation(func->funcName());
-    ImageProcessor& proc = ImageProcessor::getInstance();
+    ImageProcessor &proc = ImageProcessor::getInstance();
 
-    auto globalParms = func->funcArgs(); 
+    auto globalParms = func->funcArgs();
     int gs = globalParms.size();
 
     switch (op)
     {
-    case ImageOperation::LOAD: {
+    case ImageOperation::LOAD:
+    {
         assert(gs == 1);
         globalParms[0]->accept(this);
-        String* str = dynamic_cast<String*>(current.get());
+        String *str = dynamic_cast<String *>(current.get());
         assert(str != nullptr);
-        std::string path = str->getStr();  // Now inside a block scope
+        std::string path = str->getStr(); // Now inside a block scope
         current = ValuePtr(IPLFactory::createImage(path));
         break;
     }
 
-    case ImageOperation::SAVE: {
+    case ImageOperation::SAVE:
+    {
         assert(gs == 2);
 
         globalParms[1]->accept(this);
-        String* str = dynamic_cast<String*>(current.get());
+        String *str = dynamic_cast<String *>(current.get());
         assert(str != nullptr);
-        std::string path = str->getStr(); 
+        std::string path = str->getStr();
 
         globalParms[0]->accept(this);
-        Image* image = dynamic_cast<Image*>(current.get());
+        Image *image = dynamic_cast<Image *>(current.get());
         assert(image != nullptr);
 
         image->save(path);
         break;
     }
 
-    case ImageOperation::CONV2BIN: {
+    case ImageOperation::CONV2BIN:
+    {
         assert(gs == 1 || gs == 2);
 
-        if(gs == 1){
-            Id* id = dynamic_cast<Id*>(globalParms[0]);
+        if (gs == 1)
+        {
+            Id *id = dynamic_cast<Id *>(globalParms[0]);
             assert(id != nullptr);
-            Image* img = dynamic_cast<Image*>(context.getVariable(id->getName()));
+            Image *img = dynamic_cast<Image *>(context.getVariable(id->getName()));
             proc.toBinary(img);
-        }else{
-
+        }
+        else
+        {
         }
         break;
     }
-    
+
+    case ImageOperation::CONV2GRAY:
+    {
+        assert(gs == 1);
+
+        Id *id = dynamic_cast<Id *>(globalParms[0]);
+        assert(id != nullptr);
+        Image *img = dynamic_cast<Image *>(context.getVariable(id->getName()));
+        proc.conv2Grayscale(img);
+        break;
+    }
+
     default:
         break;
     }
     LOG_OPERATION_END("Interpreter::defaultFunction(CallFunc *func)");
 }
 
-
-float Interpreter::binaryNumber(BinaryExpr* expr, char op)
+float Interpreter::binaryNumber(BinaryExpr *expr, char op)
 {
     expr->getLeft()->accept(this);
-    Number* l = dynamic_cast<Number*>(current.get());
+    Number *l = dynamic_cast<Number *>(current.get());
     assert(l != nullptr);
     float left = l->getValue();
 
     expr->getRight()->accept(this);
-    Number* r = dynamic_cast<Number*>(current.get());
+    Number *r = dynamic_cast<Number *>(current.get());
     assert(r != nullptr);
     float right = r->getValue();
 
-    switch (op) {
-        case '+':
-            return left + right;
-        case '-':
-            return left - right;
-        case '*':
-            return left * right;
-        case '/':
-            return left / right;
-        case '%':
-            return int(left) % int(right);
-        default:
-            assert(0 && "Error Arithmatic Operation");
-            break;
+    switch (op)
+    {
+    case '+':
+        return left + right;
+    case '-':
+        return left - right;
+    case '*':
+        return left * right;
+    case '/':
+        return left / right;
+    case '%':
+        return int(left) % int(right);
+    default:
+        assert(0 && "Error Arithmatic Operation");
+        break;
     }
 }
 
 bool Interpreter::boolean(BoolExpr *expr, int op)
 {
     expr->getLeft()->accept(this);
-    Number* l = dynamic_cast<Number*>(current.get());
+    Number *l = dynamic_cast<Number *>(current.get());
     assert(l != nullptr);
     int left = l->getValue();
 
     expr->getRight()->accept(this);
-    Number* r = dynamic_cast<Number*>(current.get());
+    Number *r = dynamic_cast<Number *>(current.get());
     assert(r != nullptr);
     int right = r->getValue();
-    
-    switch (op) {
-        case 1:
-            return left && right;
-        case 2:
-            return left || right;
-        case 3:
-            return left == right;
-        case 4:
-            return left != right;
-        case 5:
-            return left > right;
-        case 6:
-            return left >= right;
-        case 7:
-            return left < right;
-        case 8:
-            return left <= right;
-        default:
-            assert(0 && "Error Boolean Operation");
-            break;
+
+    switch (op)
+    {
+    case 1:
+        return left && right;
+    case 2:
+        return left || right;
+    case 3:
+        return left == right;
+    case 4:
+        return left != right;
+    case 5:
+        return left > right;
+    case 6:
+        return left >= right;
+    case 7:
+        return left < right;
+    case 8:
+        return left <= right;
+    default:
+        assert(0 && "Error Boolean Operation");
+        break;
     }
 }
 
@@ -171,7 +188,8 @@ Interpreter::~Interpreter()
     LOG_OPERATION_END("Interpreter::~Interpreter");
 }
 
-Interpreter& Interpreter::getInstance() {
+Interpreter &Interpreter::getInstance()
+{
     LOG_OPERATION_START("Interpreter::getInstance");
     static Interpreter instance;
     LOG_OPERATION_END("Interpreter::getInstance");
@@ -213,13 +231,16 @@ void Interpreter::visit(AddExpr *expr)
 {
     LOG_OPERATION_START("Interpreter::visit(AddExpr *expr)");
     expr->getLeft()->accept(this);
-    String* str1 = dynamic_cast<String*>(current.get());
+    String *str1 = dynamic_cast<String *>(current.get());
 
-    if(str1){
+    if (str1)
+    {
         expr->getRight()->accept(this);
-        String* str2 = dynamic_cast<String*>(current.get());
+        String *str2 = dynamic_cast<String *>(current.get());
         current = std::unique_ptr<String>(IPLFactory::createEString(str1->getStr() + str2->getStr()));
-    }else{
+    }
+    else
+    {
         current = FloatPtr(IPLFactory::createFloat(binaryNumber(expr, '+')));
     }
 
@@ -249,7 +270,7 @@ void Interpreter::visit(DivExpr *expr)
     LOG_OPERATION_START("Interpreter::visit(DivExpr *expr)");
 
     current = FloatPtr(IPLFactory::createFloat(binaryNumber(expr, '/')));
-    
+
     LOG_OPERATION_END("Interpreter::visit(DivExpr *expr)");
 }
 
@@ -258,7 +279,7 @@ void Interpreter::visit(MulExpr *expr)
     LOG_OPERATION_START("Interpreter::visit(MulExpr *expr)");
 
     current = FloatPtr(IPLFactory::createFloat(binaryNumber(expr, '*')));
-    
+
     LOG_OPERATION_END("Interpreter::visit(MulExpr *expr)");
 }
 
@@ -272,9 +293,10 @@ void Interpreter::visit(Statement *stmt)
 void Interpreter::visit(Block *stmt)
 {
     LOG_OPERATION_START("Interpreter::visit(Block *stmt)");
-    auto stmts =  stmt->getStatemets();
+    auto stmts = stmt->getStatemets();
 
-    for(Statement* s : stmts){
+    for (Statement *s : stmts)
+    {
         s->accept(this);
     }
 
@@ -285,9 +307,9 @@ void Interpreter::visit(DefVar *stmt)
 {
     LOG_OPERATION_START("Interpreter::visit(DefVar *stmt)");
     stmt->getValue()->accept(this);
-    Value* val = dynamic_cast<Value*>(current.get());
+    Value *val = dynamic_cast<Value *>(current.get());
     assert(val != nullptr);
-    Id* id = stmt->getId();
+    Id *id = stmt->getId();
     context.addNewVariable(id->getName(), val->cloneValue());
     LOG_OPERATION_END("Interpreter::visit(DefVar *stmt)");
 }
@@ -297,13 +319,16 @@ void Interpreter::visit(Assign *stmt)
     LOG_OPERATION_START("Interpreter::visit(Assign *stmt)");
 
     stmt->getValue()->accept(this);
-    Value* val = dynamic_cast<Value*>(current.get());
+    Value *val = dynamic_cast<Value *>(current.get());
     assert(val != nullptr);
 
-    const std::string& var_name = stmt->getId()->getName();
-    if(context.getVariable(var_name)){
+    const std::string &var_name = stmt->getId()->getName();
+    if (context.getVariable(var_name))
+    {
         context.updateVariable(var_name, val->cloneValue());
-    }else{
+    }
+    else
+    {
         throw std::string("Undeclaired Varibale ") + var_name + "\n";
     }
 
@@ -313,16 +338,19 @@ void Interpreter::visit(Assign *stmt)
 void Interpreter::visit(AddAssign *stmt)
 {
     LOG_OPERATION_START("Interpreter::visit(AddAssign *stmt)");
-    
+
     stmt->getValue()->accept(this);
-    Number* val = dynamic_cast<Number*>(current.get());
+    Number *val = dynamic_cast<Number *>(current.get());
     assert(val != nullptr);
 
-    const std::string& var_name = stmt->getId()->getName();
-    Number* old = dynamic_cast<Number*>(context.getVariable(var_name));
-    if(old){
+    const std::string &var_name = stmt->getId()->getName();
+    Number *old = dynamic_cast<Number *>(context.getVariable(var_name));
+    if (old)
+    {
         old->setValue(val->getValue() + old->getValue());
-    }else{
+    }
+    else
+    {
         throw std::string("Undeclaired Varibale ") + var_name + "\n";
     }
 
@@ -333,11 +361,14 @@ void Interpreter::visit(Decrease *stmt)
 {
     LOG_OPERATION_START("Interpreter::visit(Decrease *stmt)");
 
-    const std::string& var_name = stmt->getId()->getName();
-    Number* old = dynamic_cast<Number*>(context.getVariable(var_name));
-    if(old){
+    const std::string &var_name = stmt->getId()->getName();
+    Number *old = dynamic_cast<Number *>(context.getVariable(var_name));
+    if (old)
+    {
         old->setValue(old->getValue() - 1);
-    }else{
+    }
+    else
+    {
         throw std::string("Undeclaired Varibale ") + var_name + "\n";
     }
 
@@ -348,30 +379,36 @@ void Interpreter::visit(Increase *stmt)
 {
     LOG_OPERATION_START("Interpreter::visit(Increase *stmt)");
 
-    const std::string& var_name = stmt->getId()->getName();
-    Number* old = dynamic_cast<Number*>(context.getVariable(var_name));
-    if(old){
+    const std::string &var_name = stmt->getId()->getName();
+    Number *old = dynamic_cast<Number *>(context.getVariable(var_name));
+    if (old)
+    {
         old->setValue(old->getValue() + 1);
-    }else{
+    }
+    else
+    {
         throw std::string("Undeclaired Varibale ") + var_name + "\n";
     }
-    
+
     LOG_OPERATION_END("Interpreter::visit(Increase *stmt)");
 }
 
 void Interpreter::visit(DivAssign *stmt)
 {
     LOG_OPERATION_START("Interpreter::visit(DivAssign *stmt)");
-    
+
     stmt->getValue()->accept(this);
-    Number* val = dynamic_cast<Number*>(current.get());
+    Number *val = dynamic_cast<Number *>(current.get());
     assert(val != nullptr);
 
-    const std::string& var_name = stmt->getId()->getName();
-    Number* old = dynamic_cast<Number*>(context.getVariable(var_name));
-    if(old){
+    const std::string &var_name = stmt->getId()->getName();
+    Number *old = dynamic_cast<Number *>(context.getVariable(var_name));
+    if (old)
+    {
         old->setValue((float)old->getValue() / val->getValue());
-    }else{
+    }
+    else
+    {
         throw std::string("Undeclaired Varibale ") + var_name + "\n";
     }
 
@@ -381,16 +418,19 @@ void Interpreter::visit(DivAssign *stmt)
 void Interpreter::visit(SubAssign *stmt)
 {
     LOG_OPERATION_START("Interpreter::visit(SubAssign *stmt)");
-    
+
     stmt->getValue()->accept(this);
-    Number* val = dynamic_cast<Number*>(current.get());
+    Number *val = dynamic_cast<Number *>(current.get());
     assert(val != nullptr);
 
-    const std::string& var_name = stmt->getId()->getName();
-    Number* old = dynamic_cast<Number*>(context.getVariable(var_name));
-    if(old){
+    const std::string &var_name = stmt->getId()->getName();
+    Number *old = dynamic_cast<Number *>(context.getVariable(var_name));
+    if (old)
+    {
         old->setValue(old->getValue() - val->getValue());
-    }else{
+    }
+    else
+    {
         throw std::string("Undeclaired Varibale ") + var_name + "\n";
     }
 
@@ -400,16 +440,19 @@ void Interpreter::visit(SubAssign *stmt)
 void Interpreter::visit(MulAssign *stmt)
 {
     LOG_OPERATION_START("Interpreter::visit(MulAssign *stmt)");
-    
+
     stmt->getValue()->accept(this);
-    Number* val = dynamic_cast<Number*>(current.get());
+    Number *val = dynamic_cast<Number *>(current.get());
     assert(val != nullptr);
 
-    const std::string& var_name = stmt->getId()->getName();
-    Number* old = dynamic_cast<Number*>(context.getVariable(var_name));
-    if(old){
+    const std::string &var_name = stmt->getId()->getName();
+    Number *old = dynamic_cast<Number *>(context.getVariable(var_name));
+    if (old)
+    {
         old->setValue(old->getValue() * val->getValue());
-    }else{
+    }
+    else
+    {
         throw std::string("Undeclaired Varibale ") + var_name + "\n";
     }
 
@@ -427,30 +470,35 @@ void Interpreter::visit(CallFunc *func)
 {
     LOG_OPERATION_START("Interpreter::visit(CallFunc *func)");
 
-    Value* fName = context.getVariable(func->funcName());
-    if(isDefaultFunction(func->funcName())){
+    Value *fName = context.getVariable(func->funcName());
+    if (isDefaultFunction(func->funcName()))
+    {
         defaultFunction(func);
-    } else{
-        DefFunc* f = dynamic_cast<DefFunc*>(fName); //function
-        auto globalParms = func->funcArgs(); 
+    }
+    else
+    {
+        DefFunc *f = dynamic_cast<DefFunc *>(fName); // function
+        auto globalParms = func->funcArgs();
         auto internalParms = f->funcArgs();
 
         assert(f != nullptr);
         assert(internalParms.size() == globalParms.size());
-        
+
         context.newScope();
 
-
-        for(int i = 0; i<internalParms.size(); i++){
-            const std::string& name = internalParms[i]->getName();
+        for (int i = 0; i < internalParms.size(); i++)
+        {
+            const std::string &name = internalParms[i]->getName();
             globalParms[i]->accept(this);
             context.addNewVariable(name, current->cloneValue());
         }
         auto statements = f->funcStatements();
-        for(int i = 0; i<statements.size(); i++){
+        for (int i = 0; i < statements.size(); i++)
+        {
             statements[i]->accept(this);
 
-            if(funcReturn){
+            if (funcReturn)
+            {
                 funcReturn = false;
                 break;
             }
@@ -464,7 +512,8 @@ void Interpreter::visit(PrintExpr *expr)
 {
     LOG_OPERATION_START("Interpreter::visit(PrintExpr *expr)");
 
-    for(Expr* e : expr->getExprs()){
+    for (Expr *e : expr->getExprs())
+    {
         assert(e != nullptr);
         e->accept(this);
 
@@ -472,8 +521,8 @@ void Interpreter::visit(PrintExpr *expr)
 
         current->print();
     }
-    
-    std::cout<<"\n";
+
+    std::cout << "\n";
 
     LOG_OPERATION_END("Interpreter::visit(PrintExpr *expr)");
 }
@@ -492,21 +541,23 @@ void Interpreter::visit(Ifcond *expr)
 
     expr->getCond()->accept(this);
 
-    Bool* cond = dynamic_cast<Bool*>(current.get());
+    Bool *cond = dynamic_cast<Bool *>(current.get());
 
     assert(cond != nullptr);
 
     context.newScope();
 
-    if(cond->getValue()){
+    if (cond->getValue())
+    {
         auto statements = expr->getBody();
-        for(int i = 0; i<statements.size(); i++){
+        for (int i = 0; i < statements.size(); i++)
+        {
             statements[i]->accept(this);
         }
     }
 
     context.exitScope();
-    
+
     LOG_OPERATION_END("Interpreter::visit(Ifcond *expr)");
 }
 
@@ -514,29 +565,33 @@ void Interpreter::visit(Ifelse *expr)
 {
     LOG_OPERATION_START("Interpreter::visit(Ifelse *expr)");
 
-    
     expr->getCond()->accept(this);
 
-    Bool* cond = dynamic_cast<Bool*>(current.get());
+    Bool *cond = dynamic_cast<Bool *>(current.get());
 
     assert(cond != nullptr);
 
     context.newScope();
 
-    if(cond->getValue()){
+    if (cond->getValue())
+    {
         auto statements = expr->getBody();
-        for(int i = 0; i<statements.size(); i++){
+        for (int i = 0; i < statements.size(); i++)
+        {
             statements[i]->accept(this);
         }
-    }else{
+    }
+    else
+    {
         auto statements = expr->getElseBody();
-        for(int i = 0; i<statements.size(); i++){
+        for (int i = 0; i < statements.size(); i++)
+        {
             statements[i]->accept(this);
         }
     }
 
     context.exitScope();
-    
+
     LOG_OPERATION_END("Interpreter::visit(Ifelse *expr)");
 }
 
@@ -546,7 +601,7 @@ void Interpreter::visit(ForLoop *for_stmt)
 
     context.newScope();
 
-    DefVar* var_def = dynamic_cast<DefVar*>(for_stmt->getInitial());
+    DefVar *var_def = dynamic_cast<DefVar *>(for_stmt->getInitial());
 
     assert(var_def != nullptr);
 
@@ -554,16 +609,16 @@ void Interpreter::visit(ForLoop *for_stmt)
 
     for_stmt->getCond()->accept(this);
 
-    Bool* v = dynamic_cast<Bool*>(current.get());
+    Bool *v = dynamic_cast<Bool *>(current.get());
 
     assert(v != nullptr);
 
     auto stmt_list = for_stmt->getBody();
 
-
     while (v->getValue())
     {
-        for(auto& stmt : stmt_list){
+        for (auto &stmt : stmt_list)
+        {
             stmt->accept(this);
         }
 
@@ -571,7 +626,7 @@ void Interpreter::visit(ForLoop *for_stmt)
 
         for_stmt->getCond()->accept(this);
 
-        v = dynamic_cast<Bool*>(current.get());
+        v = dynamic_cast<Bool *>(current.get());
     }
     context.exitScope();
 
@@ -584,25 +639,24 @@ void Interpreter::visit(While *while_stmt)
 
     while_stmt->getCond()->accept(this);
 
-    Bool* v = dynamic_cast<Bool*>(current.get());
+    Bool *v = dynamic_cast<Bool *>(current.get());
 
     assert(v != nullptr);
 
     auto stmt_list = while_stmt->getBody();
 
-
     while (v->getValue())
     {
         context.newScope();
 
-        for(auto& stmt : stmt_list)
+        for (auto &stmt : stmt_list)
             stmt->accept(this);
 
         context.exitScope();
 
         while_stmt->getCond()->accept(this);
 
-        v = dynamic_cast<Bool*>(current.get());
+        v = dynamic_cast<Bool *>(current.get());
     }
 
     LOG_OPERATION_END("Interpreter::visit(While *while_stmt)");
@@ -613,7 +667,7 @@ void Interpreter::visit(And *expr)
     LOG_OPERATION_START("Interpreter::visit(And *expr)");
 
     current = BoolPtr(IPLFactory::createBool(boolean(expr, 1)));
-    
+
     LOG_OPERATION_END("Interpreter::visit(And *expr)");
 }
 
@@ -622,7 +676,7 @@ void Interpreter::visit(Equal *expr)
     LOG_OPERATION_START("Interpreter::visit(Equal *expr)");
 
     current = BoolPtr(IPLFactory::createBool(boolean(expr, 3)));
-    
+
     LOG_OPERATION_END("Interpreter::visit(Equal *expr)");
 }
 
@@ -631,7 +685,7 @@ void Interpreter::visit(Greater *expr)
     LOG_OPERATION_START("Interpreter::visit(Greater *expr)");
 
     current = BoolPtr(IPLFactory::createBool(boolean(expr, 5)));
-    
+
     LOG_OPERATION_END("Interpreter::visit(Greater *expr)");
 }
 
@@ -640,7 +694,7 @@ void Interpreter::visit(GreaterEqual *expr)
     LOG_OPERATION_START("Interpreter::visit(GreaterEqual *expr)");
 
     current = BoolPtr(IPLFactory::createBool(boolean(expr, 6)));
-    
+
     LOG_OPERATION_END("Interpreter::visit(GreaterEqual *expr)");
 }
 
@@ -649,7 +703,7 @@ void Interpreter::visit(Less *expr)
     LOG_OPERATION_START("Interpreter::visit(Less *expr)");
 
     current = BoolPtr(IPLFactory::createBool(boolean(expr, 7)));
-    
+
     LOG_OPERATION_END("Interpreter::visit(Less *expr)");
 }
 
@@ -658,7 +712,7 @@ void Interpreter::visit(LessEqual *expr)
     LOG_OPERATION_START("Interpreter::visit(LessEqual *expr)");
 
     current = BoolPtr(IPLFactory::createBool(boolean(expr, 8)));
-    
+
     LOG_OPERATION_END("Interpreter::visit(LessEqual *expr)");
 }
 
@@ -667,7 +721,7 @@ void Interpreter::visit(NotEqual *expr)
     LOG_OPERATION_START("Interpreter::visit(NotEqual *expr)");
 
     current = BoolPtr(IPLFactory::createBool(boolean(expr, 4)));
-    
+
     LOG_OPERATION_END("Interpreter::visit(NotEqual *expr)");
 }
 
@@ -676,7 +730,7 @@ void Interpreter::visit(Or *expr)
     LOG_OPERATION_START("Interpreter::visit(Or *expr)");
 
     current = BoolPtr(IPLFactory::createBool(boolean(expr, 2)));
-    
+
     LOG_OPERATION_END("Interpreter::visit(Or *expr)");
 }
 
@@ -685,7 +739,7 @@ void Interpreter::visit(JpgImage *img)
     LOG_OPERATION_START("Interpreter::visit(JpgImage *img)");
 
     current = img->cloneValue();
-    
+
     LOG_OPERATION_END("Interpreter::visit(JpgImage *img)");
 }
 
@@ -694,7 +748,7 @@ void Interpreter::visit(PngImage *img)
     LOG_OPERATION_START("Interpreter::visit(PngImage *img)");
 
     current = img->cloneValue();
-    
+
     LOG_OPERATION_END("Interpreter::visit(PngImage *img)");
 }
 
@@ -703,7 +757,7 @@ void Interpreter::visit(TIFFImage *img)
     LOG_OPERATION_START("Interpreter::visit(TIFFImage *img)");
 
     current = img->cloneValue();
-    
+
     LOG_OPERATION_END("Interpreter::visit(TIFFImage *img)");
 }
 

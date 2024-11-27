@@ -1,0 +1,25 @@
+function toBinary(imgPath, output){
+    var img = load(imgPath);
+
+    conv2Bin(img);
+
+    save(img, output);
+    
+    print(img);
+    print("saved!!!");
+}
+
+function toGray(imgPath, output){
+    var img = load(imgPath);
+
+    conv2Gray(img);
+
+    save(img, output);
+    
+    print(img);
+    print("saved!!!");
+}
+
+
+toBinary("../images/a.jpg", "../output/a.jpg");
+toGray("../images/a.jpg", "../output/b.jpg");

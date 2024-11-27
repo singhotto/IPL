@@ -1,6 +1,4 @@
-
-
-function sumRange1(a, b){
+function sumRange1(a, b) {
     return (a + b) * (b - a + 1) / 2;
 }
 

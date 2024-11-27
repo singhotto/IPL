@@ -167,7 +167,7 @@ ImageProcessor &ImageProcessor::getInstance()
     return instance;
 }
 
-void ImageProcessor::conv2Grayscale(std::unique_ptr<Image> &image)
+void ImageProcessor::conv2Grayscale(Image* image)
 {
     if (image->getChannels() < 3)
     {

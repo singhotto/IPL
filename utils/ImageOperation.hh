@@ -5,6 +5,7 @@ enum class ImageOperation {
     LOAD,
     SAVE,
     CONV2BIN,
+    CONV2GRAY,
     UNKNOWN
 };
 
@@ -16,6 +17,7 @@ inline const char* toString(ImageOperation type) {
         case ImageOperation::LOAD: return "load";
         case ImageOperation::SAVE: return "save";
         case ImageOperation::CONV2BIN: return "conv2bin";
+        case ImageOperation::CONV2GRAY: return "conv2gray";
         default: return "Unknown";
     }
 }
@@ -24,6 +26,7 @@ const ImageOperation allImageOperations[] = {
     ImageOperation::LOAD,
     ImageOperation::SAVE,
     ImageOperation::CONV2BIN,
+    ImageOperation::CONV2GRAY,
     ImageOperation::UNKNOWN
 };
 

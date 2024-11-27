@@ -16,6 +16,7 @@
 #include <algorithm>
 #include <cstdlib> 
 #include <ctime> 
+#include <cstring> 
 
 class ImageProcessor
 {
@@ -37,7 +38,7 @@ public:
     // Static method to access the singleton instance
     static ImageProcessor& getInstance();
 
-    void conv2Grayscale(std::unique_ptr<Image>& image);
+    void conv2Grayscale(Image* image);
     void conv2rgb(std::unique_ptr<Image>& image);
     void conv2rgba(std::unique_ptr<Image>& image);
 
