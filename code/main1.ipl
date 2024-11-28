@@ -1,14 +1,45 @@
-function toInt(imgPath, output){
+function setInt(imgPath, output) {
     var img = load(imgPath);
 
-    conv2Rgba(img);
-    setIntensity(img, 150);
+    toRGBA(img);
+    setIntensity(img, 255);
+
+    mirrorX(img);
+    addNoise(img, 0.81);
 
     save(img, output);
-    
-    print(img);
-    print("saved!!!");
+
+
+    saveHistogram(img, "../output/hist.bmp");
+}
+
+function toBin(imgPath, output) {
+    var img = load(imgPath);
+
+    conv2Bin(img);
+
+    save(img, output);
+}
+
+function neg(imgPath, output) {
+    var img = load(imgPath);
+
+    negativeImage(img);
+
+    save(img, output);
+}
+
+function setBri(imgPath, output) {
+    var img = load(imgPath);
+
+    addBrightness(img, 10);
+
+    save(img, output);
 }
 
 
-toInt("../images/a.jpg", "../output/d.jpg");
+
+// toBin("../images/a.jpg", "../output/a.jpg");
+// neg("../images/a.jpg", "../output/b.jpg");
+setInt("../images/a.jpg", "../output/d.jpg");
+// setBri("../images/a.jpg", "../output/" + "f.jpg");

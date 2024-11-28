@@ -89,5 +89,5 @@ std::unique_ptr<Value> &ExecContext::getVariableRef(const std::string name)
     }
 
     LOG_OPERATION_END("ExecContext::getVariableRef BUT NOT FOUND");
-    throw std::runtime_error("Variable not found"); // Handle error properly
+    throw std::runtime_error("Variable " + name + " not found!"); // Handle error properly
 }

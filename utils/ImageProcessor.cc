@@ -1,7 +1,7 @@
 #include "ImageProcessor.hh"
 
-#define WHITE 255
-#define BLACK 0
+#define WHITE 255.0f
+#define BLACK 0.0f
 
 float min(float a, float b)
 {
@@ -58,12 +58,12 @@ void calculateKernel(float *kernel, int size, int sigma)
     }
 }
 
-void applykernel(Image &img, float *kernel, int ksize)
+void applykernel(Image *img, float *kernel, int ksize)
 {
-    int height = img.getHeight();
-    int width = img.getWidth();
-    float *data = img.getData();
-    int cnls = img.getChannels();
+    int height = img->getHeight();
+    int width = img->getWidth();
+    float *data = img->getData();
+    int cnls = img->getChannels();
     int work_cnls = cnls < 4 ? cnls : 3;
     int offset = ksize / 2;
     float *sumArr = new float[work_cnls];
@@ -98,6 +98,28 @@ void applykernel(Image &img, float *kernel, int ksize)
     delete[] sumArr;
 }
 
+Image *ImageProcessor::createNewImage(const Image *original, int width, int height)
+{
+    ImageType format = getImageType(original->getName());
+
+    if (format == ImageType::PNG)
+    {
+        return new PngImage(original->getName(), width, height, original->getChannels(), original->getBPC());
+    }
+    else if (format == ImageType::JPG || format == ImageType::JPEG)
+    {
+        return new JpgImage(original->getName(), width, height, original->getChannels(), original->getBPC());
+    }
+    else if (format == ImageType::TIFF)
+    {
+        return new TIFFImage(original->getName(), width, height, original->getChannels(), original->getBPC());
+    }
+    else
+    {
+        throw std::runtime_error("Unsupported image format");
+    }
+}
+
 std::vector<float> ImageProcessor::getHistogram(Image *image)
 {
     std::vector<float> hist(256, 0);
@@ -117,9 +139,103 @@ std::vector<float> ImageProcessor::getHistogram(Image *image)
     return hist;
 }
 
+void ImageProcessor::rotateImage(std::unique_ptr<Value> &img, char x)
+{
+    Image *image = dynamic_cast<Image *>(img.get());
+
+    assert(image != nullptr);
+
+    int originalH = image->getHeight();
+    int originalW = image->getWidth();
+    int width = originalW;
+    int height = originalH;
+    int cnls = image->getChannels();
+
+    if (x == 'l' || x == 'r')
+        swap(width, height);
+
+    std::unique_ptr<Image> newImage(createNewImage(image, width, height));
+
+    assert(newImage != nullptr);
+
+    if (x == 'l')
+    {
+        for (int i = 0; i < originalH; i++)
+        {
+            for (int j = 0; j < originalW; j++)
+            {
+                Pixel oldPixel = image->operator()(i, j);
+                Pixel newPixel = newImage->operator()(originalW - j - 1, i);
+
+                newPixel.copy(oldPixel);
+            }
+        }
+    }
+
+    if (x == 'r')
+    {
+        for (int i = 0; i < originalH; i++)
+        {
+            for (int j = 0; j < originalW; j++)
+            {
+                Pixel oldPixel = image->operator()(i, j);
+
+                Pixel newPixel = newImage->operator()(j, originalH - i - 1);
+
+                newPixel.copy(oldPixel);
+            }
+        }
+    }
+
+    if (x == 'd')
+    {
+        for (int i = 0; i < height; i++)
+        {
+            for (int j = 0; j < width; j++)
+            {
+                Pixel oldPixel = image->operator()(originalH - i - 1, originalW - j - 1);
+                Pixel newPixel = newImage->operator()(i, j);
+
+                newPixel.copy(oldPixel);
+            }
+        }
+    }
+
+    if (x == 'f')
+    {
+        for (int i = 0; i < height; i++)
+        {
+            for (int j = 0; j < width; j++)
+            {
+                Pixel oldPixel = image->operator()(i, originalW - j - 1);
+                Pixel newPixel = newImage->operator()(i, j);
+
+                newPixel.copy(oldPixel);
+            }
+        }
+    }
+
+    if (x == 'm')
+    {
+        for (int i = 0; i < originalH; i++)
+        {
+            for (int j = 0; j < originalW; j++)
+            {
+                Pixel oldPixel = image->operator()(i, j);
+
+                Pixel newPixel = newImage->operator()(originalH - i - 1, j);
+
+                newPixel.copy(oldPixel);
+            }
+        }
+    }
+
+    img = std::move(newImage);
+}
+
 void ImageProcessor::grayscale2color(std::unique_ptr<Value> &img, char x)
 {
-    Image* image = dynamic_cast<Image*>(img.get());
+    Image *image = dynamic_cast<Image *>(img.get());
 
     assert(image != nullptr);
     int cnls = 3;
@@ -152,9 +268,9 @@ void ImageProcessor::grayscale2color(std::unique_ptr<Value> &img, char x)
     {
         for (int j = 0; j < width; j++)
         {
-            std::unique_ptr<Pixel> p = image->operator()(i, j);
-            std::unique_ptr<Pixel> np = newImg->operator()(i, j);
-            np->setValue(p->getValue());
+            Pixel p = image->operator()(i, j);
+            Pixel np = newImg->operator()(i, j);
+            np.setValue(p[0]);
         }
     }
 
@@ -169,9 +285,9 @@ ImageProcessor &ImageProcessor::getInstance()
     return instance;
 }
 
-void ImageProcessor::conv2Grayscale(std::unique_ptr<Value> &img)
+void ImageProcessor::toGray(std::unique_ptr<Value> &img)
 {
-    Image* image = dynamic_cast<Image*>(img.get());
+    Image *image = dynamic_cast<Image *>(img.get());
 
     assert(image != nullptr);
 
@@ -180,34 +296,33 @@ void ImageProcessor::conv2Grayscale(std::unique_ptr<Value> &img)
         std::cout << "It's not a color Image!!!\n";
         return;
     }
-    std::cout << "ok channels:" << image->getChannels() << "\n";
+
     float temp;
 
     for (int i = 0; i < image->getHeight(); i++)
     {
         for (int j = 0; j < image->getWidth(); j++)
         {
-            std::unique_ptr<Pixel> pp = image->operator()(i, j);
-            RgbPixel *rgbPixel = dynamic_cast<RgbPixel *>(pp.get());
-            temp = rgbPixel->getR() * 0.299f + rgbPixel->getG() * 0.587f + rgbPixel->getB() * 0.114f;
-            rgbPixel->setValue(temp);
+            Pixel pp = image->operator()(i, j);
+            temp = pp[0] * 0.299f + pp[1] * 0.587f + pp[2] * 0.114f;
+            pp.setValue(temp);
         }
     }
 }
 
-void ImageProcessor::conv2rgb(std::unique_ptr<Value> &image)
+void ImageProcessor::toRGB(std::unique_ptr<Value> &image)
 {
     grayscale2color(image, 'c');
 }
 
-void ImageProcessor::conv2rgba(std::unique_ptr<Value> &image)
+void ImageProcessor::toRGBA(std::unique_ptr<Value> &image)
 {
     grayscale2color(image, 'a');
 }
 
-void ImageProcessor::conv2Bin(std::unique_ptr<Value> &img, int threshold)
+void ImageProcessor::toBin(std::unique_ptr<Value> &img, int threshold)
 {
-    Image* image = dynamic_cast<Image*>(img.get());
+    Image *image = dynamic_cast<Image *>(img.get());
 
     assert(image != nullptr);
     int cnls = image->getChannels();
@@ -216,21 +331,20 @@ void ImageProcessor::conv2Bin(std::unique_ptr<Value> &img, int threshold)
     {
         for (int j = 0; j < image->getWidth(); j++)
         {
-            std::unique_ptr<Pixel> pp = image->operator()(i, j);
-            if (RgbPixel *rgbPixel = dynamic_cast<RgbPixel *>(pp.get()))
+            Pixel pp = image->operator()(i, j);
+
+            if (cnls > 1)
             {
-                temp = rgbPixel->getR() * 0.299f + rgbPixel->getG() * 0.587f + rgbPixel->getB() * 0.114f;
+                temp = pp[0] * 0.299f + pp[1] * 0.587f + pp[2] * 0.114f;
                 temp = temp > threshold ? WHITE : BLACK;
-                rgbPixel->setValue(temp);
-                if (RgbaPixel *rgbaPixel = dynamic_cast<RgbaPixel *>(pp.get()))
-                {
-                    rgbaPixel->setAlpha(WHITE);
-                }
+                pp.setValue(temp);
+                if (cnls == 4)
+                    pp[3] == WHITE;
             }
             else
             {
-                temp = pp->getValue() > threshold ? WHITE : BLACK;
-                pp->setValue(temp);
+                temp = pp[0] > threshold ? WHITE : BLACK;
+                pp.setValue(temp);
             }
         }
     }
@@ -238,56 +352,49 @@ void ImageProcessor::conv2Bin(std::unique_ptr<Value> &img, int threshold)
 
 void ImageProcessor::setIntensity(std::unique_ptr<Value> &img, const float intensity)
 {
-    Image* image = dynamic_cast<Image*>(img.get());
+    Image *image = dynamic_cast<Image *>(img.get());
 
     assert(image != nullptr);
     if (image->getChannels() != 4)
         throw std::runtime_error("It's not a four channel image!!!");
 
+    float newIntensity = Utility::getInstance().correctRange(intensity);
+
     for (int i = 0; i < image->getHeight(); i++)
     {
         for (int j = 0; j < image->getWidth(); j++)
         {
-            std::unique_ptr<Pixel> pp = image->operator()(i, j);
-            if (RgbaPixel *rgbaPixel = dynamic_cast<RgbaPixel *>(pp.get()))
-                rgbaPixel->setAlpha(intensity);
+            Pixel pp = image->operator()(i, j);
+            pp[3] = newIntensity;
         }
     }
 }
 
 void ImageProcessor::addBrightness(std::unique_ptr<Value> &img, int threshold)
 {
-    Image* image = dynamic_cast<Image*>(img.get());
+    Image *image = dynamic_cast<Image *>(img.get());
 
     assert(image != nullptr);
     int cnls = image->getChannels();
-    float r, g, b;
+
     for (int i = 0; i < image->getHeight(); i++)
     {
         for (int j = 0; j < image->getWidth(); j++)
         {
-            std::unique_ptr<Pixel> pp = image->operator()(i, j);
-            if (RgbPixel *rgbPixel = dynamic_cast<RgbPixel *>(pp.get()))
-            {
-                rgbPixel->operator+=(threshold);
-                if (RgbaPixel *rgbaPixel = dynamic_cast<RgbaPixel *>(pp.get()))
-                {
-                    rgbaPixel->setAlpha(WHITE);
-                }
-                rgbPixel->correctPixel();
-            }
-            else
-            {
-                pp->operator+=(threshold);
-                pp->correctPixel();
-            }
+            Pixel pp = image->operator()(i, j);
+
+            for (float *f : pp)
+                *f = Utility::getInstance().correctRange(*f + threshold);
+
+            if (cnls == 4)
+                pp[3] = WHITE;
         }
     }
 }
 
-void ImageProcessor::negativeImage(std::unique_ptr<Value> &img)
+void ImageProcessor::invert(std::unique_ptr<Value> &img)
 {
-    Image* image = dynamic_cast<Image*>(img.get());
+    Image *image = dynamic_cast<Image *>(img.get());
 
     assert(image != nullptr);
     int height = image->getHeight();
@@ -299,26 +406,17 @@ void ImageProcessor::negativeImage(std::unique_ptr<Value> &img)
     {
         for (int j = 0; j < width; j++)
         {
-            std::unique_ptr<Pixel> pp = image->operator()(i, j);
-            if (RgbPixel *rgbPixel = dynamic_cast<RgbPixel *>(pp.get()))
-            {
-                rgbPixel->operator*=(-1.0f);
-                rgbPixel->operator+=(WHITE);
-                rgbPixel->correctPixel();
-            }
-            else
-            {
-                pp->operator*=(-1.0f);
-                pp->operator+=(WHITE);
-                pp->correctPixel();
-            }
+            Pixel pp = image->operator()(i, j);
+
+            for (float *p : pp)
+                *p = Utility::getInstance().correctRange(WHITE - *p);
         }
     }
 }
 
-void ImageProcessor::histEqualization(std::unique_ptr<Value> &img)
+void ImageProcessor::equalizeHist(std::unique_ptr<Value> &img)
 {
-    Image* image = dynamic_cast<Image*>(img.get());
+    Image *image = dynamic_cast<Image *>(img.get());
 
     assert(image != nullptr);
     std::vector<float> hist = getHistogram(image);
@@ -338,4 +436,157 @@ void ImageProcessor::histEqualization(std::unique_ptr<Value> &img)
     {
         data[i] = histEq[(int)data[i]];
     }
+}
+
+void ImageProcessor::rotateLeft(std::unique_ptr<Value> &image)
+{
+    rotateImage(image, 'l');
+}
+
+void ImageProcessor::rotateRight(std::unique_ptr<Value> &image)
+{
+    rotateImage(image, 'r');
+}
+
+void ImageProcessor::rotateDown(std::unique_ptr<Value> &image)
+{
+    rotateImage(image, 'd');
+}
+
+void ImageProcessor::mirrorX(std::unique_ptr<Value> &image)
+{
+    rotateImage(image, 'f');
+}
+
+void ImageProcessor::mirrorY(std::unique_ptr<Value> &image)
+{
+    rotateImage(image, 'm');
+}
+
+void ImageProcessor::medianFilter(std::unique_ptr<Value> &img, int sigma)
+{
+    Image *image = dynamic_cast<Image *>(img.get());
+
+    assert(image != nullptr);
+    if (sigma % 2 == 0)
+    {
+        sigma += 1;
+    }
+
+    int offset = sigma / 2;
+    int height = image->getHeight();
+    int width = image->getWidth();
+    float *data = image->getData();
+    int cnls = image->getChannels();
+
+    int work_cnls = cnls < 4 ? cnls : 3;
+    std::vector<std::vector<float>> window(work_cnls, std::vector<float>());
+
+    for (int i = 0; i < work_cnls; i++)
+    {
+        window[i].reserve(sigma * sigma);
+    }
+
+    for (int i = offset; i < height - offset; i++)
+    {
+        for (int j = offset; j < width - offset; j++)
+        {
+            for (int ik = -offset; ik < offset + 1; ik++)
+            {
+                int rowPointer = (i + ik) * width;
+                for (int jk = -offset; jk < offset + 1; jk++)
+                {
+                    int pointer = (rowPointer + j + jk) * cnls;
+                    for (int m = 0; m < work_cnls; m++)
+                    {
+                        std::vector<float> *curr = &window[m];
+                        curr->push_back(data[pointer + m]);
+                    }
+                }
+            }
+
+            int pp = (i * width + j) * cnls;
+            for (int m = 0; m < work_cnls; m++)
+            {
+                std::vector<float> *curr = &window[m];
+
+                sort(curr->begin(), curr->end());
+
+                data[pp + m] = curr->at(curr->size() / 2);
+                curr->clear();
+            }
+        }
+    }
+}
+
+void ImageProcessor::gaussianSmoothing(std::unique_ptr<Value> &img, int sigma)
+{
+    Image *image = dynamic_cast<Image *>(img.get());
+
+    assert(image != nullptr);
+
+    int kernelSize = 6 * sigma + 1;
+
+    float *kernel = new float[kernelSize * kernelSize];
+
+    calculateKernel(kernel, kernelSize, sigma);
+
+    applykernel(image, kernel, kernelSize);
+
+    delete[] kernel;
+}
+
+void ImageProcessor::addNoise(std::unique_ptr<Value> &img, float ratio)
+{
+    Image *image = dynamic_cast<Image *>(img.get());
+
+    assert(image != nullptr);
+
+    ratio = Utility::getInstance().correctRange(ratio, 0.0f, 1.0f);
+
+    int height = image->getHeight();
+    int width = image->getWidth();
+    float *data = image->getData();
+    int cnls = image->getChannels();
+    int work_cnls = cnls < 4 ? cnls : 3;
+    int noisyPixels = ratio * height * width;
+    srand(static_cast<unsigned>(time(0)));
+
+    for (int i = 0; i < noisyPixels; i++)
+    {
+        int y = rand() % height;
+        int x = rand() % width;
+        bool salt = rand() % 2;
+        int pointer = (y * width + x) * cnls;
+
+        for (int j = 0; j < work_cnls; j++)
+        {
+            data[pointer + j] = salt ? WHITE : BLACK;
+        }
+    }
+}
+
+void ImageProcessor::saveHistogram(std::unique_ptr<Value> &img, const std::string path)
+{
+    Image *image = dynamic_cast<Image *>(img.get());
+
+    assert(image != nullptr);
+    std::vector<float> hist = getHistogram(image);
+
+    std::vector<std::string> labels;
+    labels.reserve(255);
+
+    for (int i = 0; i < 256; i++)
+    {
+        labels.push_back(std::to_string(i));
+    }
+
+    Chart chart(hist, labels);
+
+    chart.drawAxes();
+
+    chart.drawBars({0, 100, 200});
+    chart.drawXLabels({255, 10, 50});
+
+    chart.writeBMP(path.c_str());
 }

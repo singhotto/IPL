@@ -88,12 +88,13 @@ extern int yydebug;
     GREATEREQUAL = 289,            /* GREATEREQUAL  */
     AND = 290,                     /* AND  */
     OR = 291,                      /* OR  */
-    LPAREN = 292,                  /* LPAREN  */
-    RPAREN = 293,                  /* RPAREN  */
-    LBRACE = 294,                  /* LBRACE  */
-    RBRACE = 295,                  /* RBRACE  */
-    SEMICOLON = 296,               /* SEMICOLON  */
-    COMMA = 297                    /* COMMA  */
+    NOT = 292,                     /* NOT  */
+    LPAREN = 293,                  /* LPAREN  */
+    RPAREN = 294,                  /* RPAREN  */
+    LBRACE = 295,                  /* LBRACE  */
+    RBRACE = 296,                  /* RBRACE  */
+    SEMICOLON = 297,               /* SEMICOLON  */
+    COMMA = 298                    /* COMMA  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -117,7 +118,7 @@ union YYSTYPE
     IdVec* sIdList;
     Id* IDENTIFIER;
 
-#line 121 "/Users/singhotto/Documents/IPL/parser/ipl.parse.hh"
+#line 122 "/Users/singhotto/Documents/IPL/parser/ipl.parse.hh"
 
 };
 typedef union YYSTYPE YYSTYPE;

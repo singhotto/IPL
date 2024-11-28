@@ -15,6 +15,7 @@
 #include "ImageType.hh"
 
 #include "expr/Expr.hh"
+#include "expr/arithmatic/MinusExpr.hh"
 #include "expr/arithmatic/AddExpr.hh"
 #include "expr/arithmatic/DivExpr.hh"
 #include "expr/arithmatic/MulExpr.hh"
@@ -41,6 +42,7 @@
 #include "stmt/ForLoop.hh"
 #include "stmt/While.hh"
 
+#include "expr/boolean/Not.hh"
 #include "expr/boolean/And.hh"
 #include "expr/boolean/Or.hh"
 #include "expr/boolean/Equal.hh"
@@ -176,6 +178,20 @@ public:
         ExprPtr right)
     {
         return new LessEqual(std::move(left), std::move(right));
+    }
+
+    static MinusExpr *createMinusExpr(
+        ExprPtr left
+    )
+    {
+        return new MinusExpr(std::move(left));
+    }
+
+    static Not *createNot(
+        ExprPtr left
+    )
+    {
+        return new Not(std::move(left));
     }
 
     static AddExpr *createAddExpr(

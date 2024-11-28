@@ -9,6 +9,7 @@ class Float;
 class Expr;  
 
 //Arithmatic
+class MinusExpr;  
 class BinaryExpr;  
 class AddExpr;  
 class ModExpr;  
@@ -45,6 +46,7 @@ class Less;
 class LessEqual;  
 class NotEqual;  
 class Or;  
+class Not;  
 
 //Images
 class JpgImage;
@@ -61,6 +63,7 @@ public:
     virtual void visit(Float* expr) = 0;
 
     virtual void visit(Expr* expr) = 0;
+    virtual void visit(MinusExpr* expr) = 0;
     virtual void visit(BinaryExpr* expr) = 0;
     virtual void visit(AddExpr* expr) = 0;
     virtual void visit(ModExpr* expr) = 0;
@@ -96,6 +99,7 @@ public:
     virtual void visit(LessEqual* expr) = 0;
     virtual void visit(NotEqual* expr) = 0;
     virtual void visit(Or* expr) = 0;
+    virtual void visit(Not* expr) = 0;
 
     virtual void visit(JpgImage* img) = 0;
     virtual void visit(PngImage* img) = 0;

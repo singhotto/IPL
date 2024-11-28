@@ -6,10 +6,7 @@
 
 #include "ImageType.hh"
 #include "Utility.hh"
-#include "expr/value/image/pixel/Pixel.hh"
-#include "expr/value/image/pixel/GrayPixel.hh"
-#include "expr/value/image/pixel/RgbPixel.hh"
-#include "expr/value/image/pixel/RgbaPixel.hh"
+#include "expr/value/image/Pixel.hh"
 
 #include <iostream>
 #include <string>
@@ -49,7 +46,7 @@ public:
     int getBPC() const;
     std::string getName() const;
 
-    std::unique_ptr<Pixel> operator()(int row, int col);
+    Pixel operator()(int row, int col);
 };
 
 #endif // IMAGE_H

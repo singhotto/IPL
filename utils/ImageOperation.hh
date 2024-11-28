@@ -4,14 +4,23 @@
 enum class ImageOperation {
     LOAD,
     SAVE,
-    CONV2BIN,
-    CONV2GRAY,
+    TOBIN,
+    TOGRAY,
     SETINTENSITY,
     ADDBRIGHTNESS,
-    NEGATIVEIMAGE,
-    HISTEQUALIZATION,
-    CONV2RGBA,
-    CONV2RGB,
+    INVERT,
+    EQUALIZEHIST,
+    TORGBA,
+    TORGB,
+    ROTATERIGHT,
+    ROTATELEFT,
+    ROTATEDOWN,
+    MIRRORX,
+    MIRRORY,
+    MEDIANFILTER,
+    GAUSSIANSMOOTHING,
+    ADDNOISE,
+    SAVEHISTOGRAM,
     UNKNOWN
 };
 
@@ -22,14 +31,23 @@ inline const char* toString(ImageOperation type) {
     switch (type) {
         case ImageOperation::LOAD: return "load";
         case ImageOperation::SAVE: return "save";
-        case ImageOperation::CONV2BIN: return "conv2Bin";
-        case ImageOperation::CONV2GRAY: return "conv2Gray";
+        case ImageOperation::TOBIN: return "toBin";
+        case ImageOperation::TOGRAY: return "toGray";
         case ImageOperation::SETINTENSITY: return "setIntensity";
         case ImageOperation::ADDBRIGHTNESS: return "addBrightness";
-        case ImageOperation::NEGATIVEIMAGE: return "negativeImage";
-        case ImageOperation::HISTEQUALIZATION: return "histEqualization";
-        case ImageOperation::CONV2RGBA: return "conv2Rgba";
-        case ImageOperation::CONV2RGB: return "conv2Rgb";
+        case ImageOperation::INVERT: return "invert";
+        case ImageOperation::EQUALIZEHIST: return "equalizeHist";
+        case ImageOperation::TORGBA: return "toRGBA";
+        case ImageOperation::TORGB: return "toRGB";
+        case ImageOperation::ROTATERIGHT: return "rotateRight";
+        case ImageOperation::ROTATELEFT: return "rotateLeft";
+        case ImageOperation::ROTATEDOWN: return "rotateDown";
+        case ImageOperation::MIRRORX: return "mirrorX";
+        case ImageOperation::MIRRORY: return "mirrorY";
+        case ImageOperation::MEDIANFILTER: return "medianFilter";
+        case ImageOperation::GAUSSIANSMOOTHING: return "gaussianSmoothing";
+        case ImageOperation::ADDNOISE: return "addNoise";
+        case ImageOperation::SAVEHISTOGRAM: return "saveHistogram";
         default: return "Unknown";
     }
 }
@@ -37,14 +55,23 @@ inline const char* toString(ImageOperation type) {
 const ImageOperation allImageOperations[] = {
     ImageOperation::LOAD,
     ImageOperation::SAVE,
-    ImageOperation::CONV2BIN,
-    ImageOperation::CONV2GRAY,
+    ImageOperation::TOBIN,
+    ImageOperation::TOGRAY,
     ImageOperation::SETINTENSITY,
     ImageOperation::ADDBRIGHTNESS,
-    ImageOperation::NEGATIVEIMAGE,
-    ImageOperation::HISTEQUALIZATION,
-    ImageOperation::CONV2RGBA,
-    ImageOperation::CONV2RGB,
+    ImageOperation::INVERT,
+    ImageOperation::EQUALIZEHIST,
+    ImageOperation::TORGBA,
+    ImageOperation::TORGB,
+    ImageOperation::ROTATERIGHT,
+    ImageOperation::ROTATELEFT,
+    ImageOperation::ROTATEDOWN,
+    ImageOperation::MIRRORX,
+    ImageOperation::MIRRORY,
+    ImageOperation::MEDIANFILTER,
+    ImageOperation::GAUSSIANSMOOTHING,
+    ImageOperation::ADDNOISE,
+    ImageOperation::SAVEHISTOGRAM,
     ImageOperation::UNKNOWN
 };
 

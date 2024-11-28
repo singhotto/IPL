@@ -27,6 +27,7 @@ private:
     Interpreter& operator=(const Interpreter&) = delete;
 
     float binaryNumber(BinaryExpr* expr, char op);
+    bool checkBool(BoolExpr *expr, int op);
     bool boolean(BoolExpr* expr, int op);
 
     bool isIPFunction(const std::string& funcName);
@@ -50,6 +51,7 @@ public:
     void visit(Float* expr) override;
     void visit(Expr* expr) override;
 
+    void visit(MinusExpr* expr) override;
     void visit(BinaryExpr* expr) override;
     void visit(AddExpr* expr) override;
     void visit(ModExpr* expr) override;
@@ -86,6 +88,7 @@ public:
     void visit(LessEqual* expr) override;
     void visit(NotEqual* expr) override;
     void visit(Or* expr) override;
+    void visit(Not* expr) override;
 
     void visit(JpgImage* img) override;
     void visit(PngImage* img) override;

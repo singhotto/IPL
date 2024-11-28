@@ -39,7 +39,7 @@ Interpreter& eval = Interpreter::getInstance();
 %token ADD SUB MUL DIV MOD ASSIGN 
 %token INCREASE DECREASE ADDASSIGN SUBASSIGN MULASSIGN DIVASSIGN
 %token EQUAL NOTEQUAL LESS GREATER LESSEQUAL GREATEREQUAL
-%token AND OR LPAREN RPAREN LBRACE RBRACE SEMICOLON COMMA
+%token AND OR NOT LPAREN RPAREN LBRACE RBRACE SEMICOLON COMMA
 
 // Non-terminal declarations
 %type <node> program
@@ -50,12 +50,13 @@ Interpreter& eval = Interpreter::getInstance();
 %type <sExprList> expr_list
 %type <sIdList> func_args
 
-%right ASSIGN 
+%right ASSIGN
 %left OR
 %left AND
 %nonassoc EQUAL NOTEQUAL LESS GREATER LESSEQUAL GREATEREQUAL
 %left ADD SUB
 %left MUL DIV MOD
+%right NOT
 
 
 %%
@@ -193,6 +194,8 @@ expr:
     | expr GREATEREQUAL expr { $$ = IPLFactory::createGreaterEqual(U(Expr, $1), U(Expr, $3)); }
     | expr AND expr { $$ = IPLFactory::createAnd(U(Expr, $1), U(Expr, $3)); }
     | expr OR expr { $$ = IPLFactory::createOr(U(Expr, $1), U(Expr, $3)); }
+    | SUB expr %prec NOT { $$ = IPLFactory::createMinusExpr(U(Expr, $2)); }
+    | NOT expr { $$ = IPLFactory::createNot(U(Expr, $2)); }
     | INTEGER { $$ = IPLFactory::createFloat($1); }
     | FLOAT { $$ = IPLFactory::createFloat($1); }
     | STRING { $$ = IPLFactory::createString(*$1); }

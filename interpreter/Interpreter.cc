@@ -65,13 +65,15 @@ bool Interpreter::isIPFunction(const std::string &funcName)
 {
     return ImageOperation::UNKNOWN != getImageOperation(funcName);
 }
-void Interpreter::ipFunction(CallFunc* func) {
+void Interpreter::ipFunction(CallFunc *func)
+{
     LOG_OPERATION_START("Interpreter::ipFunction(CallFunc *func)");
 
-    try {
+    try
+    {
         // Retrieve operation and processor
         ImageOperation op = getImageOperation(func->funcName());
-        ImageProcessor& proc = ImageProcessor::getInstance();
+        ImageProcessor &proc = ImageProcessor::getInstance();
 
         // Get function arguments
         auto globalParms = func->funcArgs();
@@ -79,44 +81,106 @@ void Interpreter::ipFunction(CallFunc* func) {
         assert(gs > 0);
 
         // Handle the LOAD operation
-        if (op == ImageOperation::LOAD) {
+        if (op == ImageOperation::LOAD)
+        {
             assert(gs == 1);
             std::string path = getString(globalParms[0]);
             current = ValuePtr(IPLFactory::createImage(path));
-        } else {
+        }
+        else
+        {
             // Retrieve the image for other operations
-            std::unique_ptr<Value>& img = getImage(globalParms[0]);
-            Image* image = dynamic_cast<Image*>(img.get());
+            std::unique_ptr<Value> &img = getImage(globalParms[0]);
+            Image *image = dynamic_cast<Image *>(img.get());
 
             // Handle SAVE operation
-            if (op == ImageOperation::SAVE) {
+            if (op == ImageOperation::SAVE)
+            {
                 assert(gs == 2 && image != nullptr);
                 std::string path = getString(globalParms[1]);
                 image->save(path);
-            } else if (gs == 2) {
+            }
+            else if (op == ImageOperation::SAVEHISTOGRAM)
+            {
+                assert(gs == 2 && image != nullptr);
+                std::string path = getString(globalParms[1]);
+                proc.saveHistogram(img, path);
+            }
+            else if (gs == 2)
+            {
                 // Handle operations with two parameters
                 double param = getNumber(globalParms[1]);
-                switch (op) {
-                    case ImageOperation::SETINTENSITY: proc.setIntensity(img, param); break;
-                    case ImageOperation::ADDBRIGHTNESS: proc.addBrightness(img, param); break;
-                    case ImageOperation::CONV2BIN: proc.conv2Bin(img, param); break;
-                    default: throw std::invalid_argument("Invalid operation with two parameters");
+                switch (op)
+                {
+                case ImageOperation::SETINTENSITY:
+                    proc.setIntensity(img, param);
+                    break;
+                case ImageOperation::ADDBRIGHTNESS:
+                    proc.addBrightness(img, param);
+                    break;
+                case ImageOperation::TOBIN:
+                    proc.toBin(img, param);
+                    break;
+                case ImageOperation::MEDIANFILTER:
+                    proc.medianFilter(img, param);
+                    break;
+                case ImageOperation::GAUSSIANSMOOTHING:
+                    proc.gaussianSmoothing(img, param);
+                    break;
+                case ImageOperation::ADDNOISE:
+                    proc.addNoise(img, param);
+                    break;
+                default:
+                    throw std::invalid_argument("Invalid operation with two parameters");
                 }
-            } else {
+            }
+            else
+            {
                 // Handle operations with one parameter
-                switch (op) {
-                    case ImageOperation::CONV2BIN: proc.conv2Bin(img); break;
-                    case ImageOperation::CONV2GRAY: proc.conv2Grayscale(img); break;
-                    case ImageOperation::NEGATIVEIMAGE: proc.negativeImage(img); break;
-                    case ImageOperation::HISTEQUALIZATION: proc.histEqualization(img); break;
-                    case ImageOperation::CONV2RGB: proc.conv2rgb(img); break;
-                    case ImageOperation::CONV2RGBA: proc.conv2rgba(img); break;
-                    default: throw std::invalid_argument("Invalid single-parameter operation");
+                switch (op)
+                {
+                case ImageOperation::TOBIN:
+                    proc.toBin(img);
+                    break;
+                case ImageOperation::TOGRAY:
+                    proc.toGray(img);
+                    break;
+                case ImageOperation::INVERT:
+                    proc.invert(img);
+                    break;
+                case ImageOperation::EQUALIZEHIST:
+                    proc.equalizeHist(img);
+                    break;
+                case ImageOperation::TORGB:
+                    proc.toRGB(img);
+                    break;
+                case ImageOperation::TORGBA:
+                    proc.toRGBA(img);
+                    break;
+                case ImageOperation::ROTATELEFT:
+                    proc.rotateLeft(img);
+                    break;
+                case ImageOperation::ROTATERIGHT:
+                    proc.rotateRight(img);
+                    break;
+                case ImageOperation::ROTATEDOWN:
+                    proc.rotateDown(img);
+                    break;
+                case ImageOperation::MIRRORX:
+                    proc.mirrorX(img);
+                    break;
+                case ImageOperation::MIRRORY:
+                    proc.mirrorY(img);
+                    break;
+                default:
+                    throw std::invalid_argument("Invalid single-parameter operation");
                 }
             }
         }
-    } catch (const std::exception& e) {
-        std::cout<<("Error in ipFunction: ", e.what())<<"\n";
+    }
+    catch (const std::exception &e)
+    {
+        std::cout << ("Error in ipFunction: ", e.what()) << "\n";
     }
 
     LOG_OPERATION_END("Interpreter::ipFunction(CallFunc *func)");
@@ -145,8 +209,37 @@ float Interpreter::binaryNumber(BinaryExpr *expr, char op)
     }
 }
 
+bool Interpreter::checkBool(BoolExpr *expr, int op)
+{
+    std::string left = getString(expr->getLeft());
+    std::string right = getString(expr->getRight());
+    switch (op)
+    {
+    case 3:
+        return left == right;
+    case 4:
+        return left != right;
+    case 5:
+        return left > right;
+    case 6:
+        return left >= right;
+    case 7:
+        return left < right;
+    case 8:
+        return left <= right;
+    default:
+        assert(0 && "Error Boolean Operation");
+        break;
+    }
+}
+
 bool Interpreter::boolean(BoolExpr *expr, int op)
 {
+    expr->getLeft()->accept(this);
+    if (dynamic_cast<String *>(current.get()))
+    {
+        return checkBool(expr, op);
+    }
     float left = getNumber(expr->getLeft());
     float right = getNumber(expr->getRight());
 
@@ -192,8 +285,12 @@ void Interpreter::visit(Id *id)
 {
     LOG_OPERATION_START("Interpreter::visit(Id *id)");
     assert(id != nullptr);
-    std::string name = id->getName();
-    current = context.getVariable(name)->cloneValue();
+    Value *v = context.getVariable(id->getName());
+
+    if (v == nullptr)
+        throw std::runtime_error("Undeclaired Varibale " + id->getName() + "\n");
+
+    current = v->cloneValue();
     LOG_OPERATION_END("Interpreter::visit(Id *id)");
 }
 
@@ -227,9 +324,7 @@ void Interpreter::visit(AddExpr *expr)
 
     if (str1)
     {
-        expr->getRight()->accept(this);
-        String *str2 = dynamic_cast<String *>(current.get());
-        current = std::unique_ptr<String>(IPLFactory::createEString(str1->getStr() + str2->getStr()));
+        current = std::unique_ptr<String>(IPLFactory::createEString(getString(expr->getLeft()) + getString(expr->getRight())));
     }
     else
     {
@@ -315,14 +410,11 @@ void Interpreter::visit(Assign *stmt)
     assert(val != nullptr);
 
     const std::string &var_name = stmt->getId()->getName();
-    if (context.getVariable(var_name))
-    {
-        context.updateVariable(var_name, val->cloneValue());
-    }
-    else
-    {
-        throw std::string("Undeclaired Varibale ") + var_name + "\n";
-    }
+
+    if (context.getVariable(var_name) == nullptr)
+        throw std::runtime_error("Undeclaired Varibale " + var_name + "\n");
+
+    context.updateVariable(var_name, val->cloneValue());
 
     LOG_OPERATION_END("Interpreter::visit(Assign *stmt)");
 }
@@ -333,14 +425,11 @@ void Interpreter::visit(AddAssign *stmt)
 
     const std::string &var_name = stmt->getId()->getName();
     Number *old = dynamic_cast<Number *>(context.getVariable(var_name));
-    if (old)
-    {
-        old->setValue(getNumber(stmt->getValue()) + old->getValue());
-    }
-    else
-    {
-        throw std::string("Undeclaired Varibale ") + var_name + "\n";
-    }
+
+    if (old == nullptr)
+        throw std::runtime_error("Undeclaired Varibale " + var_name + "\n");
+
+    old->setValue(getNumber(stmt->getValue()) + old->getValue());
 
     LOG_OPERATION_END("Interpreter::visit(AddAssign *stmt)");
 }
@@ -351,14 +440,11 @@ void Interpreter::visit(Decrease *stmt)
 
     const std::string &var_name = stmt->getId()->getName();
     Number *old = dynamic_cast<Number *>(context.getVariable(var_name));
-    if (old)
-    {
-        old->setValue(old->getValue() - 1);
-    }
-    else
-    {
-        throw std::string("Undeclaired Varibale ") + var_name + "\n";
-    }
+
+    if (old == nullptr)
+        throw std::runtime_error("Undeclaired Varibale " + var_name + "\n");
+
+    old->setValue(old->getValue() - 1);
 
     LOG_OPERATION_END("Interpreter::visit(Decrease *stmt)");
 }
@@ -369,14 +455,11 @@ void Interpreter::visit(Increase *stmt)
 
     const std::string &var_name = stmt->getId()->getName();
     Number *old = dynamic_cast<Number *>(context.getVariable(var_name));
-    if (old)
-    {
-        old->setValue(old->getValue() + 1);
-    }
-    else
-    {
-        throw std::string("Undeclaired Varibale ") + var_name + "\n";
-    }
+
+    if (old == nullptr)
+        throw std::runtime_error("Undeclaired Varibale " + var_name + "\n");
+
+    old->setValue(old->getValue() + 1);
 
     LOG_OPERATION_END("Interpreter::visit(Increase *stmt)");
 }
@@ -387,14 +470,11 @@ void Interpreter::visit(DivAssign *stmt)
 
     const std::string &var_name = stmt->getId()->getName();
     Number *old = dynamic_cast<Number *>(context.getVariable(var_name));
-    if (old)
-    {
-        old->setValue(old->getValue() / getNumber(stmt->getValue()));
-    }
-    else
-    {
-        throw std::string("Undeclaired Varibale ") + var_name + "\n";
-    }
+
+    if (old == nullptr)
+        throw std::runtime_error("Undeclaired Varibale " + var_name + "\n");
+
+    old->setValue(old->getValue() / getNumber(stmt->getValue()));
 
     LOG_OPERATION_END("Interpreter::visit(DivAssign *stmt)");
 }
@@ -405,14 +485,11 @@ void Interpreter::visit(SubAssign *stmt)
 
     const std::string &var_name = stmt->getId()->getName();
     Number *old = dynamic_cast<Number *>(context.getVariable(var_name));
-    if (old)
-    {
-        old->setValue(old->getValue() - getNumber(stmt->getValue()));
-    }
-    else
-    {
-        throw std::string("Undeclaired Varibale ") + var_name + "\n";
-    }
+
+    if (old == nullptr)
+        throw std::runtime_error("Undeclaired Varibale " + var_name + "\n");
+
+    old->setValue(old->getValue() - getNumber(stmt->getValue()));
 
     LOG_OPERATION_END("Interpreter::visit(SubAssign *stmt)");
 }
@@ -423,14 +500,11 @@ void Interpreter::visit(MulAssign *stmt)
 
     const std::string &var_name = stmt->getId()->getName();
     Number *old = dynamic_cast<Number *>(context.getVariable(var_name));
-    if (old)
-    {
-        old->setValue(old->getValue() * getNumber(stmt->getValue()));
-    }
-    else
-    {
-        throw std::string("Undeclaired Varibale ") + var_name + "\n";
-    }
+
+    if (old == nullptr)
+        throw std::runtime_error("Undeclaired Varibale " + var_name + "\n");
+
+    old->setValue(old->getValue() * getNumber(stmt->getValue()));
 
     LOG_OPERATION_END("Interpreter::visit(MulAssign *stmt)");
 }
@@ -453,9 +527,9 @@ void Interpreter::visit(CallFunc *func)
     }
     else
     {
-        std::cout<<func->funcName()<<"\n";
         DefFunc *f = dynamic_cast<DefFunc *>(fName);
-        assert(f != nullptr);
+        if (f == nullptr)
+            throw std::runtime_error("Undefined Function: " + func->funcName());
 
         auto globalParms = func->funcArgs();
         auto internalParms = f->funcArgs();
@@ -500,7 +574,7 @@ void Interpreter::visit(PrintExpr *expr)
         current->print();
     }
 
-    std::cout << "\n";
+    std::cout << "\n"; // dont remove
 
     LOG_OPERATION_END("Interpreter::visit(PrintExpr *expr)");
 }
@@ -712,6 +786,15 @@ void Interpreter::visit(Or *expr)
     LOG_OPERATION_END("Interpreter::visit(Or *expr)");
 }
 
+void Interpreter::visit(Not *expr)
+{
+    LOG_OPERATION_START("Interpreter::visit(Not *expr)");
+
+    current = BoolPtr(IPLFactory::createBool(!getNumber(expr->getExpr())));
+
+    LOG_OPERATION_END("Interpreter::visit(Not *expr)");
+}
+
 void Interpreter::visit(JpgImage *img)
 {
     LOG_OPERATION_START("Interpreter::visit(JpgImage *img)");
@@ -751,4 +834,11 @@ void Interpreter::visit(BinaryExpr *expr)
     LOG_OPERATION_START("Interpreter::visit(BinaryExpr *expr)");
     expr->accept(this);
     LOG_OPERATION_END("Interpreter::visit(BinaryExpr *expr)");
+}
+
+void Interpreter::visit(MinusExpr *expr)
+{
+    LOG_OPERATION_START("Interpreter::visit(MinusExpr *expr)");
+    current = FloatPtr(IPLFactory::createFloat(0.0f - getNumber(expr->getExpr())));
+    LOG_OPERATION_END("Interpreter::visit(MinusExpr *expr)");
 }

@@ -46,6 +46,7 @@ STRING \"(\\.|[^\"])*\"
 "<="          { return LESSEQUAL; }
 ">="          { return GREATEREQUAL; }
 
+"!"          { return NOT; }
 "&&"          { return AND; }
 "||"          { return OR; }
 

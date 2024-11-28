@@ -13,6 +13,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -O3")
 set(LOG_DIR ${CMAKE_SOURCE_DIR}/logger)
 set(LIB_DIR ${CMAKE_SOURCE_DIR}/lib)
 set(UTILS_DIR ${CMAKE_SOURCE_DIR}/utils)
+set(CHART_DIR ${UTILS_DIR}/ChartGenerator)
 set(INTERPRETER_DIR ${CMAKE_SOURCE_DIR}/interpreter)
 set(AST_DIR ${CMAKE_SOURCE_DIR}/ast)
 set(EXPR_DIR ${AST_DIR}/expr)
@@ -38,6 +39,7 @@ file(GLOB AST_SRC ${AST_DIR}/*.cc)
 file(GLOB LOG_SRC ${LOG_DIR}/*.cc)
 file(GLOB LIB_SRC ${LIB_DIR}/*.cc)
 file(GLOB UTILS_SRC ${UTILS_DIR}/*.cc)
+file(GLOB CHART_SRC ${CHART_DIR}/*.cc)
 file(GLOB INTERPRETER_SRC ${INTERPRETER_DIR}/*.cc)
 set(PARSER_SRC ${PARSER_DIR}/ipl.cc ${PARSER_DIR}/ipl.lex.cc ${PARSER_DIR}/ipl.parse.cc)
 
@@ -54,6 +56,7 @@ set(SOURCE_FILES
     ${LOG_SRC}
     ${LIB_SRC}
     ${UTILS_SRC}
+    ${CHART_SRC}
     ${INTERPRETER_SRC}
     ${PARSER_SRC}
 )

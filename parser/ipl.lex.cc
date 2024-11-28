@@ -375,8 +375,8 @@ static void yynoreturn yy_fatal_error ( const char* msg  );
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
-#define YY_NUM_RULES 45
-#define YY_END_OF_BUFFER 46
+#define YY_NUM_RULES 46
+#define YY_END_OF_BUFFER 47
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -386,16 +386,16 @@ struct yy_trans_info
 	};
 static const flex_int16_t yy_accept[99] =
     {   0,
-        0,    0,   46,   44,   43,   41,   44,   44,    9,   44,
-        1,    2,    7,    5,   11,    6,   44,    8,   38,   12,
-       21,   10,   22,   37,   37,   37,   37,   37,   37,   37,
-       37,   37,    3,   44,    4,   20,    0,   40,    0,   25,
-       17,   13,   15,   14,   16,   39,   42,   18,   39,   38,
-       23,   19,   24,   37,   37,   37,   37,   37,   32,   37,
-       37,   37,   37,   37,   26,    0,   40,    0,    0,   42,
-       37,   37,   30,   37,   37,   37,   37,   27,   37,    0,
-       39,   33,   37,   37,   37,   37,   35,   37,   36,   37,
-       28,   37,   31,   37,   34,   37,   29,    0
+        0,    0,   47,   45,   44,   42,   25,   45,    9,   45,
+        1,    2,    7,    5,   11,    6,   45,    8,   39,   12,
+       21,   10,   22,   38,   38,   38,   38,   38,   38,   38,
+       38,   38,    3,   45,    4,   20,    0,   41,    0,   26,
+       17,   13,   15,   14,   16,   40,   43,   18,   40,   39,
+       23,   19,   24,   38,   38,   38,   38,   38,   33,   38,
+       38,   38,   38,   38,   27,    0,   41,    0,    0,   43,
+       38,   38,   31,   38,   38,   38,   38,   28,   38,    0,
+       40,   34,   38,   38,   38,   38,   36,   38,   37,   38,
+       29,   38,   32,   38,   35,   38,   30,    0
 
     } ;
 
@@ -519,11 +519,11 @@ static const flex_int16_t yy_chk[174] =
     } ;
 
 /* Table of booleans, true if rule could match eol. */
-static const flex_int32_t yy_rule_can_match_eol[46] =
+static const flex_int32_t yy_rule_can_match_eol[47] =
     {   0,
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-    1, 1, 0, 0, 0, 0,     };
+    0, 1, 1, 0, 0, 0, 0,     };
 
 static yy_state_type yy_last_accepting_state;
 static char *yy_last_accepting_cpos;
@@ -956,114 +956,119 @@ YY_RULE_SETUP
 case 25:
 YY_RULE_SETUP
 #line 49 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
-{ return AND; }
+{ return NOT; }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
 #line 50 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
-{ return OR; }
+{ return AND; }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 52 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
-{ return VAR; }
+#line 51 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
+{ return OR; }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
 #line 53 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
-{ return PRINT; }
+{ return VAR; }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
 #line 54 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
-{ return FUNC; }
+{ return PRINT; }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
 #line 55 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
-{ return FOR;}
+{ return FUNC; }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
 #line 56 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
-{ return WHILE;}
+{ return FOR;}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
 #line 57 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
-{ return IF; }
+{ return WHILE;}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
 #line 58 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
-{ return ELSE; }
+{ return IF; }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
 #line 59 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
-{ return RETURN; }
+{ return ELSE; }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
 #line 60 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
-{ return TRUE; }
+{ return RETURN; }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
 #line 61 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
-{ return FALSE; }
+{ return TRUE; }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 63 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
-{ yylval.str = new std::string(yytext); return ID; }
+#line 62 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
+{ return FALSE; }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
 #line 64 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
-{ yylval.inum = atoi(yytext); return INTEGER; }
+{ yylval.str = new std::string(yytext); return ID; }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
 #line 65 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
-{ yylval.fnum = atof(yytext); return FLOAT; }
+{ yylval.inum = atoi(yytext); return INTEGER; }
 	YY_BREAK
 case 40:
-/* rule 40 can match eol */
 YY_RULE_SETUP
 #line 66 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
-{ yylval.str = new std::string(yytext); return STRING; }
+{ yylval.fnum = atof(yytext); return FLOAT; }
 	YY_BREAK
 case 41:
 /* rule 41 can match eol */
 YY_RULE_SETUP
-#line 68 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
-{  }
+#line 67 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
+{ yylval.str = new std::string(yytext); return STRING; }
 	YY_BREAK
 case 42:
+/* rule 42 can match eol */
 YY_RULE_SETUP
-#line 70 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
-{ /* ignore comments */ }
+#line 69 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
+{  }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
 #line 71 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
-{ /* ignore whitespace */ }
+{ /* ignore comments */ }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
 #line 72 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
+{ /* ignore whitespace */ }
+	YY_BREAK
+case 45:
+YY_RULE_SETUP
+#line 73 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 {
                 auto msg = std::string("Unknown character: ") + *yytext;
                 yyerror(msg.c_str());
               }
 	YY_BREAK
-case 45:
+case 46:
 YY_RULE_SETUP
-#line 77 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
+#line 78 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 YY_FATAL_ERROR( "flex scanner jammed" );
 	YY_BREAK
-#line 1066 "/Users/singhotto/Documents/IPL/parser/ipl.lex.cc"
+#line 1071 "/Users/singhotto/Documents/IPL/parser/ipl.lex.cc"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2039,7 +2044,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 77 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
+#line 78 "/Users/singhotto/Documents/IPL/parser/ipl.ll"
 
 
 
