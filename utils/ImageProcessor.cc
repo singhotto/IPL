@@ -149,7 +149,6 @@ void ImageProcessor::rotateImage(std::unique_ptr<Value> &img, char x)
     int originalW = image->getWidth();
     int width = originalW;
     int height = originalH;
-    int cnls = image->getChannels();
 
     if (x == 'l' || x == 'r')
         swap(width, height);
@@ -241,7 +240,6 @@ void ImageProcessor::grayscale2color(std::unique_ptr<Value> &img, char x)
     int cnls = 3;
     int height = image->getHeight();
     int width = image->getWidth();
-    float v1, v2, v3;
     int imgCnls = image->getChannels();
 
     if (x == 'a')
@@ -326,7 +324,7 @@ void ImageProcessor::toBin(std::unique_ptr<Value> &img, int threshold)
 
     assert(image != nullptr);
     int cnls = image->getChannels();
-    float temp, v;
+    float temp;
     for (int i = 0; i < image->getHeight(); i++)
     {
         for (int j = 0; j < image->getWidth(); j++)
@@ -339,7 +337,7 @@ void ImageProcessor::toBin(std::unique_ptr<Value> &img, int threshold)
                 temp = temp > threshold ? WHITE : BLACK;
                 pp.setValue(temp);
                 if (cnls == 4)
-                    pp[3] == WHITE;
+                    pp[3] = WHITE;
             }
             else
             {
@@ -399,8 +397,6 @@ void ImageProcessor::invert(std::unique_ptr<Value> &img)
     assert(image != nullptr);
     int height = image->getHeight();
     int width = image->getWidth();
-    int cnls = image->getChannels();
-    const float c = 255.0f;
 
     for (int i = 0; i < height; i++)
     {

@@ -1,3 +1,63 @@
-Make
-./main
+***Prerequisites***
+
+Before compiling and running the interpreter, ensure you have the following tools installed on your system:
+
+**Required Tools**
+Flex (for lexical analysis)
+Bison (for parsing)
+CMake (for build configuration)
+GCC (GNU Compiler Collection)
+libtiff (for handling TIFF image files)
+
+**Installation Commands (Linux-based systems)**
+sudo apt update
+sudo apt install flex bison cmake gcc libtiff-dev
+
+**Steps to Compile**
+mkdir build
+cd build
+cmake ..
+make clean
+make
+
+**Running the Interpreter**
+cd build
+./ipl ../code/<nome del file>
+
+
+***Example Usage***
+var imgName = "example.jpg";
+var input = "../images/";
+var output = "../output/";
+var img = load(input + imgName);
+
+toGray(img);
+addNoise(img, 0.01);
+invert(img);
+
+save(img, output + imgName);
+
+
+***Supported Image Operations***
+Operation                     Description
+------------------------     ------------------------------------------------
+load(path)                  | Loads an image from the specified path.
+save(image, path)           | Saves the image to the specified path.
+toBin(image)                | Converts the image to binary.
+toGray(image)               | Converts the image to grayscale.
+setIntensity(image, val)    | Sets intensity of the image.
+addBrightness(image, +-v)   | Adjusts brightness of the image.
+invert(image)               | Inverts the colors of the image.
+equalizeHist(image)         | Equalizes the image histogram.
+toRGBA(image)               | Converts the image to RGBA format.
+toRGB(image)                | Converts the image to RGB format.
+rotateRight(image)          | Rotates the image 90 degrees clockwise.
+rotateLeft(image)           | Rotates the image 90 degrees counterclockwise.
+rotateDown(image)           | Rotates the image 180 degrees.
+mirrorX(image)              | Mirrors the image along the X-axis.
+mirrorY(image)              | Mirrors the image along the Y-axis.
+medianFilter(image)         | Applies a median filter to reduce noise.
+gaussianSmoothing(image)    | Applies Gaussian smoothing.
+addNoise(image, 0 to 1)     | Adds noise to the image.
+saveHistogram(image, path)  | Saves the image histogram to a file.
 

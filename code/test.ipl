@@ -1,7 +1,17 @@
-var img = load("../images/a.jpg");
+var imgName = "cnls4.jpg";
+var input = "../images/";
+var output = "../output/";
+var img = load(input + imgName);
 
+// rotateLeft(img);
+// rotateDown(img);
+// print(img);
+// rotateRight(img);
 print(img);
+// toGray(img);
+toBin(img);
+// invert(img);
+// addNoise(img, 0.01);
 
-var x = "../test.jpg";
 
-save(img, x);
+save(img, output + imgName);
