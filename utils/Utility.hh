@@ -16,6 +16,8 @@ public:
     static Utility& getInstance();
 
     // Method to correct value range
+    bool isCorrect(float v);
+    bool isCorrect(float r, float g, float b);
     float correctRange(float value, float min = 0.0f, float max = 255.0f);
     static float* cast2float(unsigned char *input, int input_size);
     static unsigned char* cast2char(float *input, int input_size);

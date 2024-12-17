@@ -124,6 +124,10 @@ public:
         return img;
     }
 
+    static Image *createPng(int w, int h){
+        return new PngImage(w, h);
+    }
+
     static Equal *createEqual(
         ExprPtr left,
         ExprPtr right)

@@ -14,6 +14,18 @@ PngImage::PngImage(const std::string filepath, int width, int height, int channe
     LOG_OPERATION_END("PngImage::PngImage(string, int, int, int, int)");
 }
 
+PngImage::PngImage(int width, int height, int channels, int bitsPerChannel)
+{
+    LOG_OPERATION_START("PngImage::PngImage(int, int, int, int)");
+    assert(channels < 5);
+    Image::width = width;
+    Image::height = height;
+    Image::channels = channels;
+    Image::bitPerChannel = bitsPerChannel;
+    Image::data = new float[width * height * channels];
+    LOG_OPERATION_END("PngImage::PngImage(int, int, int, int)");
+}
+
 void PngImage::load(const std::string &filename) {
     LOG_OPERATION_START("PngImage::load(string)");
     Image::load(filename);

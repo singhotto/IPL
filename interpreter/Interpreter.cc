@@ -105,8 +105,21 @@ void Interpreter::ipFunction(CallFunc *func)
                 assert(gs == 2 && image != nullptr);
                 std::string path = getString(globalParms[1]);
                 proc.saveHistogram(img, path);
-            }
-            else if (gs == 2)
+            }else if(gs == 3){
+                int param1 = getNumber(globalParms[1]);
+                int param2 = getNumber(globalParms[2]);
+                current = ValuePtr(IPLFactory::createPng(image->getWidth()* param1, image->getHeight()* param2));
+                proc.tile(img, param1, param2, current);
+            }else if (gs ==  7){
+                int param1 = getNumber(globalParms[1]);
+                int param2 = getNumber(globalParms[2]);
+                int param3 = getNumber(globalParms[3]);
+                int param4 = getNumber(globalParms[4]);
+                int param5 = getNumber(globalParms[5]);
+                int param6 = getNumber(globalParms[6]);
+
+                proc.replaceColor(img, param1, param2, param3, param4, param5, param6);
+            }else if (gs == 2)
             {
                 // Handle operations with two parameters
                 double param = getNumber(globalParms[1]);

@@ -459,6 +459,43 @@ void ImageProcessor::mirrorY(std::unique_ptr<Value> &image)
     rotateImage(image, 'm');
 }
 
+bool in_range(int input, int output, int window)
+{
+    int upper = input - window;
+    int lower = input + window;
+    if (output >= upper && output <= lower)
+        return true;
+    return false;
+}
+
+void ImageProcessor::replaceColor(std::unique_ptr<Value> &img, int inp_r, int inp_g, int inp_b, int out_r, int out_g, int out_b)
+{
+    Image *image = dynamic_cast<Image *>(img.get());
+
+    assert(image != nullptr);
+    assert(Utility::getInstance().isCorrect(inp_r, inp_g, inp_b));
+    assert(Utility::getInstance().isCorrect(out_r, out_g, out_b));
+
+    int height = image->getHeight();
+    int width = image->getWidth();
+    int ws = 60;
+
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width; j++)
+        {
+            Pixel pp = image->operator()(i, j);
+
+            if (in_range(inp_r, pp[0], ws) && in_range(inp_g, pp[1], ws) && in_range(inp_b, pp[2], ws))
+            {
+                pp[0] = out_r;
+                pp[1] = out_g;
+                pp[2] = out_b;
+            }
+        }
+    }
+}
+
 void ImageProcessor::medianFilter(std::unique_ptr<Value> &img, int sigma)
 {
     Image *image = dynamic_cast<Image *>(img.get());
@@ -558,6 +595,53 @@ void ImageProcessor::addNoise(std::unique_ptr<Value> &img, float ratio)
         for (int j = 0; j < work_cnls; j++)
         {
             data[pointer + j] = salt ? WHITE : BLACK;
+        }
+    }
+}
+
+void ImageProcessor::tile(std::unique_ptr<Value> &input, int n_r, int n_c, std::unique_ptr<Value> &output)
+{
+    Image *inp = dynamic_cast<Image *>(input.get());
+
+    assert(inp != nullptr);
+
+    Image *out = dynamic_cast<Image *>(output.get());
+
+    assert(out != nullptr);
+
+    // Get dimensions and data pointers
+    int inp_height = inp->getHeight();
+    int inp_width = inp->getWidth();
+    int inp_channels = inp->getChannels();
+    float *inp_data = inp->getData();
+
+    int out_height = out->getHeight();
+    int out_width = out->getWidth();
+    int out_channels = out->getChannels();
+    float *out_data = out->getData();
+
+    assert((inp_height * n_r) <= out_height);
+    assert((inp_width * n_c) <= out_width);
+
+    // Copy input pixels to the output grid
+    for (int row = 0; row < n_r; ++row) {         // Iterate over rows of tiles
+        for (int col = 0; col < n_c; ++col) {     // Iterate over columns of tiles
+            for (int y = 0; y < inp_height; ++y) { // Iterate over rows of input image
+                for (int x = 0; x < inp_width; ++x) { // Iterate over columns of input image
+                    for (int c = 0; c < inp_channels; ++c) { // Iterate over channels
+                        // Compute the position in the output image
+                        int out_y = row * inp_height + y; // Y-coordinate in the output image
+                        int out_x = col * inp_width + x;  // X-coordinate in the output image
+                        int out_idx = (out_y * out_width + out_x) * out_channels + c;
+
+                        // Compute the position in the input image
+                        int inp_idx = (y * inp_width + x) * inp_channels + c;
+
+                        // Copy pixel data
+                        out_data[out_idx] = inp_data[inp_idx];
+                    }
+                }
+            }
         }
     }
 }

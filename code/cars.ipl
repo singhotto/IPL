@@ -1,0 +1,32 @@
+var a = load("../images/car_3.png");
+
+// Replace the color for 10 unique variations and save with new IDs.
+replaceColor(a, 186, 203, 76, 255, 0, 0);  // Bright Red
+save(a, "../output/cars/vertical/" + "car_3_1.png");
+
+replaceColor(a, 255, 0, 0, 0, 255, 0);  // Bright Green
+save(a, "../output/cars/vertical/" + "car_3_2.png");
+
+replaceColor(a, 0, 255, 0, 0, 0, 255);  // Bright Blue
+save(a, "../output/cars/vertical/" + "car_3_3.png");
+
+replaceColor(a, 0, 0, 255, 255, 255, 0);  // Yellow
+save(a, "../output/cars/vertical/" + "car_3_4.png");
+
+replaceColor(a, 255, 255, 0, 255, 0, 255);  // Magenta
+save(a, "../output/cars/vertical/" + "car_3_5.png");
+
+replaceColor(a, 255, 0, 255, 0, 255, 255);  // Cyan
+save(a, "../output/cars/vertical/" + "car_3_6.png");
+
+replaceColor(a, 0, 255, 255, 128, 0, 128);  // Purple
+save(a, "../output/cars/vertical/" + "car_3_7.png");
+
+replaceColor(a, 128, 0, 128, 255, 165, 0);  // Orange
+save(a, "../output/cars/vertical/" + "car_3_8.png");
+
+replaceColor(a, 255, 165, 0, 75, 0, 130);  // Indigo
+save(a, "../output/cars/vertical/" + "car_3_9.png");
+
+replaceColor(a, 75, 0, 130, 192, 192, 192);  // Silver
+save(a, "../output/cars/vertical/" + "car_3_10.png");

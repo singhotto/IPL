@@ -55,10 +55,14 @@ public:
     void mirrorX(std::unique_ptr<Value> &image);
     void mirrorY(std::unique_ptr<Value> &image);
 
+    void replaceColor(std::unique_ptr<Value> &image, int inp_r, int inp_g, int inp_b, int out_r, int out_g, int out_b);
+
     void medianFilter(std::unique_ptr<Value> &image, int sigma);
     void gaussianSmoothing(std::unique_ptr<Value> &image, int sigma);
 
     void addNoise(std::unique_ptr<Value> &image, float ratio);
+
+    void tile(std::unique_ptr<Value> &input, int n_r, int n_c, std::unique_ptr<Value> &output);
 
     void saveHistogram(std::unique_ptr<Value> &image, const std::string path);
 };

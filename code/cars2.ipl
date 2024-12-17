@@ -1,0 +1,44 @@
+var car_2_1 = "car_2_1";
+var img_1 = load("../output/cars/vertical/" + car_2_1 + ".png");
+rotateRight(img_1);
+save(img_1, "../output/cars/horizontal/" + car_2_1 + "_h.png");
+
+var car_2_2 = "car_2_2";
+var img_2 = load("../output/cars/vertical/" + car_2_2 + ".png");
+rotateRight(img_2);
+save(img_2, "../output/cars/horizontal/" + car_2_2 + "_h.png");
+
+var car_2_3 = "car_2_3";
+var img_3 = load("../output/cars/vertical/" + car_2_3 + ".png");
+rotateRight(img_3);
+save(img_3, "../output/cars/horizontal/" + car_2_3 + "_h.png");
+
+var car_2_4 = "car_2_4";
+var img_4 = load("../output/cars/vertical/" + car_2_4 + ".png");
+rotateRight(img_4);
+save(img_4, "../output/cars/horizontal/" + car_2_4 + "_h.png");
+
+var car_2_5 = "car_2_5";
+var img_5 = load("../output/cars/vertical/" + car_2_5 + ".png");
+rotateRight(img_5);
+save(img_5, "../output/cars/horizontal/" + car_2_5 + "_h.png");
+
+var car_2_6 = "car_2_6";
+var img_6 = load("../output/cars/vertical/" + car_2_6 + ".png");
+rotateRight(img_6);
+save(img_6, "../output/cars/horizontal/" + car_2_6 + "_h.png");
+
+var car_2_7 = "car_2_7";
+var img_7 = load("../output/cars/vertical/" + car_2_7 + ".png");
+rotateRight(img_7);
+save(img_7, "../output/cars/horizontal/" + car_2_7 + "_h.png");
+
+var car_2_8 = "car_2_8";
+var img_8 = load("../output/cars/vertical/" + car_2_8 + ".png");
+rotateRight(img_8);
+save(img_8, "../output/cars/horizontal/" + car_2_8 + "_h.png");
+
+var car_2_9 = "car_2_9";
+var img_9 = load("../output/cars/vertical/" + car_2_9 + ".png");
+rotateRight(img_9);
+save(img_9, "../output/cars/horizontal/" + car_2_9 + "_h.png");

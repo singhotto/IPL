@@ -1,0 +1,12 @@
+var name = "luna3.jpeg";
+var luna = load("../images/" + name);
+
+// addBrightness(luna, 80);
+// addNoise(luna, 0.1);
+rotateLeft(luna);
+// equalizeHist(luna);
+// mirrorX(luna);
+mirrorY(luna);
+// gaussianSmoothing(luna, 3);
+
+save(luna, "../output/"+ name);

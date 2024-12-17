@@ -10,6 +10,7 @@ private:
 public:
     PngImage() = default;
     PngImage(const std::string filepath, int width, int height, int channels, int bitsPerChannel = 8);
+    PngImage(int width, int height, int channels = 3, int bitsPerChannel = 8);
     ~PngImage() = default;
 
     void load(const std::string &filename) override;

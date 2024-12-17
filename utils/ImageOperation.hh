@@ -17,6 +17,8 @@ enum class ImageOperation {
     ROTATEDOWN,
     MIRRORX,
     MIRRORY,
+    TILE,
+    REPLACECOLOR,
     MEDIANFILTER,
     GAUSSIANSMOOTHING,
     ADDNOISE,
@@ -44,6 +46,8 @@ inline const char* toString(ImageOperation type) {
         case ImageOperation::ROTATEDOWN: return "rotateDown";
         case ImageOperation::MIRRORX: return "mirrorX";
         case ImageOperation::MIRRORY: return "mirrorY";
+        case ImageOperation::TILE: return "tile";
+        case ImageOperation::REPLACECOLOR: return "replaceColor";
         case ImageOperation::MEDIANFILTER: return "medianFilter";
         case ImageOperation::GAUSSIANSMOOTHING: return "gaussianSmoothing";
         case ImageOperation::ADDNOISE: return "addNoise";
@@ -68,6 +72,8 @@ const ImageOperation allImageOperations[] = {
     ImageOperation::ROTATEDOWN,
     ImageOperation::MIRRORX,
     ImageOperation::MIRRORY,
+    ImageOperation::TILE,
+    ImageOperation::REPLACECOLOR,
     ImageOperation::MEDIANFILTER,
     ImageOperation::GAUSSIANSMOOTHING,
     ImageOperation::ADDNOISE,

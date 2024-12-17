@@ -7,6 +7,16 @@ Utility& Utility::getInstance()
     return instance;
 }
 
+bool Utility::isCorrect(float v)
+{
+    return v >= 0 && v<=255;
+}
+
+bool Utility::isCorrect(float r, float g, float b)
+{
+    return isCorrect(r) && isCorrect(g) && isCorrect(b);
+}
+
 float Utility::correctRange(float value, float min, float max)
 {
     if(value<min)
