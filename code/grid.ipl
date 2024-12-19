@@ -1,0 +1,5 @@
+var cell = load("../images/cell.png");
+
+var b = tile(cell, 6, 6);
+
+save(b, "../output/grid.png");

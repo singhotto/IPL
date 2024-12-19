@@ -1,0 +1,3 @@
+var a = load("../images/bottles.tiff");
+
+saveHistogram(a, "../output/histgram_bottels.bmp");

@@ -1,0 +1,6 @@
+var a = load("../images/aa.tiff");
+a = load("../images/cameraman.jpg");
+
+gaussianSmoothing(a, 3);
+
+save(a, "../output/cameraman.jpg");

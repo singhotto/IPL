@@ -1,0 +1,7 @@
+var a = load("../images/luna_dark.png");
+
+addBrightness(a, 50);
+// equalizeHist(a);
+
+save(a, "../output/luna_dark.png");
+

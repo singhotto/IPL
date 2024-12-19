@@ -1,0 +1,6 @@
+var a = load("../images/luna_piedi.png");
+
+mirrorX(a);
+medianFilter(a, 7);
+
+save(a, "../output/luna_piedi.png");

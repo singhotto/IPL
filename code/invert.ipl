@@ -1,0 +1,5 @@
+var a = load("../images/bottels.png");
+
+invert(a);
+
+save(a, "../output/bottels.png");

@@ -1,32 +1,47 @@
-var a = load("../images/car_3.png");
+var a = load("../images/car.png");
 
-// Replace the color for 10 unique variations and save with new IDs.
+// Original 10 Variations
 replaceColor(a, 186, 203, 76, 255, 0, 0);  // Bright Red
-save(a, "../output/cars/vertical/" + "car_3_1.png");
+save(a, "../output/cars/vertical/" + "car_2_1.png");
 
 replaceColor(a, 255, 0, 0, 0, 255, 0);  // Bright Green
-save(a, "../output/cars/vertical/" + "car_3_2.png");
+save(a, "../output/cars/vertical/" + "car_2_2.png");
 
 replaceColor(a, 0, 255, 0, 0, 0, 255);  // Bright Blue
-save(a, "../output/cars/vertical/" + "car_3_3.png");
+save(a, "../output/cars/vertical/" + "car_2_3.png");
 
 replaceColor(a, 0, 0, 255, 255, 255, 0);  // Yellow
-save(a, "../output/cars/vertical/" + "car_3_4.png");
+save(a, "../output/cars/vertical/" + "car_2_4.png");
 
 replaceColor(a, 255, 255, 0, 255, 0, 255);  // Magenta
-save(a, "../output/cars/vertical/" + "car_3_5.png");
+save(a, "../output/cars/vertical/" + "car_2_5.png");
 
 replaceColor(a, 255, 0, 255, 0, 255, 255);  // Cyan
-save(a, "../output/cars/vertical/" + "car_3_6.png");
+save(a, "../output/cars/vertical/" + "car_2_6.png");
 
 replaceColor(a, 0, 255, 255, 128, 0, 128);  // Purple
-save(a, "../output/cars/vertical/" + "car_3_7.png");
+save(a, "../output/cars/vertical/" + "car_2_7.png");
 
 replaceColor(a, 128, 0, 128, 255, 165, 0);  // Orange
-save(a, "../output/cars/vertical/" + "car_3_8.png");
+save(a, "../output/cars/vertical/" + "car_2_8.png");
 
-replaceColor(a, 255, 165, 0, 75, 0, 130);  // Indigo
-save(a, "../output/cars/vertical/" + "car_3_9.png");
+replaceColor(a, 255, 165, 0, 128, 128, 128);  // Gray
+save(a, "../output/cars/vertical/" + "car_2_9.png");
 
-replaceColor(a, 75, 0, 130, 192, 192, 192);  // Silver
-save(a, "../output/cars/vertical/" + "car_3_10.png");
+replaceColor(a, 128, 128, 128, 0, 128, 0);  // Dark Green
+save(a, "../output/cars/vertical/" + "car_2_10.png");
+
+replaceColor(a, 0, 128, 0, 255, 140, 0);  // Dark Orange
+save(a, "../output/cars/vertical/" + "car_2_11.png");
+
+replaceColor(a, 255, 140, 0, 255, 228, 181);  // Moccasin
+save(a, "../output/cars/vertical/" + "car_2_12.png");
+
+replaceColor(a, 255, 228, 181, 255, 105, 180);  // Hot Pink
+save(a, "../output/cars/vertical/" + "car_2_13.png");
+
+replaceColor(a, 255, 105, 180, 192, 192, 192);  // Silver
+save(a, "../output/cars/vertical/" + "car_2_14.png");
+
+replaceColor(a, 192, 192, 192, 128, 128, 0);  // Olive
+save(a, "../output/cars/vertical/" + "car_2_15.png");

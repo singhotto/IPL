@@ -1,0 +1,11 @@
+function sum(a){
+    if(a==0){
+        return 0;
+    }
+    var s = sum(a-1);
+    var c =  a + s;
+    return c;
+}
+
+var f = sum(15000);
+print(f);

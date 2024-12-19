@@ -1,0 +1,5 @@
+var a = load("../images/cnls4.jpg");
+
+toGray(a);
+
+save(a, "../output/cnls4.jpg");
